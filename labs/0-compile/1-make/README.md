@@ -14,10 +14,24 @@ is huge and sprawling,there is a narrow  slice that will do most of what
 you need.  We cover most of that slice today by doing increasingly fancy
 varions of a `Makefile` that does two things:
 
-  1. Produces an executable file <main> by compiling
-      C files `a.c`, `b.c`, `c.c`, `main.c` and a header file `header.h`.
-  2. After doing so, checking that running `main`  gives the same result
-     as a reference output `main.ref`.
+  1. Produces an executable file <main> by compiling the C files `a.c`,
+     `b.c`, `c.c`, `main.c`.
+
+     Correctness rule 1: All of these files include a header file
+     `header.h` and so must be recompiled if `header.h` changes.
+
+     Correctness rule 2: if any C file changes, or anything it depends
+     on changes, it must be re-compiled and `main` regenerated.
+
+     Note: we only worry about the header.   Of course the Makefile
+     itself is a dependency.  Strictly speaking, the operating system
+     installation, compiler (assembler, linker, preprocessor) or libc
+     implementations can be seen as dependencies as well ---- in some
+     cases you may want to recompile if any of these changes.  We do
+     not do this today.
+
+  2. After producing the `main` executable, checking that running `main`
+     gives the same result as a reference output `main.ref`.
 
 Required reading:
   - [simple concrete makefiles](http://nuclear.mutantstargoat.com/articles/make/).
@@ -29,9 +43,10 @@ Required reading:
 ### A simple-minded `Makefile`.
 
 Our first makefile `Makefile.0` hard-codes all dependencies.  Stripping
-out all comments:
+out most comments:
 
 ```make
+    # Makefile.0
     all: main test
 
     main: a.c b.c c.c main.c header.h
@@ -51,17 +66,24 @@ out all comments:
 ```
 
 
-If you look inside it has four rules:
-  - `all` --- this rule is the first rule in the makefile so what `make` 
-    runs as well as any rules it recursively depends on.  It ignores
-    all other rules (e.g., `clean`).    It does not need to be called
-    `all`.  Ours states it depends on `main` and `test` so `make` will
-    run these rules (in that order).   
+This `Makefile` has four rules:
+
+  - `all` --- this rule is the first rule in the makefile so is what the
+    only rule `make`  will run by default, including any rules it
+    recursively depends on.  `make` will ignore all other rules (e.g.,
+    `clean`).    This first rule does not need to be called `all`.
+    Ours states it depends on `main` and `test` rules so `make` will
+    also run these rules (in that order).  
 
      What happens if we changed it as follows?
 
         all: test main
 
+     When does this work the same?  Differently?
+
+     What happens if we changed it to:
+
+        all: main
 
   - `main` --- this rule makes the `main` program by invoking the 
     default compiler (held in the `CC` variable).   It is what we
@@ -69,7 +91,6 @@ If you look inside it has four rules:
 
         main: a.c b.c c.c main.c header.h
 	        $(CC) a.c b.c c.c main.c -o main
-
 
     It explicitly enumerates all dependencies (`a.c`, `b.c`, `c.c`,
     `main.c` and `header.h`) and will re-execute if any of the
@@ -95,4 +116,7 @@ If you look inside it has four rules:
 Both `test` and `clean` don't produce any ouput file, so we tell `make`
 they are `PHONY` targets.   (See the `make` 
 [manual pages for why](https://web.mit.edu/gnu/doc/html/make_4.html#SEC31)).
+(The main reason we do this is that you'll get weird behavior if there
+is a `test` or `clean` file / directory.)
+
 
