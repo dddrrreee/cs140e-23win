@@ -1,0 +1,18 @@
+# makefile 1
+#
+# a very simple minded makefile that:
+#  1. hardcodes all dependencies.
+#  2. only compile parts that need it.
+all: main 
+
+main: a.o b.o c.o main.o 
+	$(CC) a.o b.o c.o main.o -o main
+
+a.o: a.c header.h
+	$(CC) -c a.c -o a.o
+b.o: b.c header.h
+	$(CC) -c b.c -o b.o
+c.o: c.c header.h
+	$(CC) -c c.c -o c.o
+main.o: main.c header.h
+	$(CC) -c main.c -o main.o
