@@ -28,7 +28,26 @@ Required reading:
 ---------------------------------------------------------------------------
 ### A simple-minded `Makefile`.
 
-Our first makefile `Makefile.0` hard-codes all dependencies.
+Our first makefile `Makefile.0` hard-codes all dependencies.  Stripping
+out all comments:
+
+    all: main test
+
+    main: a.c b.c c.c main.c header.h
+	    $(CC) a.c b.c c.c main.c -o main
+
+    .PHONY: clean test
+
+    test:
+	    ./main > out
+	    diff out main.ref
+	    @echo "makefile: program 'main' passed test"
+	    rm -f out
+
+    # cleanup remove outputs and temporary files
+    clean:
+	    rm -f main out *~ *.bak
+
 
 If you look inside it has four rules:
   - `all` --- this rule is the first rule in the makefile so what `make` 
