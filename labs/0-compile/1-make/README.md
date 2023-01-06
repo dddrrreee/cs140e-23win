@@ -31,6 +31,7 @@ Required reading:
 Our first makefile `Makefile.0` hard-codes all dependencies.  Stripping
 out all comments:
 
+```make
     all: main test
 
     main: a.c b.c c.c main.c header.h
@@ -47,6 +48,7 @@ out all comments:
     # cleanup remove outputs and temporary files
     clean:
 	    rm -f main out *~ *.bak
+```
 
 
 If you look inside it has four rules:
