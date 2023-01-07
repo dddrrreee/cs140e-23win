@@ -14,23 +14,25 @@ is huge and sprawling,there is a narrow  slice that will do most of what
 you need.  We cover most of that slice today by doing increasingly fancy
 varions of a `Makefile` that does two things:
 
-  1. Produces an executable file <main> by compiling the C files `a.c`,
-     `b.c`, `c.c`, `main.c`.
+  1. Produces an executable file `main` by compiling the C source
+     files `a.c`, `b.c`, `c.c`, `main.c`.
 
-     Correctness rule 1: All of these files include a header file
+     Correctness rule 1: any source file must be recompiled if
+     it cheanges and after `main` regenerated.
+  
+     Correctness rule 2: All of these files `#include` a header file
      `header.h` and so must be recompiled if `header.h` changes.
 
-     Correctness rule 2: if any C file changes, or anything it depends
-     on changes, it must be re-compiled and `main` regenerated.
+     In general, a source file must be recompiled if anything it depends
+     on changes.  For today we only worry about the header `header.h`.
+     Of course, the makefile itself is a dependency.  
 
-     Note: we only worry about the header.   Of course the Makefile
-     itself is a dependency.  Strictly speaking, the operating system
-     installation, compiler (assembler, linker, preprocessor) or libc
-     implementations can be seen as dependencies as well ---- in some
-     cases you may want to recompile if any of these changes.  We do
-     not do this today.
+     In addition, the operating system installation, compiler (assembler,
+     linker, preprocessor) or libc implementations can be seen as
+     dependencies as well ---- in some cases you may want to recompile
+     if any of these changes.  We do not do this today.
 
-  2. After producing the `main` executable, checking that running `main`
+  2. After producing the `main` executable, check that running `main`
      gives the same result as a reference output `main.ref`.
 
 Required reading:
@@ -38,9 +40,8 @@ Required reading:
     While the domain name is weird, the `make` examples are concrete,
     simple, useful.
 
-
-If you understand the required reading, feel free to jump to part 4
-and just implement it.  (You should be able to answer the questions
+If you understand the required reading, feel free to jump to part 4 and
+just implement it.  (You should be able to answer the boldfaced questions
 in the other parts.)
 
 ---------------------------------------------------------------------------
@@ -128,4 +129,6 @@ is a `test` or `clean` file / directory.)
 
   3. The `@` as part of the `test` rule suppresses output.   Change
      the rule so it only prints if the test passed or failed.
-    
+
+---------------------------------------------------------------------------
+### 1. A simple-minded makefile: `Makefile.1`
