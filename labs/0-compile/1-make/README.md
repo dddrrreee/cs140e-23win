@@ -39,8 +39,12 @@ Required reading:
     simple, useful.
 
 
+If you understand the required reading, feel free to jump to part 4
+and just implement it.  (You should be able to answer the questions
+in the other parts.)
+
 ---------------------------------------------------------------------------
-### A simple-minded `Makefile`.
+### 0. A simple-minded makefile: `Makefile.0`
 
 Our first makefile `Makefile.0` hard-codes all dependencies.  Stripping
 out most comments:
@@ -65,7 +69,6 @@ out most comments:
 	    rm -f main out *~ *.bak
 ```
 
-
 This `Makefile` has four rules:
 
   - `all` --- this rule is the first rule in the makefile so is what the
@@ -74,16 +77,6 @@ This `Makefile` has four rules:
     `clean`).    This first rule does not need to be called `all`.
     Ours states it depends on `main` and `test` rules so `make` will
     also run these rules (in that order).  
-
-     What happens if we changed it as follows?
-
-        all: test main
-
-     When does this work the same?  Differently?
-
-     What happens if we changed it to:
-
-        all: main
 
   - `main` --- this rule makes the `main` program by invoking the 
     default compiler (held in the `CC` variable).   It is what we
@@ -95,14 +88,6 @@ This `Makefile` has four rules:
     It explicitly enumerates all dependencies (`a.c`, `b.c`, `c.c`,
     `main.c` and `header.h`) and will re-execute if any of the
     dependencies change.
-
-    What happens if you delete some or all of these dependencies?
-    For example:
-
-        main: 
-	        $(CC) a.c b.c c.c main.c -o main
-
-     When will this work?  What is an example of when it will break?
 
   - `test` --- this rule runs `diff` to compare the result of `main` to
     `out.ref`.
@@ -118,5 +103,26 @@ they are `PHONY` targets.   (See the `make`
 [manual pages for why](https://web.mit.edu/gnu/doc/html/make_4.html#SEC31)).
 (The main reason we do this is that you'll get weird behavior if there
 is a `test` or `clean` file / directory.)
+
+***Questions***:
+
+  1. What happens if we changed the `all` rule as follows?
+
+        all: test main
+
+     When does this work the same?  Differently?
+
+     What happens if we changed it as follows?
+
+        all: main
+
+
+  2. What happens if you delete some or all of the `main` rule
+     dependencies?  For example:
+
+        main: 
+	        $(CC) a.c b.c c.c main.c -o main
+
+     When will this work?  What is an example of when it will break?
 
 
