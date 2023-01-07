@@ -108,20 +108,20 @@ is a `test` or `clean` file / directory.)
 
   1. What happens if we changed the `all` rule as follows?
 
-        all: test main
+            all: test main
 
      When does this work the same?  Differently?
 
      What happens if we changed it as follows?
 
-        all: main
+            all: main
 
 
   2. What happens if you delete some or all of the `main` rule
      dependencies?  For example:
 
-        main: 
-	        $(CC) a.c b.c c.c main.c -o main
+            main: 
+	            $(CC) a.c b.c c.c main.c -o main
 
      When will this work?  What is an example of when it will break?
 
