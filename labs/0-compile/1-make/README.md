@@ -126,3 +126,6 @@ is a `test` or `clean` file / directory.)
      When will this work?  What is an example of when it will break?
 
 
+  3. The `@` as part of the `test` rule suppresses output.   Change
+     the rule so it only prints if the test passed or failed.
+    
