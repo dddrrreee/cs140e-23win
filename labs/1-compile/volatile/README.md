@@ -274,7 +274,7 @@ are magic and falsely assumes:
             // wait until mailbox is not full
             while(*status & MAILBOX_FULL)
                 ;
-            ...
+            return;
 
      In this case, the compiler sees that the `while` loop contains no
      store that can affect `status`.  Because it assumes sequential
