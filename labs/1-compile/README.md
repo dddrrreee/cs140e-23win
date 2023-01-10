@@ -20,29 +20,33 @@ What to do:
   1. Read through [volatile writeup](volatile/README.md)
       and work through the `examples-volatile` and `examples-pointer`.
 
-  2. Write good makefiles for `examples-volatile` and `examples-pointer`.
+
+Checkoff:
+
+  1. Write good makefiles for `examples-volatile` and `examples-pointer`.
      These should use wildcards and automatic dependencies.  After
      compiling a `.c` into a `.o` they should disassemble the result.
 
+-------------------------------------------------------------------
 
+### write good makefiles for `volatile/examples-*`
 
-Required reading:
+If you look at the makefiles in these subdirectories, they are awful.
+Rewrite them from scratch using the methods from:
+
   - [simple concrete makefiles](http://nuclear.mutantstargoat.com/articles/make/).
-    While the domain name is weird, the `make` examples are concrete,
-    simple, useful.
 
+In particular:
+  - Use wildcard patterns to get all the `.c` files from 
+    the current directory and generate `.o` files from them.
+  - Have a `CFLAGS`, `DIS` and `CC` variables so you can 
+    switch between compiler, disassembly, and compiler options.
+  - In the custom `%.o` rule you define, disassemble the resultant
+    `.o`.
+  - Use the built in make variables `$@` and and `$<`
+  - Install the ARM compiler and make sure your makefile can correctly use it.
 
---------------------------------------------------------------------
-#### `git`
+Additional reading:
+  - [The wikipedia page gives a reasonable overview](https://en.wikipedia.org/wiki/Make_(software))
+  - [cheatsheet](https://devhints.io/makefile)
 
-Useful reading:
-  - [Wikipedia volatile]
-    (https://en.wikipedia.org/wiki/Volatile_(computer_programming))
-  - [How gcc treats volatile](https://gcc.gnu.org/onlinedocs/gcc/Volatiles.html).
-  - Linux's [case against volatile]:
-    (https://github.com/spotify/linux/blob/master/Documentation/volatile-considered-harmful.txt)
-
-  - [Long thread on volatile and threads]
-    (https://groups.google.com/g/comp.lang.c++.moderated/c/_O9XxTmkLvU).
-  - Another [against volatile](https://sites.google.com/site/kjellhedstrom2/stay-away-from-volatile-in-threaded-code)
-  - [Linux memory barriers](https://www.kernel.org/doc/Documentation/memory-barriers.txt).
