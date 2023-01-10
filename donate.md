@@ -3,7 +3,7 @@
 tl;dr: our class paypal link to donate money for food
 and equipment:
 
-    - [paypalme/hackerfood](paypal.com/paypalme/hackerfood)
+  - [paypalme/hackerfood](paypal.com/paypalme/hackerfood)
 
 Even $30 helps defray costs, $700 will pay for a lab's worth of food,
 $2k will pay for a section leader (the default staff budget we have is
