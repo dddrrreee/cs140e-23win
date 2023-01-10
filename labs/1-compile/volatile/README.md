@@ -445,8 +445,8 @@ We have only covered a sliver of the issues.   In the interests of
 time, rather than have a lot more prose, we just throw a bunch of 
 examples at the problem.  What to do now:
 
-  - Go through the examples in the `examples-volatile/` and
-    `examples-pointer` directory.
+  - Go through the volatile examples in the `examples-volatile/` and
+    figure out (1) what the problem is and (2) how to fix it.
 
   - Get a feel for compiler observation games, by going through the
     `pointer` directory examples.  Each dereference of a pointer is
