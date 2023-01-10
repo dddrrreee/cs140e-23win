@@ -18,7 +18,7 @@ the forest and no one is there to hear it:
    - It could fall out of order with other trees since you can't tell.
    - Or rendering could be deferred until someone walks by.
 
-(A famous equivalance-substitution example is the Turing test.  When I
+(A famous equivalence-substitution example is the Turing test.  When I
 grew up, this was a snickering, "irrelevant" thing to worry about.  Now,
 it's going to be interesting to see where the new gen of AI behaves in
 an observably equivalent way to humans and can put them out of a job
@@ -31,22 +31,22 @@ Over-simplifying, the as-if substitution principle is:
    it was P ---  then we say they are equivalent and, for example,
    we can replace P with P_better.
 
-   - Equivalance substitution can apply at any level: a single line of
+   - Equivalence substitution can apply at any level: a single line of
    code (replacing an expensive multiply with a shift for power-of-two
    multiplicands), a procedure (e.g., linear sort with quick sort) or
    even an entire system.    Presumably you have have relied on a rough
-   notion of equivalance substitution multiple times where you replace
+   notion of equivalence substitution multiple times where you replace
    an old laptop you can replace an old laptop with a new, faster one
    or an old version of an OS with a newer one, or setup dual booting.
 
-Equivalance substitution is a core systems principle.  We will use it,
+Equivalence substitution is a core systems principle.  We will use it,
 exploit it, and sometimes be burned by it this quarter.  It shows up at
 every level of the computer systems.  It's the only reasons things work
 at all at any kind of speed.
 
 Weirdly, despite being ubiquitous, it's rarely talked about explicitly.
 
-### Some general rules for equivalance  substitution
+### Some general rules for equivalence  substitution
 
 When you write code, you likely reason about how it behaves by looking
 at the source code at the source code (loops, variables, function
@@ -57,8 +57,8 @@ directly.  Thus the compiler translates your source code down to low-level
 it was the original (sort of: only if your program was well-defined).
 
 As part of this translation, compilers aggressively optimize code
-by replacing possibly large chunks with puportedly faster or smaller
-equivalants that behave "as if" they were the original.  The compiler
+by replacing possibly large chunks with purportedly faster or smaller
+equivalents that behave "as if" they were the original.  The compiler
 will frequently reorder operations or delete them
 (dead code removal) if it believes an external
 observer could not tell.  A very small set of examples:
@@ -73,7 +73,7 @@ observer could not tell.  A very small set of examples:
 
 The key issue for the compiler's game is what an "observer" is.  If the
 observer can tell the difference between P and P', then they are not
-equivalant. 
+equivalent. 
 
 As an example of observation and equivalence, consider the 
 contrived code:
@@ -164,7 +164,7 @@ observer is:
 
      With complete information (such as your CPU, a debugger, or even
      a disassembler) can see exactly how code differs --- if we had to
-     satisfy the equivalency judgement of these observers, we could
+     satisfy the equivalence judgement of these observers, we could
      never optimize anything, because they could detect any change.
      For example, if you replaced a multiply with a shift or reordered
      two stores, any disassembler or debugger could see this.
@@ -175,19 +175,20 @@ observer can be fooled the most number of ways.  Of course, the kicker
 is "as possible": a human looking at the code must be able to look at
 (observe) the program and reason about what it does.  Humans already
 can't do simple, reliably --- adding non-deterministic behavior (e.g.,
-look up "memory models") can easily make correctnes hopeless.
+look up "memory models") can easily make correctness hopeless.
 
 In the big world, the rough place many systems settle on is that they
 ignore "how" a result is computed (what instructions actually run on
-the CPU), and instead only require that external actions.  For example,
-they require that network messages, disk writes, output statements,
-exceptions, or launching a rocket happen in the order they are written,
-without duplication or eliminating (not always).  As long as these
-observations remain the same, they treat code itself as a black box and
-(very roughly speaking) do not concern themselves with what actual CPU
-operations performed.  An entire program could be replaced with a lookup
-table if that gives equivalant results, or even deleted entirely if it
-has no output.
+the CPU), and instead only require that externally observable actions
+such as network messages, disk writes, output statements, exceptions,
+or launching a rocket happen in the order they are written, without
+duplication or eliminating. As long as these observations remain the
+same, they treat code itself as a black box and (very roughly speaking)
+do not concern themselves with what actual CPU operations performed.
+An entire program could be replaced with a lookup table if that gives
+equivalent results, or even deleted entirely if it has no output.
+There are interesting, subtle variations you can play for this (some
+covered in CS240), but we leave them aside for the moment.
 
 ### How as-if lets the compiler wtf-you.
 
@@ -208,21 +209,21 @@ your problems:
 
 How this breaks your code:
 
-  1. The C compiler intends to preserve side-effect equivalance with a
-     "sequentially consistent" program where every read returns the value of
-     the last write.
+  1. The C compiler is allowed to do any transformation that
+     preserves side-effect equivalence with a "sequentially consistent"
+     program where every read returns the value of the last write.
 
   2. But any memory location shared between threads, interrupts or
-    hardware devices can potentially be read or written in ways that
-    the compiler assumes are "impossible".   These reads or writes will
-    break your code.
+     hardware devices can potentially be read or written in ways that
+     the compiler assumes are "impossible".   These reads or writes will
+     break your code.
 
 Trivial example: if we have code that does:
 
     y = 1                   
     x = 2;
 
-Since there is no read of `y` or `x` in this code --- no observertation
+Since there is no read of `y` or `x` in this code --- no observation
 of either variable --- `gcc` can reorder these as:
 
     x = 2;
@@ -237,8 +238,6 @@ they see if these reorderings or deletions occur.  This can cause real
 problems.  Or consider a bit fancier code where `x` was called `lock`
 and was supposed to protect `y` --- if the compiler reorders writes to
 `lock` and `y` it's broken your critical section.
-
-
 
 ### A specific way the compiler will break your code this quarter
 
@@ -257,49 +256,116 @@ Thus, this hardware is both a strict observer and a mutator of these
 special locations.  Unfortunately, `gcc` has no idea these locations
 are magic and falsely assumes:
 
-  1. The only way to read a location is via a load within the program.
+
+  1. The only way to change the value of a location is a store
+     within a program.
+
+     The compiler does not realize that that there is an external device
+     that can spontaneously change the value without any visible prodding.
+
+     A cliched example of how this breaks:
+
+            #define MAILBOX_FULL   (1<<31)
+
+            // status field of r/pi mailbox
+            static uint32_t *status =  (void*)(0x2000B880+4*7);
+
+            // wait until mailbox is not full
+            while(*status & MAILBOX_FULL)
+                ;
+            ...
+
+    In this case, the compiler sees not store that could affect `status`,
+    so it checks the value once, and if it is full, infinite loops
+    without reading the location again (this is not what we want).  
+    Otherwise falls through (this is fine).
+
+            % arm-none-eabi-gcc -O3 -c wait-not-full.c 
+            % arm-none-eabi-objdump -d  wait-not-full.o 
+
+            00000000 <wait_not_full>:
+            # load <status> address
+            0:	e59f300c 	ldr	r3, [pc, #12]
+            # load <status> value
+            4:	e593389c 	ldr	r3, [r3, #2204]
+            # compare if high bit set
+            8:	e3530000 	cmp	r3, #0
+            # if not: return
+            c:	a12fff1e 	bxge	lr
+            # if so: inf loop
+            10:	eafffffe 	b	10 <wait_not_full+0x10>
+            # status address: hack b/c can't load w
+            # one instruction.
+            14:	2000b000 	.word	0x2000b000
+
+  2. The only way to read a location is via a load within the program.
 
      The compiler does not realize there is a concurrent hardware device
      that can see exactly what is written as soon as the change occurs.
 
-     An easy way to break:
+     A contrived example of how this can be bad, assume we have an
+     `initialized` variable and a `cnt` variable shared with an
+     interrupt handler.
 
-        device->enable_interrupt = 0;
-        device->enable_device = 1;
+        int initialized;
+        unsigned *cnt;
 
-     Given that there are no reads, the compiler could potentially
-     reorder this as:
+        // assume: will run whenever interrupts trigger
+        void int_handler(void) {
+            if(!initialized)
+                return;
+            *cnt = *cnt + 1;
+        }
 
-        device->enable_device = 1;
-        device->enable_intterrupt = 0;
+        // initialization code
+        cnt = malloc(sizeof *cnt);
+        *cnt = 0;
+        initialized = 1;
 
-  2. The only way to change the value of a location is a store 
-     within a program.
+     Given that the two assignments are independent for sequential code,
+     the compiler could potentially reorder this as:
 
-    The compiler does not realize that that there is an external
-    device that can spontenously change the value without any 
-    visible prodding.
+        initialized = 1;
+        cnt = malloc(sizeof *cnt);
+        *cnt = 0;
 
-that there is an external
-agent that can see or affect these values, and so its optimizations
-can totally destroy the intended semantics.   (You cannot detect such
-problems without looking at the machine code it generates; which is a
-good reason to get in the habit of doing so!)
+     Which would cause memory corruption or reads of garbage values if the
+     interrupt handler triggered during this process.
 
-One method to handle this problem is to mark any shared memory location as
-`volatile`.  The rough rule for `gcc` is that it will not remove, add,
-or reorder loads and stores to volatile locations.  
+     Note: usually the code would work.  If it didn't, not many people
+     could figure out the issue.
 
-A bit more precisely, from the very useful [blog](https://blog.regehr.org/archives/28):
+
+To repeat: threads, interrupt handlers, and devices are all external
+agent that can see or affect program values in ways that violate the
+compilers assumptions.  Thus, since it does transformations without
+an accurate notion of what can see the result, its optimizations can
+totally destroy the intended semantics.  (It can be very hard to detect
+such problems without looking at the machine code it generates; which
+is a good reason to get in the habit of doing so!)
+
+### volatile
+
+One method to handle this problem is to mark any shared memory location
+as `volatile` which, crudely, tells the compiler this marked location
+is magic and can spontaneously change or instantaneously, continuously
+be read.  The rough rule for `volatile` in `gcc` is that it will
+not remove, add, or reorder loads and stores to volatile locations.
+(Even rougher: volatile has whatever semantics  is needed so the the
+linux kernel roughly works when compiled with gcc.)
+
+Some high level rules from the very useful
+[blog](https://blog.regehr.org/archives/28):
 
  - Use `volatile` only when you can provide a precise technical
- justification.  `volatile` is not a substitute for thought
+   justification.  `volatile` is not a substitute for thought
 
- - If an aggregate type is `volatile`, the effect is the same as making all
- members `volatile`.
+ - If an aggregate type is `volatile`, the effect is the same as
+ making all
+   members `volatile`.
 
  - The C standard is unambiguous that `volatile` side effects must
- not move past sequence points
+   not move past sequence points
 
 As a more cynical counter-point from someone who should know:
 
@@ -316,9 +382,8 @@ only occasionally break.  Tracking down the problem is a nightmare (add
 a `printf`?   Problem goes away.  Remove some code?  Same.  Add some
 code?  Same.)  As a result, for this class we only ever read/write
 device memory using trivial assembly functions `get32` and `put32`
-(disussed in lab `1-gpio`) since this defeats any attempt of current
-compilers to opimize the operations they perform.   
-
+(discussed in lab `1-gpio`) since this defeats any attempt of current
+compilers to optimize the operations they perform.   
 
 A contrived example:
 
@@ -377,7 +442,7 @@ For today we will:
   - To refresh your view of C, look through the `c-traps` directory.
 
     It's worth thinking about how you actually reason about what your
-    code does.  This likely involves working forwads or backwards
+    code does.  This likely involves working forwards or backwards
     following a sequence of how/what each storage location (variable,
     heap) is assigned, what is read, and what side-effects occur.
     You are likely informally computing what "happens before" to determine
