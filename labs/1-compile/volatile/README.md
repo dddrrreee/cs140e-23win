@@ -31,7 +31,7 @@ Over-simplifying, the as-if substitution principle is:
    it was P ---  then we say they are equivalent and, for example,
    we can replace P with P_better.
 
-   Equivalance substitution can apply at any level: a single line of
+   - Equivalance substitution can apply at any level: a single line of
    code (replacing an expensive multiply with a shift for power-of-two
    multiplicands), a procedure (e.g., linear sort with quick sort) or
    even an entire system.    Presumably you have have relied on a rough
@@ -48,13 +48,12 @@ Weirdly, despite being ubiquitous, it's rarely talked about explicitly.
 
 ### Some general rules for equivalance  substitution
 
-
 When you write code, you likely reason about how it behaves by looking
 at the source code at the source code (loops, variables, function
 calls, etc) and pushing the side-effects of these operations forwards
-and backwards.  However, obviously, hardware can't run C/C++/Rust
-source directly.  Thus the compiler translates your source code down
-to low-level operations that --- aspirationally --- will behave "as if"
+and backwards.  However, obviously, hardware can't run C/C++/Rust source
+directly.  Thus the compiler translates your source code down to low-level
+"machine code" operations that --- aspirationally --- will behave "as if"
 it was the original (sort of: only if your program was well-defined).
 
 As part of this translation, compilers aggressively optimize code
@@ -76,24 +75,30 @@ The key issue for the compiler's game is what an "observer" is.  If the
 observer can tell the difference between P and P', then they are not
 equivalant. 
 
-If you think about it, there is a tension between how much the observer
-sees and:
-  1. How easy it is for us to reason about the code (since the observations 
-     are what we are allowed to rely on.
-  2. How much the compiler or system can substitute.
+If you think about it, a strong observer is good for correctness but
+bad for speed, and vice versa.
+The more all-seeing and all-knowing the observer is:
 
-If we define every single operation as occuring in the order its written
-(sequential consistency) exactly as written, this is is easiest for us
-as programmers to reason about.  What does the code do?  Exactly what
-it says, in exactly the order it's written, with no changes.  What you
-see is what you get.
+  1. The easier it is for us to reason about the code (since the
+     observations are what we are allowed to rely on).  Slightly reworded:
+     the more the observer can rely on the easier the code gets for the
+     observer to reason about.
 
-Of course, an all-seeing, all-knowing observer with complete information
-(such as your CPU, a debugger, or even a disassembler) can see exactly
-how code differs --- if we had to satisfy the equivalency judgement of
-these observers, we could never optimize anything, because they could
-detect any change.  For example, if you replaced a multiply with a shift
-or reordered two stores, any disassembler or debugger could see this.
+     If we define every single operation as occuring in the order its
+     written (sequential consistency) exactly as written, this is is
+     easiest for us as programmers to reason about.  What does the
+     code do?  Exactly what it says, in exactly the order it's written,
+     with no changes.  What you see is what you get.
+
+  2. But the more changes the observer can detect,
+     and the less substitution can occur.
+
+     With complete information (such as your CPU, a debugger, or even
+     a disassembler) can see exactly how code differs --- if we had to
+     satisfy the equivalency judgement of these observers, we could
+     never optimize anything, because they could detect any change.
+     For example, if you replaced a multiply with a shift or reordered
+     two stores, any disassembler or debugger could see this.
 
 The game we play is to --- perhaps counte-intuitively --- try to make
 the observer as weak as possible (while still being useful), since a weak
@@ -104,15 +109,16 @@ can't do simple, reliably --- adding non-deterministic behavior (e.g.,
 look up "memory models") can easily make correctnes hopeless.
 
 In the big world, the rough place many systems settle on is that they
-ignore "how" a result is computed, and instead only require that external
-actions ---- e.g., network messages, disk writes, output statements,
-exceptions, or launching a rocket --- happen in the order they are
-written, without duplication or eliminating (not always).  As long as
-these observations remain the same, they treat code itself as a black
-box and (very roughly speaking) do not concern themselves with what
-actual CPU operations performed.  An entire program could be replaced
-with a lookup table if that gives equivalant results, or even deleted
-entirely if it has no output.
+ignore "how" a result is computed (what instructions actually run on
+the CPU), and instead only require that external actions.  For example,
+they require that network messages, disk writes, output statements,
+exceptions, or launching a rocket happen in the order they are written,
+without duplication or eliminating (not always).  As long as these
+observations remain the same, they treat code itself as a black box and
+(very roughly speaking) do not concern themselves with what actual CPU
+operations performed.  An entire program could be replaced with a lookup
+table if that gives equivalant results, or even deleted entirely if it
+has no output.
 
 ### How as-if lets the compiler wtf-you.
 
@@ -121,10 +127,28 @@ roughly speaking, the C compiler `gcc` that we will use  assumes that only
 the source code you write can affect values, and only do so sequentially.
 It does not know about threads, interrupts, or hardware devices.
 
-It tries to preserve side-effect equivalance with a "sequentially
-consistent" program where every read returns the value of the last write.
+Let's say it again, since one sentence will be the root of many of
+your problems:
 
-Thus, if we have code that does:
+  - C does not know about threads, interrupts, or hardware devices.
+  - C does not know about threads, interrupts, or hardware devices.
+  - C does not know about threads, interrupts, or hardware devices.
+  - C does not know about threads, interrupts, or hardware devices.
+  - C does not know about threads, interrupts, or hardware devices.
+  - C does not know about threads, interrupts, or hardware devices.
+
+How this breaks your code:
+
+  1. The C compiler intends to preserve side-effect equivalance with a
+     "sequentially consistent" program where every read returns the value of
+     the last write.
+
+  2. But any memory location shared between threads, interrupts or
+    hardware devices can potentially be read or written in ways that
+    the compiler assumes are "impossible".   These reads or writes will
+    break your code.
+
+Trivial example: if we have code that does:
 
     y = 1                   
     x = 2;
@@ -144,6 +168,7 @@ they see if these reorderings or deletions occur.  This can cause real
 problems.  Or consider a bit fancier code where `x` was called `lock`
 and was supposed to protect `y` --- if the compiler reorders writes to
 `lock` and `y` it's broken your critical section.
+
 
 
 ### A specific way the compiler will break your code this quarter
