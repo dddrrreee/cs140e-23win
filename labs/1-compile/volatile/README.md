@@ -263,7 +263,8 @@ are magic and falsely assumes:
      The compiler does not realize that that there is an external device
      that can spontaneously change the value without any visible prodding.
 
-     A cliched example of how this breaks:
+     A cliched example of how this breaks, consider some typical code
+     that waits until a status field says a hardware FIFO is not full:
 
             #define MAILBOX_FULL   (1<<31)
 
@@ -275,10 +276,12 @@ are magic and falsely assumes:
                 ;
             ...
 
-    In this case, the compiler sees not store that could affect `status`,
-    so it checks the value once, and if it is full, infinite loops
-    without reading the location again (this is not what we want).  
-    Otherwise falls through (this is fine).
+     In this case, the compiler sees that the `while` loop contains no
+     store that can affect `status`.  Because it assumes sequential
+     execution, it can replace the loop with an if-statement that
+     checks the loop condition once, and if it is true, infinite loops
+     without reading the location again (this is not what we want).
+     Otherwise falls through (this is fine).
 
             % arm-none-eabi-gcc -O3 -c wait-not-full.c 
             % arm-none-eabi-objdump -d  wait-not-full.o 
