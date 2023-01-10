@@ -302,7 +302,6 @@ are magic and falsely assumes:
             14:	2000b000 	.word	0x2000b000
 
   2. The only way to read a location is via a load within the program.
-
      The compiler does not realize there is a concurrent hardware device
      that can see exactly what is written as soon as the change occurs.
 
@@ -310,27 +309,27 @@ are magic and falsely assumes:
      `initialized` variable and a `cnt` variable shared with an
      interrupt handler.
 
-        int initialized;
-        unsigned *cnt;
+            int initialized;
+            unsigned *cnt;
 
-        // assume: will run whenever interrupts trigger
-        void int_handler(void) {
-            if(!initialized)
-                return;
-            *cnt = *cnt + 1;
-        }
+            // assume: will run whenever interrupts trigger
+            void int_handler(void) {
+                if(!initialized)
+                    return;
+                *cnt = *cnt + 1;
+            }
 
-        // initialization code
-        cnt = malloc(sizeof *cnt);
-        *cnt = 0;
-        initialized = 1;
+            // initialization code
+            cnt = malloc(sizeof *cnt);
+            *cnt = 0;
+            initialized = 1;
 
      Given that the two assignments are independent for sequential code,
      the compiler could potentially reorder this as:
 
-        initialized = 1;
-        cnt = malloc(sizeof *cnt);
-        *cnt = 0;
+            initialized = 1;
+            cnt = malloc(sizeof *cnt);
+            *cnt = 0;
 
      Which would cause memory corruption or reads of garbage values if the
      interrupt handler triggered during this process.
