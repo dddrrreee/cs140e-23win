@@ -23,9 +23,7 @@ with all coupons the food budget is going to be around $1200 a week.
 (So about 4.8k a month.)
 
 You would think Stanford would pay for food and equipment, but they
-do not.  It's an interesting game theory question as to why buildings
-and administration costs win over teaching budgets, but I'm not cynical
-enough to correctly solve for the optimal here.
+do not.  
 
 In any case, the kids have to get fed, so please donate if you find the
 material useful.
