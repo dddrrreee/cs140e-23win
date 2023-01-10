@@ -75,9 +75,50 @@ The key issue for the compiler's game is what an "observer" is.  If the
 observer can tell the difference between P and P', then they are not
 equivalant. 
 
+As an example of observation and equivalence, consider the 
+contrived code:
+
+        // trivial.c
+        int foo(void) {
+            int x = 3;
+            int y = 4;
+            int z = 5;
+            int w = 6;
+        
+            return x*y+z*w;
+        }
+
+If we compile this to machine code and then disassemble the machine
+code we can see exactly what the compiler did:
+
+    # compile with reasonable optimization using the 
+    # arm gcc compiler for this class
+    % arm-none-eabi-gcc -O2 -c trivial.c
+    # disassemble
+    % arm-none-eabi-objdump -d trivial.o
+
+    Disassembly of section .text:
+    00000000 <foo>:
+        0:	e3a0002a 	mov	r0, #42	; 0x2a
+        4:	e12fff1e 	bx	lr
+
+Here the compiler views the only "observation" that occurs as the value
+returned from `foo`.  Since all the variables are constants, it can
+replace these with the single constant `42` and return it it.
+
+A couple notes:
+  1. You should get used to looking at machine code!
+  2. Even if you don't know how to write assembly code, or
+     even understand all (most) of of the instructions, it's possible
+     to get a sense for key events such as what locations are being read
+     or written, what values returned, etc.
+
+
+### Tradeoffs in observer power
+
 If you think about it, a strong observer is good for correctness but
-bad for speed, and vice versa.
-The more all-seeing and all-knowing the observer is:
+bad for speed, and vice versa.  The more all-seeing and all-knowing the
+observer is:
 
   1. The easier it is for us to reason about the code (since the
      observations are what we are allowed to rely on).  Slightly reworded:
