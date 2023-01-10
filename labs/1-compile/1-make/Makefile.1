@@ -3,7 +3,7 @@
 # a very simple minded makefile that:
 #  1. hardcodes all dependencies.
 #  2. only compile parts that need it.
-all: main 
+all: main  test
 
 main: a.o b.o c.o main.o 
 	$(CC) a.o b.o c.o main.o -o main
@@ -16,3 +16,5 @@ c.o: c.c header.h
 	$(CC) -c c.c -o c.o
 main.o: main.c header.h
 	$(CC) -c main.c -o main.o
+
+include common.mk

@@ -25,6 +25,7 @@ all: main test
 #  % touch header.h
 #  % make        # will produce <main>
 main: a.c b.c c.c main.c header.h
+	# main: rule
 	$(CC) a.c b.c c.c main.c -o main
 
 # tell `make` the <test> and <clean> rules don't 
@@ -39,6 +40,7 @@ main: a.c b.c c.c main.c header.h
 #
 # This will rerun each time you run `make -f Makefile.0`
 test:
+	# test: rule
 	./main > out
 	diff out main.ref
 	@echo "makefile: program 'main' passed test"
