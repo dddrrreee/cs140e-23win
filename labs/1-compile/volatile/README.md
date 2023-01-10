@@ -119,8 +119,9 @@ A couple notes:
   3. Even though your laptop almost certainly uses a different CPU than
      the pi, we can still compile code for the pi on it ("cross-compilation").
 
-  4. Further, since the code is well-defined, we can compile the same code
-     for other architectures and will see a similar result.  For example,
+  4. Further, since the code for `trivial.c` is well-defined, we can
+     compile ito for other machine architectures and yet still see
+     similar behavior.  For example, using the native `gcc` and `objdump`
      on my 64-bit x86 laptop:
 
             % gcc -O2 -c trivial.c
@@ -143,16 +144,20 @@ If you think about it, a strong observer is good for correctness but
 bad for speed, and vice versa.  The more all-seeing and all-knowing the
 observer is:
 
-  1. The easier it is for us to reason about the code (since the
-     observations are what we are allowed to rely on).  Slightly reworded:
-     the more the observer can rely on the easier the code gets for the
-     observer to reason about.
+  1. The easier it is for us as programmers to reason about the code
+     (since the observations are what we are allowed to rely on).
+     If code can behave in exactly one way, it is easier to reason
+     about.  
 
-     If we define every single operation as occuring in the order its
-     written (sequential consistency) exactly as written, this is is
-     easiest for us as programmers to reason about.  What does the
+     For example, if we define every single operation as occuring in the
+     order its written (sequential consistency) exactly as written, this
+     is is easiest for us as programmers to reason about.  What does the
      code do?  Exactly what it says, in exactly the order it's written,
      with no changes.  What you see is what you get.
+
+     On the other hand if the code is allowed to have different possible
+     results (e.g., if it has a non-sequential memory model) it's harder
+     to figure out what is going on.
 
   2. But the more changes the observer can detect,
      and the less substitution can occur.
@@ -164,7 +169,7 @@ observer is:
      For example, if you replaced a multiply with a shift or reordered
      two stores, any disassembler or debugger could see this.
 
-The game we play is to --- perhaps counte-intuitively --- try to make
+The game we play is to --- perhaps counter-intuitively --- try to make
 the observer as weak as possible (while still being useful), since a weak
 observer can be fooled the most number of ways.  Of course, the kicker
 is "as possible": a human looking at the code must be able to look at
