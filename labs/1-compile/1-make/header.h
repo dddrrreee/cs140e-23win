@@ -8,5 +8,7 @@ void a(void);
 void b(void);
 void c(void);
 
+// defined in subdir
+void d(void);
 
 #endif

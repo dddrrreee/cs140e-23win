@@ -1,4 +1,4 @@
-M = Makefile.1
+M = Makefile.3
 
 # compile using Makefile.0
 all:  main test
@@ -7,7 +7,7 @@ main:
 	make -f $(M)
 
 # tell `make` these rules don't produce anything.
-.PHONY: test clean
+.PHONY: test clean main
 
 # make sure <main> produces the same result.
 test: 

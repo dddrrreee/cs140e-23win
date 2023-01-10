@@ -2,4 +2,5 @@
 
 void c(void) { 
     printf("in c()\n");
+    d();
 }

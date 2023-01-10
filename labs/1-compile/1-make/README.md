@@ -157,4 +157,42 @@ is a `test` or `clean` file or directory.)
      What happens and why?  Fix it!
 
 ---------------------------------------------------------------------------
-### 1. A simple-minded makefile: `Makefile.1`
+### 1. Simple-minded makefile: `Makefile.1`
+
+In the previous makefile, we always recompiled all `.c` files even
+if only one changed.  For a small project, this doesn't matter
+(and does make the makefile simple).  However, for big projects you
+don't want to regenerate everything but instead will recompile just
+what you need.  A first, sort-of dumb method:
+
+
+```make
+		# Makefile.1
+        all: main  test
+
+        main: a.o b.o c.o main.o 
+	        $(CC) a.o b.o c.o main.o -o main
+        a.o: a.c header.h
+	        $(CC) -c a.c -o a.o
+        b.o: b.c header.h
+	        $(CC) -c b.c -o b.o
+        c.o: c.c header.h
+	        $(CC) -c c.c -o c.o
+        main.o: main.c header.h
+	        $(CC) -c main.c -o main.o
+
+        include common.mk
+```
+
+This will re-compile any source file whose dependency changed,
+producing an object file (e.g., `a.c` becomes `a.o`).
+It will then re-generate `main` using only the `.o` files.
+So we don't hvae to keep including the rest of the file, we just
+include `common.mk`.
+
+What to do:
+  1. Rewrite this makefile so that it uses pattern rules  and there is
+     a single rule for how to produce a `.o` from a `.c` file.
+
+     Use the built-in variables `$@` and `$^` --- you can print these
+     out using the `echo` command.
