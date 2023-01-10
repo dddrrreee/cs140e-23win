@@ -102,9 +102,13 @@ code we can see exactly what the compiler did:
         0:	e3a0002a 	mov	r0, #42	; 0x2a
         4:	e12fff1e 	bx	lr
 
+
 Here the compiler views the only "observation" that occurs as the value
-returned from `foo`.  Since all the variables are constants, it can
-replace these with the single constant `42` and return it it.
+returned from `foo`.  Since all of `foo`'s local variables are constants, 
+the compiler can compute the final result at compile-time ("statically")
+and replace all these calculations with 
+a single constant `42` and return it (on ARMv6,
+an integer return result is put in register `r0`).
 
 A couple notes:
   1. You should get used to looking at machine code!
@@ -112,7 +116,26 @@ A couple notes:
      even understand all (most) of of the instructions, it's possible
      to get a sense for key events such as what locations are being read
      or written, what values returned, etc.
+  3. Even though your laptop almost certainly uses a different CPU than
+     the pi, we can still compile code for the pi on it ("cross-compilation").
 
+  4. Further, since the code is well-defined, we can compile the same code
+     for other architectures and will see a similar result.  For example,
+     on my 64-bit x86 laptop:
+
+            % gcc -O2 -c trivial.c
+            % objdump -d trivial.c
+            0000000000000000 <foo>:
+                0:	f3 0f 1e fa          	endbr64 
+                4:	b8 2a 00 00 00       	mov    $0x2a,%eax
+                9:	c3                   	retq   
+
+     Here, too, the compiler has computed 42 (`0x2a`) and returned it.
+     Though, unsurprisingly, the machine code looks very different.
+
+
+   5. The reason the code addresses start at 0 is that we have not linked
+      the code.  We'll discuss this in later labs.
 
 ### Tradeoffs in observer power
 
