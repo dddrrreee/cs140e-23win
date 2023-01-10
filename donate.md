@@ -1,12 +1,12 @@
 ### Consider donating to the class!  
 
-tl;dr: our class paypal link to donate for food
+tl;dr: our class paypal link to donate money for food
 and equipment:
 
     - [paypalme/hackerfood](paypal.com/paypalme/hackerfood)
 
 Even $30 helps defray costs, $700 will pay for a lab's worth of food,
-$2k will pay for a section leader (the staff budget we are given is
+$2k will pay for a section leader (the default staff budget we have is
 woefully inadequate), and $25k can cover the quarter.
 
 As always, all 140E class course materials are provided, free, in our github
@@ -24,11 +24,11 @@ with all coupons the food budget is going to be around $1200 a week.
 
 You would think Stanford would pay for food and equipment, but they
 do not.  It's an interesting game theory question as to why buildings
-and administration costs win over teaching budgets, but I'm not smart
-enough to solve for the optimal here.
+and administration costs win over teaching budgets, but I'm not cynical
+enough to correctly solve for the optimal here.
 
-In any case, the kids have to get fed, so please donate if you find
-the material useful.
+In any case, the kids have to get fed, so please donate if you find the
+material useful.
 
 Note, the paypal method doesn't give a tax write-off, but on the other
 hand there is zero administrative overhead, so the money goes right to
