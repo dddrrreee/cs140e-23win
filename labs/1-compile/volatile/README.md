@@ -1,12 +1,16 @@
-Today we look at some quick examples to give a feel for how hardware-level
-(operating system) programming is different from at application level.
+# Observation, code equivalance, and bugs.
 
-Today is the only non-lab class. 
-   1. We give a broad, high-level view of the course: `intro.pdf`.
-   2. We try to give a feel for the type of thinking in the class by
-      doing a narrow deep-ish dive into the issue of how a compiler
-      can cause extreme grief by optimizing code that controls hardware.
+Below we have a quick --- very incomplete and rough --- view of how the
+C compiler  can break your code because it assumes C code only executes
+sequentially.  As a result, many of the transformations the compiler
+performs can destroy correctness when they involve memory locations read
+or written by threads, interrupt handlers or hardware devices.  (All
+things we do in this course.)
 
+This is a good example of how the hardware-level programming we do in
+this class is different from what you are used to at application level.
+
+--------------------------------------------------------------------
 ### The "As-if" substitution principle.
 
 Bishop Berkeley is the patron saint of computer stuff.  If a tree falls in 
@@ -239,6 +243,7 @@ problems.  Or consider a bit fancier code where `x` was called `lock`
 and was supposed to protect `y` --- if the compiler reorders writes to
 `lock` and `y` it's broken your critical section.
 
+--------------------------------------------------------------------
 ### A specific way the compiler will break your code this quarter
 
 For this class, often you will communicate with hardware devices
@@ -346,6 +351,7 @@ totally destroy the intended semantics.  (It can be very hard to detect
 such problems without looking at the machine code it generates; which
 is a good reason to get in the habit of doing so!)
 
+--------------------------------------------------------------------
 ### volatile
 
 One method to handle this problem is to mark any shared memory location
@@ -432,22 +438,29 @@ the fake abstraction of a programming language and what the machine
 actually runs.  (One of the goals of this class is to frequently have you
 rip back the lies of abstractions and see something closer to reality.)
 
-### Examples
+--------------------------------------------------------------------
+### What to do now
 
-For today we will:
-  - Go through the examples in the `volatile/` directory.
+We have only covered a sliver of the issues.   In the interests of
+time, rather than have a lot more prose, we just throw a bunch of 
+examples at the problem.  What to do now:
 
-  - Get a feel for compiler observation games, by going through the 
-    `pointer` directory examples.  Each dereference of a pointer is a
-      observation --- the compiler can only optimize if it's sure no pointer
-      dereference can catch it.
-  - To refresh your view of C, look through the `c-traps` directory.
+  - Go through the examples in the `examples-volatile/` and
+    `examples-pointer` directory.
 
-    It's worth thinking about how you actually reason about what your
-    code does.  This likely involves working forwards or backwards
-    following a sequence of how/what each storage location (variable,
-    heap) is assigned, what is read, and what side-effects occur.
-    You are likely informally computing what "happens before" to determine
-    what causes what.  Your reasoning is likely sequential and tries to
-    ignore stuff that is not (hopefully) not relevant, such as the 100+
-    other programs executing on your computer when this one is.
+  - Get a feel for compiler observation games, by going through the
+    `pointer` directory examples.  Each dereference of a pointer is
+    a observation --- the compiler can only optimize if it's sure no
+    pointer dereference can catch it.
+
+Useful volatile reading:
+  - [Wikipedia volatile]
+    (https://en.wikipedia.org/wiki/Volatile_(computer_programming))
+  - [How gcc treats volatile](https://gcc.gnu.org/onlinedocs/gcc/Volatiles.html).
+  - Linux's [case against volatile]:
+    (https://github.com/spotify/linux/blob/master/Documentation/volatile-considered-harmful.txt)
+
+  - [Long thread on volatile and threads]
+    (https://groups.google.com/g/comp.lang.c++.moderated/c/_O9XxTmkLvU).
+  - Another [against volatile](https://sites.google.com/site/kjellhedstrom2/stay-away-from-volatile-in-threaded-code)
+  - [Linux memory barriers](https://www.kernel.org/doc/Documentation/memory-barriers.txt).
