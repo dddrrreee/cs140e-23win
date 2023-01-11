@@ -72,17 +72,32 @@ you'll understand much more deeply in a way that cannot be faked.
 (Hence this class.)
 
 For this lab you will write code to implement Thompson's hack in three
-steps: start with `code/step1`, then `code/step2`, then `code/step3`.
+steps: start with `code/step1` (easy), then `code/step2` (medium), 
+then `code/step3` (hardest).
 
-Check-off:
+Standard check-off:
    - When you type `make` in `code/step3` the test passes.
+   - Extension: redo all the steps in a different programming language.
+
+Hard check-off:
+
+  - Do not use our code at all but write everything on your own
+    from the paper.  This will maximize difficulty, but also understanding
+    Just make sure it passes our `make check` in `step3`.
+
+    NOTE: in general for any lab you can always ignore
+    our code and just implement your own from scratch as long
+    as the provided tests pass.
 
 -----------------------------------------------------------------------
 ### step1: write a self-reproducing program generator
 
 To get started, we'll first finish implementing the self-reproducing
 program (a [quine](https://en.wikipedia.org/wiki/Quine_(computing)))
-based on Figure 1 in Thompson's paper.
+based on Figure 1 in Thompson's paper:
+
+   - If `make check` passes in `code/step1` then your code works.
+
 
 #### What to do
 
@@ -134,19 +149,19 @@ and (2) the input itself (as shown in the beginning of Figure 1).
     If the `diff` matches: Congratulations!  This is the first step in
     replicating Thompson's hack.  If not start running each one at a
     time and look at the output.
+  
+    To make this easier, we've added a target `check` in the
+    `step1/Makefile`: you can check using `make check`.
 
 --------------------------------------------------------------------------
 #### step2: inject an attack into `step2/login` and `step2/compiler`
 
 We now start writing a simple version of the compiler code injection
-attack Thompson described.
+attack Thompson described by 
+manually implementing (1) the backdoor in `step2/login` and (2) 
+the code in `step2/compiler`.
+that will inject the backdoor into `login` when compiling it.
 
-In this second step we're going to inject trivial attacks into the 
-`step2/login` and `step2/compiler` in the obvious way and check that these work.
-
-You can do all this on your own from the Thompson paper and ignore our
-code (as long as it checks out!) or do the suggestions in Step 1 and
-Step 2 below.
 
 We give you:
 
