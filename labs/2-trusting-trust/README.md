@@ -80,7 +80,8 @@ Check-off:
 ### step1: write a self-reproducing program.
 
 To get started, we'll first finish implementing the self-reproducing
-program based on Figure 1 in Thompson's paper.
+program (a [quine](https://en.wikipedia.org/wiki/Quine_(computing)))
+based on Figure 1 in Thompson's paper.
 
 #### What to do
 
@@ -106,22 +107,22 @@ it (as shown in the beginning of Figure 1).
     program based on `Figure 1`.  This will hopefully shake out any
     ambiguity in the paper.
 
-  - To check your work, just do `make` in `code/step`.
-
-    It should run the following and pass:
+  - You can then use `string-to-char-array` to produce a self-replicating
+    quine as follows:
 
         # 1. generate byte array based on seed.c
-        ./string-to-char-array < seed.c > replicate.c
+        ./string-to-char-array < seed.c > quine.c
         # 2. concatenate seed.c to the emitted byte array
-        cat seed.c >> replicate.c
+        cat seed.c >> quine.c
         # 3. compile the result
-        gcc replicate.c -o replicate
+        gcc quine.c -o quine
         # 4. run it and put the output in kid.c
-        ./replicate > kid.c
-        # 5. make sure kid.c and replicate.c are identical.
-        diff replicate.c kid.c
-
-  - If this passes: Congratulations!  This is the first step in
+        ./quine > quine-output.c
+        # 5. make sure the quine and the output it produces
+        # are identical.
+        diff quine.c quine-output.c
+        
+    If this passes: Congratulations!  This is the first step in
     replicating Thompson's hack.  If not start running each one at a
     time and look at the output.
 
