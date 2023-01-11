@@ -31,7 +31,9 @@ Among other things, this makes fixing compile errors much easier.
 
 ---
 
-#### Part 1: micro-SD card stuff
+### Part 1: micro-SD card stuff
+
+This part isn't super important for Thursday, but you'll need it for Tuesday.
 
 In order to run code on the pi, you will need to be able to write to a
 micro-SD card on your laptop:
