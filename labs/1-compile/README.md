@@ -74,22 +74,30 @@ Install the toolchain:
 
 ### write good makefiles for `volatile/examples-*`
 
-If you look at the makefiles in these subdirectories, they are awful.
-Rewrite them from scratch using the methods from:
+If you look at the makefiles in these subdirectories, they are awful. You will fix them.
+
+Rewrite both `volatile/examples-pointer/Makefile` and `volatile/examples-volatile/Makefile` from scratch using the methods from:
 
   - [simple concrete makefiles](http://nuclear.mutantstargoat.com/articles/make/).
+
+At the end of this lab, when you type `make` in either `volatile/examples-pointer` or `volatile/examples-volatile`, all `.c`'s should be compiled into `.o`'s and corresponding disassembled `.dis`'s should be generated. 
 
 In particular:
   - Use wildcard patterns to get all the `.c` files from 
     the current directory and generate `.o` files from them.
   - Have a `CFLAGS`, `DIS` and `CC` variables so you can 
     switch between compiler, disassembly, and compiler options.
+      - `CC` should be the name of your compiler (either `gcc`, `clang`, or `arm-none-eabi-gcc`)
+      - `DIS` should be the name of your disassembler (either `objdump` or `arm-none-eabi-objdump`)
   - In the custom `%.o` rule you define, disassemble the resultant
     `.o`.
   - Use the built in make variables `$@` and and `$<`
   - Install the ARM compiler and make sure your makefile can correctly use it.
 
+Note: `make` has some automatic rules to make `.o` files from `.c` files; make sure it's using your rules and not the built-in ones.
+
 Additional reading:
   - [The wikipedia page gives a reasonable overview](https://en.wikipedia.org/wiki/Make_(software))
   - [cheatsheet](https://devhints.io/makefile)
 
+Once you think you're done, please check in with one of the CA's (this is typical for labs--at the end of each lab you'll want to "check off" your work with a CA).
