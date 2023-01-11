@@ -452,6 +452,9 @@ examples at the problem.  What to do now:
     `pointer` directory examples.  Each dereference of a pointer is
     a observation --- the compiler can only optimize if it's sure no
     pointer dereference can catch it.
+    
+  - Rewrite Makefiles in examples-volatile and examples-pointer to use
+    wildcards.
 
 Useful volatile reading:
   - [Wikipedia volatile]
