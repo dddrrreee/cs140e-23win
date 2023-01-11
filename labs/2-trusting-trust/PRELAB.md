@@ -31,39 +31,6 @@ Among other things, this makes fixing compile errors much easier.
 
 ---
 
-### git and checking out the class repo
-
-1.  If you don't have `git`, install it on your laptop. We use `git`
-    to push all assignments and code to you.
-
-    MacOS seems to ship with `git`, but you might need to install the
-    xcode command line tools with:
-
-        % xcode-select --install
-
-    Ubuntu:
-
-        % sudo apt install git
-
-2.  Use `git` to clone (check out) the class repository:
-
-        % git clone git@github.com:dddrrreee/cs140e-23win.git
-
-    Not recommended: If you don't want to install a key on github, use:
-
-        % git clone https://github.com/dddrrreee/cs140e-23win.git
-
-    Pro tip: run your `git clone` command in some sensible directory
-    (e.g., `~/class/`) and remember where you checked your repository
-    out to! Also, know how to find it. We had a surprising (to me)
-    number of people lose work last year because they did not do this.
-
-    Pro tip: **_Do not download the class repository directly as a
-    .zip file_**! Direct download will be both tedious and overwrite
-    any local changes you do later.
-
----
-
 #### Part 1: micro-SD card stuff
 
 In order to run code on the pi, you will need to be able to write to a
