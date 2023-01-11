@@ -7,7 +7,7 @@ Before lab:
   - Make sure you read the [PRELAB](./PRELAB.md)
   - Read the paper for today: [trusting-trust.pdf](./trusting-trust.pdf)
     carefully (I'd say at least three times).
-  - Make sure you can answer the [reading questions](./READING-Q.md).
+  - Make sure you can answer the reading questions[READING-Q](./READING-Q.md).
   - Look through the code in `code/step1`, `code/step2` and `code/step3`:
     you will be implementing the missing pieces.
   - And of course, read this README to see what you'll be doing.
