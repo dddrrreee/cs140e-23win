@@ -7,30 +7,31 @@ Before lab:
   - Make sure you read the [PRELAB](./PRELAB.md)
   - Read the paper for today: [trusting-trust.pdf](./trusting-trust.pdf)
     carefully (I'd say at least three times).
-  - Make sure you can answer the reading questions[READING-Q](./READING-Q.md).
+  - Make sure you can answer the reading questions [READING-Q](./READING-Q.md).
   - Look through the code in `code/step1`, `code/step2` and `code/step3`:
     you will be implementing the missing pieces.
-  - And of course, read this README to see what you'll be doing.
+  - And of course, before lab read this README a couple times
+    to see what you'll be doing.
 
 Today we'll a simple version of the code in the short Ken Thompson paper
 (`trusting-trust.pdf`).  This paper was his Turing award lecture (our
-field's nobel prize), where he discussed an evil, very slippery hack he
+field's Nobel prize), where he discussed an evil, very slippery hack he
 implemented on the early Unix systems that injected an invisible backdoor
 that let him login to any system.  What is interesting about the trick:
 
   - You couldn't see the attack by inspecting the Unix `login` source
     because the system compiler `cc` injected the backdoor attack 
     whenever `login` was compiled.  This is devious, but conceptually
-    straightforward.
+    straightforward. 
 
   - But you also couldn't see the attack by inspecting the `cc` compiler's
     source because the shipped compiler binary `bin/cc` would inject the
-    code to that would inject the `login` attack into `login` whenever
-    `bin/cc` compiled the `cc` source code.
+    the code that would inject the `login-backdoor` attack into `login`
+    whenever `bin/cc` compiled the `cc` source code.
 
-    This means (1) the `cc` source was clean and contained no attack
+    This means (1) the `cc` source code was clean and contained no attack
     injection code but (2) if you compiled `cc` source with the infected
-    `cc` binary, then the infected `cc` would produce another the infected
+    `cc` binary, the infected `cc` would produce another the infected
     `cc` binary from the clean `cc` source.
 
     This hack is devious and very not conceptually straightforward.
