@@ -2,8 +2,9 @@
 
 Reading deliverable:
 
-- Read the paper `cs240lx-trusting-trust.annot.pdf` very carefully at
-  least three times. You'll be implementing it. Do this first and
+- Read the paper
+  [`cs240lx-trusting-trust.annot.pdf`](./cs240lx-trusting-trust.annot.pdf) very
+  carefully at least three times. You'll be implementing it. Do this first and
   thoroughly. You'll need it for Thursday.
 - Do the [prelab
   assignment](https://www.gradescope.com/courses/488143/assignments/2556045) on
@@ -12,7 +13,7 @@ Reading deliverable:
   questions will help locate the tricky parts before you implement them
   yourself.
 
-Coding deliverable: 0. Make sure you have some way to open at least two windows side by side
+Coding deliverable: Make sure you have some way to open at least two windows side by side
 on your laptop so you can edit code in one and compile in the other.
 Among other things, this makes fixing compile errors much easier.
 
