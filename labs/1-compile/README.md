@@ -96,3 +96,4 @@ Additional reading:
   - [The wikipedia page gives a reasonable overview](https://en.wikipedia.org/wiki/Make_(software))
   - [cheatsheet](https://devhints.io/makefile)
 
+Once you think you're done, please check in with one of the CA's (this is typical for labs--at the end of each lab you'll want to "check off" your work with a CA).
