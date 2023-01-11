@@ -86,16 +86,17 @@ based on Figure 1 in Thompson's paper.
 
 #### What to do
 
-Finish implementing `code/step1/string-to-char-array.c` which
-when fed `code/step1/seed.c`  will spit out character array describing
-it (as shown in the beginning of Figure 1).
+Finish implementing `code/step1/quine-gen.c` which
+when fed `code/step1/seed.c`  will spit out a self-contained
+quine that contains (1) a character array describing the input
+and (2) the input itself (as shown in the beginning of Figure 1).
 
   - We give you `code/step1/seed.c`: the main part of the C code in
     the paper (so you don't have to type it in).
 
   - When you run your finished code:
 
-            % ./string-to-char-array < seed.c 
+            % ./quine-gen < seed.c 
 
     You should get something that looks like:
 
@@ -103,6 +104,17 @@ it (as shown in the beginning of Figure 1).
 	            47, 	47, 	32, 	99, 	97, 	110, 	
                 32, 	112,    117, 	116, 	32, 	97, 	
                 ...
+	            125, 	10, 0 };
+            // can put any payload (held in a character array as in Thompson's
+            // paper) here, before the rest of the code
+
+            // Don't modify below.
+            #include <stdio.h>
+
+            // the C code for thompson's replicating program, more-or-less.
+            int main() { 
+            ...
+
 
     This is all you need to automatically generate the self-reproducing
     program based on `Figure 1`.  This will hopefully shake out any
