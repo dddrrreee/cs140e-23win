@@ -87,10 +87,14 @@ In particular:
     the current directory and generate `.o` files from them.
   - Have a `CFLAGS`, `DIS` and `CC` variables so you can 
     switch between compiler, disassembly, and compiler options.
+      - `CC` should be the name of your compiler (either `gcc`, `clang`, or `arm-none-eabi-gcc`)
+      - `DIS` should be the name of your disassembler (either `objdump` or `arm-none-eabi-objdump`)
   - In the custom `%.o` rule you define, disassemble the resultant
     `.o`.
   - Use the built in make variables `$@` and and `$<`
   - Install the ARM compiler and make sure your makefile can correctly use it.
+
+Note: `make` has some automatic rules to make `.o` files from `.c` files; make sure it's using your rules and not the built-in ones.
 
 Additional reading:
   - [The wikipedia page gives a reasonable overview](https://en.wikipedia.org/wiki/Make_(software))
