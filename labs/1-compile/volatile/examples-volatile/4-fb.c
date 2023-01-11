@@ -35,7 +35,6 @@ void write_mailbox_x(mailbox_t *mbox, unsigned channel) {
     cp.depth = 32;
     cp.x_offset = cp.y_offset = 0;
     cp.pointer = 0;
-    asm volatile ("" : : : "memory");
 
     mbox->write = ((unsigned)(&cp) | channel | 0x40000000);
 }

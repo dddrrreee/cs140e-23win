@@ -11,7 +11,7 @@ typedef struct {
 #define MAILBOX_EMPTY  (1<<30)
 #define MAILBOX_FULL   (1<<31)
 
-static mailbox_t *mbox =  (void*)0x2000B880;
+static volatile mailbox_t *mbox =  (void*)0x2000B880;
 
 void write_mailbox(volatile void *data, unsigned channel) {
     while(mbox->status & MAILBOX_FULL)

@@ -1,7 +1,6 @@
 # good breakdown: http://cs107e.github.io/guides/make/
 CFLAGS = -O3 -Wall -Werror -std=gnu99
-PROGS = 2-wait.o 
-#wait-not-full.o # 0-timer.o 1-timer.o 1-timer-fix.o 2-wait.o 3-fb.o 4-fb.o 1-timer-fix.real.o 5-barrier.o
+PROGS = 2-wait.o wait-not-full.o  0-timer.o 1-timer.o 1-timer-fix.o 2-wait.o 3-fb.o 4-fb.o 1-timer-fix.real.o 5-barrier.o
 
 all : $(PROGS)
 

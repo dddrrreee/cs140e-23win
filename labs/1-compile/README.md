@@ -29,6 +29,49 @@ Checkoff:
 
 -------------------------------------------------------------------
 
+### install the toolchain
+
+For this class you need to compile bare-metal r/pi programs on your
+computer, which is most likely not a bare-metal r/pi itself.  Thus we
+need to set up the tools needed to `cross-compile` r/pi programs on
+your computer and to r/pi binaries.
+
+Install the toolchain:
+   -  For a mac use the [cs107e install notes](http://cs107e.github.io/guides/install/mac/).  Note: do not
+      install the python stuff.
+
+   -  For [ubuntu/linux](https://askubuntu.com/questions/1243252/how-to-install-arm-none-eabi-gdb-on-ubuntu-20-04-lts-focal-fossa), ARM recently
+      changed their method for distributing the tool change.   Now you
+      must manually install.  As of this lab, the following works:
+
+            wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+
+            sudo tar xjf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 -C /usr/opt/
+
+      Then either add symlinks to these:
+
+            sudo ln -s /usr/opt/gcc-arm-none-eabi-10.3-2021.10/bin/* /usr/bin/
+
+      Or, cleaner, add `/usr/opt/gcc-arm-none-eabi-10.3-2021.10/bin` to your
+      `path` variable in your shell configuration file (e.g., `.tchsrc`
+       or `.bashrc`), save it, and `source` the configuration.  When you run:
+
+
+            arm-none-eabi-gcc
+            arm-none-eabi-ar
+            arm-none-eabi-objdump
+
+      You should not get a "Command not found" error.
+
+
+      You may also have to add your username to the `dialout` group.
+
+      If gcc can't find header files, try:
+
+           sudo apt-get install libnewlib-arm-none-eabi
+
+
+
 ### write good makefiles for `volatile/examples-*`
 
 If you look at the makefiles in these subdirectories, they are awful.
