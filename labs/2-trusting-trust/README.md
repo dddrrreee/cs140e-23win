@@ -78,7 +78,7 @@ Check-off:
    - When you type `make` in `code/step3` the test passes.
 
 -----------------------------------------------------------------------
-### step1: write a self-reproducing program.
+### step1: write a self-reproducing program generator
 
 To get started, we'll first finish implementing the self-reproducing
 program (a [quine](https://en.wikipedia.org/wiki/Quine_(computing)))
@@ -94,7 +94,7 @@ and (2) the input itself (as shown in the beginning of Figure 1).
   - We give you `code/step1/seed.c`: the main part of the C code in
     the paper (so you don't have to type it in).
 
-  - When you run your finished code:
+  - After you implement `quine-gen.c` and then run it:
 
             % ./quine-gen < seed.c 
 
@@ -120,22 +120,18 @@ and (2) the input itself (as shown in the beginning of Figure 1).
     program based on `Figure 1`.  This will hopefully shake out any
     ambiguity in the paper.
 
-  - You can then use `string-to-char-array` to produce a self-replicating
-    quine as follows:
+  - You can then test that your `quine-gen` will produce a quine program
+    that will emit itself as follows:
 
-        # 1. generate byte array based on seed.c
-        ./string-to-char-array < seed.c > quine.c
-        # 2. concatenate seed.c to the emitted byte array
-        cat seed.c >> quine.c
-        # 3. compile the result
-        gcc quine.c -o quine
-        # 4. run it and put the output in kid.c
-        ./quine > quine-output.c
-        # 5. make sure the quine and the output it produces
-        # are identical.
-        diff quine.c quine-output.c
+	    # 1. Generate the paper quine
+	    % ./quine-gen < seed.c > quine.c
+	    # 2. Use quine to generate itself
+	    % cc quine.c -o quine
+	    % ./quine > quine-out.c
+	    # 3. Check generated quine matches quine
+	    % diff quine.c quine-out.c
         
-    If this passes: Congratulations!  This is the first step in
+    If the `diff` matches: Congratulations!  This is the first step in
     replicating Thompson's hack.  If not start running each one at a
     time and look at the output.
 
