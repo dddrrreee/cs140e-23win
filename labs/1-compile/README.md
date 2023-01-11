@@ -74,10 +74,13 @@ Install the toolchain:
 
 ### write good makefiles for `volatile/examples-*`
 
-If you look at the makefiles in these subdirectories, they are awful.
-Rewrite them from scratch using the methods from:
+If you look at the makefiles in these subdirectories, they are awful. You will fix them.
+
+Rewrite both `volatile/examples-pointer/Makefile` and `volatile/examples-volatile/Makefile` from scratch using the methods from:
 
   - [simple concrete makefiles](http://nuclear.mutantstargoat.com/articles/make/).
+
+At the end of this lab, when you type `make` in either `volatile/examples-pointer` or `volatile/examples-volatile`, all `.c`'s should be compiled into `.o`'s and corresponding disassembled `.dis`'s should be generated. 
 
 In particular:
   - Use wildcard patterns to get all the `.c` files from 
