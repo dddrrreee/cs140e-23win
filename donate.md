@@ -12,19 +12,21 @@ Donation methods:
 
     Note: this paypal method doesn't give a tax write-off.  On the other
     hand, there is zero administrative overhead, so the money goes right to
-    the students.  (We're happy to send a photo of the receipt and food;
-    or add a "sponsors" list if that is useful) I can also provide btc
-    or eth links.
+    the students.  
+
+    We're happy to send a photo of the receipt and food; or add a
+    "sponsors" list if that is useful.  (I can also provide btc or
+    eth links.)
 
   - For larger amounts where a tax write off is needed:
-    email directly (engler@stanford.edu) and we'll start the gift donation
-    process through official Stanford channels.  One caveat: after some of
-    the recent scandals you might have seen in the news, gift donations
-    have become a several month affair.  (E.g., Meta donated last year
-    and it took about 3 months.)
+    email directly (engler@stanford.edu) to start the gift donation
+    process through official Stanford channels.  One caveat: after
+    some of the recent scandals you might have seen in the news, gift
+    donations have become a several month affair.  (E.g., Meta donated
+    last year and it took about 3 months.)
 
   - We also take interesting equipment donations!   Anything with a 
-    datasheet and 60+ quantities is potentially interesting.
+    datasheet and 60+ quantities is potentially useful.
 
 As always, all 140E class course materials are provided, free, in our github
 repo, so helping this class helps others, too.
