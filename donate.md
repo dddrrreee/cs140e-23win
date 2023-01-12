@@ -15,13 +15,14 @@ and equipment:
     or add a "sponsors" list if that is useful) I can also provide btc
     or eth links.
 
-For larger amounts from a company where a tax write off is needed (thank you!):
+For larger gift amounts where a tax write off is needed:
 
- - We can also do gift donations through Stanford official channels
-   --- just email directly (engler@stanford.edu).  One caveat: after
-   some of the recent scandals you might have seen in the news, gift
-   donations have become a several month affair.  (E.g., Meta donated
-   last year and it took about 3 months.)
+   - We can also do gift donations through Stanford official channels.
+   --- just email directly (engler@stanford.edu) and we'll forward to the
+   right administration people..  One caveat: after some of the recent
+   scandals you might have seen in the news, gift donations have become
+   a several month affair.  (E.g., Meta donated last year and it took
+   about 3 months.)
 
 As always, all 140E class course materials are provided, free, in our github
 repo, so helping this class helps others, too.
@@ -34,11 +35,10 @@ As with all past years, I largely pay for both food and equipment money
 using my Stanford salary.  As the class size grows, this expense is
 on track to get close to half my take-home pay.  E.g., even with cheap
 domino's pizza with all coupons the food budget is going to be around
-$1000 a week.  (So about 4k a month.)
+$1000 a week.  (So about 4k a month.) 
 
 You would think Stanford would pay for food and equipment, but they
-do not.  Every lab instructor I've talked to has their own stories about
-doing the moral equivalent of bake sales to buy art supplies.
+do not. 
 
 In any case, the students have to get fed and equip'd, so please donate
 if you find the material useful.
