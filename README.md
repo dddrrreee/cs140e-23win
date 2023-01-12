@@ -9,8 +9,6 @@ Tl;dr:
     [please consider donating](./donate.md) --- all donated funds go
     entirely to buy food and equipment for the 2023 lab students.
 
-### Summary
-
 CS140E is an introductory operating systems course. It roughly covers
 the same high-level material as [CS 212][cs212] (formerly CS 140), but
 with a focus on embedded systems, interacting directly with hardware,
