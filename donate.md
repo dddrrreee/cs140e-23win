@@ -38,8 +38,7 @@ $1000 a week.  (So about 4k a month.)
 
 You would think Stanford would pay for food and equipment, but they
 do not.  Every lab instructor I've talked to has their own stories about
-doing the moral equivalant of bake sales to buy art supplies.
+doing the moral equivalent of bake sales to buy art supplies.
 
-In any case, the students have to get fed, so please donate if you find the
-material useful.
-
+In any case, the students have to get fed and equip'd, so please donate
+if you find the material useful.
