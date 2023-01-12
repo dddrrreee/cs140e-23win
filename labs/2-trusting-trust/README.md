@@ -17,100 +17,7 @@ Today we'll a simple version of the code in the short Ken Thompson paper
 (`trusting-trust.pdf`).  This paper was his Turing award lecture (our
 field's Nobel prize), where he discussed an evil, very slippery hack he
 implemented on the early Unix systems that injected an invisible backdoor
-that let him login to any system.  What is interesting about the trick:
-
-  - You couldn't see the attack by inspecting the Unix `login` source
-    because the system compiler `cc` injected the backdoor attack 
-    whenever `login` was compiled.  This is devious, but conceptually
-    straightforward. 
-
-  - But you also couldn't see the attack by inspecting the `cc` compiler's
-    source because it wasn't in there --- the shipped compiler binary 
-    would detect when it was compiling the compiler source code and 
-    automatically inject the code into the compiler that in turn could
-    inject the backdoor into the login program.
-
-    This is both devious and not straightfordward.
-
-
-Words make this awkward.  To make it concrete, we have three programs:
-
-  - `compiler.c`: the clean unhacked compiler, with no attack.
-    It can compile itself.
-            
-                # generate a new compiler binary
-                % compiler compiler.c -o compiler
-
-  - `login.c`: the clean unhacked login program.   When run
-    it prompts for a user name.  If the user does not exist
-    it exits.  For example:
-
-                % compiler login.c -o login
-                % login
-                username: ken
-                Not such user: exiting.
-
-  - `hacked-compiler.c`: a hacked version of `compiler.c` that 
-    can inject an attack into login:
-
-                % hacked-compiler login.c -o login
-                % login
-                username: ken
-                Successful login!
-
-    Because the compiler automatically injects the backdoor into
-    it is impossible to inspect `login.c` to see the attack.
-    (Note: we ignore the fact that login would be remote to make
-    the prompts easier.)
-
-    The big magic trick of `hacked-compiler.c` is that it *also*
-    automatically injects the code to inject this login backdoor
-    when compiling `compiler.c`.  (I.e., it is self-replicating.)
-    When this means is that after you compile `compiler.c` with it:
-
-               % hacked-compiler compiler.c -o compiler
-
-    The `compiler` binary it produces is equivalent to the original
-    `hacked-compiler` binary in that the `compiler` binary contains
-    all the code used by `hacked-compiler.c` to inject attacks both
-    into `login.c` and `compiler.c`.  In other words, `compiler`
-    will self-replicate the attack when it compiles (`compiler.c`)
-    itself *even though the attack is not in `compiler.c`!
-
-    In other words if we do:
-
-               % hacked-compiler compiler.c -o compiler
-               % compiler compiler.c -o compiler
-               % compiler compiler.c -o compiler
-               % compiler compiler.c -o compiler
-               % compiler compiler.c -o compiler
-               % compiler compiler.c -o compiler
-               % compiler compiler.c -o compiler
-               % compiler compiler.c -o compiler
-               % compiler compiler.c -o compiler
-
-    The final `compiler` binary will be equivalant to the 
-    original `hacked-compiler` binary.
-
-    Thus, when you compile `login` with this `compiler` binary it
-    will inject the backdoor:
-
-               % compiler compiler.c -o compiler
-               % compiler login.c -o login
-               % login
-               username: ken
-               Successful login!
-    
-    To re-iterate: if you look in compiler.c there is no attack.
-    If you look in `login.c` there is no attack.   We can even 
-    delete everything to do with the hack:
-
-               % rm hacked-compiler hacked-compiler.c
-    
-    And the flawed binary `compiler` will keep injecting it each
-    time you recompile `compiler.c`.
-
-    This is a weird result that should seem to flirt with the impossible.
+that let him login to any Unix system.  
 
 We will write the code for his hack.  While the paper is short, and the
 hack seems not that hard, when you actually have to write out the code,
@@ -151,6 +58,120 @@ Hard check-off:
     NOTE: in general for any lab you can always ignore
     our code and just implement your own from scratch as long
     as the provided tests pass.
+
+
+-------------------------------------------------------------------
+### Intuition: self-replicating attack injection
+
+What is interesting about his hack:
+
+  - You couldn't see the attack by inspecting the Unix `login` source
+    because the system compiler `cc` injected the backdoor attack 
+    whenever `login` was compiled.  
+
+    This is devious, but conceptually straightforward, what makes the
+    attack subtle is that it was self-replicating:
+
+  - You also couldn't see the attack by inspecting the `cc` compiler's
+    source because the attack was not in there either.  
+
+    The attack lived only in the shipped compiler binary, which detected
+    when it was compiling the clean, non-hacked compiler source code
+    and automatically inject the attack code into the produced binary.
+    This flawed binary was then able to inject attacks both into 
+    login and into the original compiler source.
+    
+    Devious and not straightfordward.
+
+Words make this awkward.  To make it concrete, assume
+we have three single-file programs:
+
+  - `compiler.c`: the clean unhacked compiler, with no attack.
+    It can compile itself:
+    
+            # generate a new compiler binary
+            % compiler compiler.c -o compiler
+
+  - `login.c`: the clean unhacked login program.   When run
+    it prompts for a user name.  If the user does not exist
+    it exits.  For example:
+
+            % compiler login.c -o login
+            % login
+            username: ken
+            Not such user: exiting.
+
+  - `hacked-compiler.c`: a hacked version of `compiler.c` that 
+    can inject an attack into login:
+
+            # inject a backdoor when compiling login.c
+            % hacked-compiler login.c -o login
+
+            # login now has the backdoor and lets ken in.
+            % login
+            username: ken
+            Successful login!
+
+    Because the compiler automatically injects the backdoor into `login.c`
+    during compilation, it is impossible to inspect `login.c` to see
+    the attack.  (Note: we ignore the fact that `login` would be 
+    for remote access so that the transcripts are easier.)
+
+    This is cool, but not that tricky to follow.  The big leap that
+    requires some thought is that `hacked-compiler.c` contains the code
+    to *also* automatically injects its entire set of attacks into a clean
+    `compiler.c` during compilation.  (I.e., self-replicate its attack.)
+
+    When this means is that after you compile `compiler.c` with 
+    `hacked-compiler`:
+
+               % hacked-compiler compiler.c -o compiler
+
+    That the `compiler` binary produced is equivalent to the original
+    `hacked-compiler` binary in that it  contains all the code used
+    by `hacked-compiler.c` to inject attacks both into `login.c` and
+    `compiler.c`. Further, `compiler` now self-replicate the attack
+    when it in turn compiles itself *even though the attack is not in
+    `compiler.c`!
+
+    To make this concrete: if we do:
+
+        
+        % hacked-compiler compiler.c -o compiler
+        % rm hacked-compiler hacked-compiler.c
+        % compiler compiler.c -o compiler
+        % compiler compiler.c -o compiler
+        % compiler compiler.c -o compiler
+        % compiler compiler.c -o compiler
+        # ... doesn't matter how many times ...
+        % compiler compiler.c -o compiler
+        % compiler compiler.c -o compiler
+        % compiler compiler.c -o compiler
+        % compiler login.c -o login
+
+    I.e., the final `compiler` binary will be equivalant to the
+    original `hacked-compiler` binary even though there is (1) no
+    `hacked-compiler` or `hacked-compiler.c` on the system  and (2)
+    `compiler.c` contains only innocent non-attack code.
+
+    Further, when you compile `login.c` with the `compiler` binary it
+    will inject the backdoor.
+
+        % login
+        username: ken
+        Successful login!
+    
+    To re-iterate: if you look in compiler.c there is no attack.
+    If you look in `login.c` there is no attack.   As the 
+    prompts above we can even 
+    delete everything to do with the hack:
+
+        % rm hacked-compiler hacked-compiler.c
+    
+    And the flawed binary `compiler` will keep injecting it each
+    time you recompile `compiler.c`.
+
+    This is a weird result that should seem to flirt with the impossible.
 
 -----------------------------------------------------------------------
 ### step1: write a self-reproducing program generator
