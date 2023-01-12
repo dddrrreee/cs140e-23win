@@ -123,7 +123,7 @@ we have three single-file programs:
     `compiler.c` during compilation.  (I.e., self-replicate its attack.)
 
     When this means is that after you compile `compiler.c` with 
-    `hacked-compiler`:
+    `hacked-compiler` you get the following magic trick:
 
             % hacked-compiler compiler.c -o compiler
             % compiler login.c -o login
@@ -131,13 +131,13 @@ we have three single-file programs:
             username: ken
             Successful login!
 
-
-    That the `compiler` binary produced is equivalent to the original
-    `hacked-compiler` binary in that it  contains all the code used
-    by `hacked-compiler.c` to inject attacks both into `login.c` and
-    `compiler.c`. Further, `compiler` now self-replicate the attack
-    when it in turn compiles itself *even though the attack is not in
-    `compiler.c`*!
+    In other words, during compilation the `hacked-compiler` binary
+    essentially turns `compiler.c` into `hacked-compiler.c` and generates
+    a binary from it. This new `compile` binary will now inject attacks
+    both into `login.c` and `compiler.c` just as `hacked-compiler` does.
+    Further, the `compiler` binary also self-replicates the attack
+    when used to compile itself *even though the attack is not in
+    `compiler.c`*!  (Think about this.)
 
     To take this a step further, we can even delete everything to do
     with the hack and recompile `compiler.c` with its flawed binary over
