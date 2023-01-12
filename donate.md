@@ -2,7 +2,7 @@
 
 Donation methods:
 
-  - [paypalme/hackerfood](paypal.com/paypalme/hackerfood)
+  - [paypal.me/hackerfood](paypal.me/hackerfood)
     is our class paypal link to donate money for food
     and equipment.
 
