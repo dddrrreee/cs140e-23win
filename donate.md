@@ -1,9 +1,10 @@
 ### Consider donating to the class!  
 
-tl;dr: our class paypal link to donate money for food
-and equipment:
+Donation methods:
 
   - [paypalme/hackerfood](paypal.com/paypalme/hackerfood)
+    is our class paypal link to donate money for food
+    and equipment.
 
     Even $30 helps defray costs, $500 will pay for a lab's worth of food,
     $2k will pay for a section leader (our default staff budget is seriously
@@ -15,14 +16,15 @@ and equipment:
     or add a "sponsors" list if that is useful) I can also provide btc
     or eth links.
 
-For larger gift amounts where a tax write off is needed:
+  - For larger amounts where a tax write off is needed:
+    email directly (engler@stanford.edu) and we'll start the gift donation
+    process through official Stanford channels.  One caveat: after some of
+    the recent scandals you might have seen in the news, gift donations
+    have become a several month affair.  (E.g., Meta donated last year
+    and it took about 3 months.)
 
-   - We can also do gift donations through Stanford official channels.
-   --- just email directly (engler@stanford.edu) and we'll forward to the
-   right administration people..  One caveat: after some of the recent
-   scandals you might have seen in the news, gift donations have become
-   a several month affair.  (E.g., Meta donated last year and it took
-   about 3 months.)
+  - We also take interesting equipment donations!   Anything with a 
+    datasheet and 60+ quantities is potentially interesting.
 
 As always, all 140E class course materials are provided, free, in our github
 repo, so helping this class helps others, too.
