@@ -132,22 +132,24 @@ we have three single-file programs:
     by `hacked-compiler.c` to inject attacks both into `login.c` and
     `compiler.c`. Further, `compiler` now self-replicate the attack
     when it in turn compiles itself *even though the attack is not in
-    `compiler.c`!
+    `compiler.c`*!
 
     To make this concrete: if we do:
-
         
-        % hacked-compiler compiler.c -o compiler
-        % rm hacked-compiler hacked-compiler.c
-        % compiler compiler.c -o compiler
-        % compiler compiler.c -o compiler
-        % compiler compiler.c -o compiler
-        % compiler compiler.c -o compiler
-        # ... doesn't matter how many times ...
-        % compiler compiler.c -o compiler
-        % compiler compiler.c -o compiler
-        % compiler compiler.c -o compiler
-        % compiler login.c -o login
+            % hacked-compiler compiler.c -o compiler
+            % rm hacked-compiler hacked-compiler.c
+            % compiler compiler.c -o compiler
+            % compiler compiler.c -o compiler
+            % compiler compiler.c -o compiler
+            % compiler compiler.c -o compiler
+            # ... doesn't matter how many times ...
+            % compiler compiler.c -o compiler
+            % compiler compiler.c -o compiler
+            % compiler compiler.c -o compiler
+            % compiler login.c -o login
+            % login
+            username: ken
+            Successful login!
 
     I.e., the final `compiler` binary will be equivalant to the
     original `hacked-compiler` binary even though there is (1) no
@@ -157,16 +159,12 @@ we have three single-file programs:
     Further, when you compile `login.c` with the `compiler` binary it
     will inject the backdoor.
 
-        % login
-        username: ken
-        Successful login!
-    
     To re-iterate: if you look in compiler.c there is no attack.
     If you look in `login.c` there is no attack.   As the 
     prompts above we can even 
     delete everything to do with the hack:
 
-        % rm hacked-compiler hacked-compiler.c
+            % rm hacked-compiler hacked-compiler.c
     
     And the flawed binary `compiler` will keep injecting it each
     time you recompile `compiler.c`.
