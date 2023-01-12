@@ -17,11 +17,11 @@ and equipment:
 
 For larger amounts from a company where a tax write off is needed (thank you!):
 
-    - We can also do gift donations through Stanford official channels
-    --- just email directly (engler@stanford.edu).  One caveat: after
-    some of the recent scandals you might have seen in the news, gift
-    donations have become a several month affair.  (E.g., Meta donated
-    last year and it took about 3 months.)
+ - We can also do gift donations through Stanford official channels
+   --- just email directly (engler@stanford.edu).  One caveat: after
+   some of the recent scandals you might have seen in the news, gift
+   donations have become a several month affair.  (E.g., Meta donated
+   last year and it took about 3 months.)
 
 As always, all 140E class course materials are provided, free, in our github
 repo, so helping this class helps others, too.
