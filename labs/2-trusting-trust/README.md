@@ -101,11 +101,11 @@ we have three single-file programs:
             username: ken
             Not such user: exiting.
 
-  - `hacked-compiler.c`: a hacked version of `compiler.c` that 
+  - `trojan-compiler.c`: a hacked version of `compiler.c` that 
     can inject an attack into login:
 
             # inject a backdoor when compiling login.c
-            % hacked-compiler login.c -o login
+            % trojan-compiler login.c -o login
 
             # login now has the backdoor and lets ken in.
             % login
@@ -118,23 +118,23 @@ we have three single-file programs:
     for remote access so that the transcripts are easier.)
 
     This is cool, but not that tricky to follow.  The big leap that
-    requires some thought is that `hacked-compiler.c` contains the code
+    requires some thought is that `trojan-compiler.c` contains the code
     to *also* automatically injects its entire set of attacks into a clean
     `compiler.c` during compilation.  (I.e., self-replicate its attack.)
 
     When this means is that after you compile `compiler.c` with 
-    `hacked-compiler` you get the following magic trick:
+    `trojan-compiler` you get the following magic trick:
 
-            % hacked-compiler compiler.c -o compiler
+            % trojan-compiler compiler.c -o compiler
             % compiler login.c -o login
             % login
             username: ken
             Successful login!
 
-    In other words, during compilation the `hacked-compiler` binary
-    essentially turns `compiler.c` into `hacked-compiler.c` and generates
+    In other words, during compilation the `trojan-compiler` binary
+    essentially turns `compiler.c` into `trojan-compiler.c` and generates
     a binary from it. This new `compile` binary will now inject attacks
-    both into `login.c` and `compiler.c` just as `hacked-compiler` does.
+    both into `login.c` and `compiler.c` just as `trojan-compiler` does.
     Further, the `compiler` binary also self-replicates the attack
     when used to compile itself *even though the attack is not in
     `compiler.c`*!  (Think about this.)
@@ -143,8 +143,8 @@ we have three single-file programs:
     with the hack and recompile `compiler.c` with its flawed binary over
     and over and have all the evil self-replicate:
 
-            % hacked-compiler compiler.c -o compiler
-            % rm hacked-compiler hacked-compiler.c
+            % trojan-compiler compiler.c -o compiler
+            % rm trojan-compiler trojan-compiler.c
             % compiler compiler.c -o compiler
             % compiler compiler.c -o compiler
             % compiler compiler.c -o compiler
@@ -159,8 +159,8 @@ we have three single-file programs:
             Successful login!
 
     I.e., once the attack is injected into the `compiler` binary, it
-    is equivalant to the original `hacked-compiler` binary, even though
-    there is no `hacked-compiler` or `hacked-compiler.c` on the system
+    is equivalant to the original `trojan-compiler` binary, even though
+    there is no `trojan-compiler` or `trojan-compiler.c` on the system
     and we have compiled `compiler.c` with `compiler` many times.
 
     And to repeat: if you look in `compiler.c` there is no attack.
@@ -240,42 +240,28 @@ itself.  This will be the code as shown at the beginning of Figure 1.
     in the `step1/Makefile`: you can check using `make check`.
 
 --------------------------------------------------------------------------
-#### step2: inject an attack into `step2/login` and `step2/compiler`
+#### step2: inject attacks into `step2/login` and `step2/compiler`
 
-In this second step we're going to inject trivial attacks into trivial
-`step2/login` and `step2/compiler` programs in the obvious way and check
-that these work.
+In this second step we're going to inject trivial attacks into the
+provided `step2/login.c` and `step2/compiler.c` programs in the obvious
+way and check that these work.  These will not be self-replicating:
+we are just trying to get what the attack code looks like --- step 3
+makes these self-replicate.
 
-As noted at the start of the lab: You can do all this on your own from
-the Thompson paper and ignore our code (as long as it checks out!).
-
-
+Again: As noted at the start of the lab: You can do all this on your own
+from the Thompson paper and ignore our code (as long as it checks out!).
 
 We give you:
 
-  - `login.c`: a dumb login program.
-  - `compile.c`: a trivial "compiler" that just reading in a file and
-    runs `gcc` on it.
+  - `login.c`: a trivial, clean login program that has no attack.
+  - `compile.c`: a trivial clean "compiler" that just reads in a file and
+    runs `gcc` on it.  It has no attack.
   - `trojan-compiler.c`: a copy of `compile.c` that you will modify to
-    insert "attacks".
-
+    insert attacks.
 
 What you should do:
-
-  1. Modify the `compile()` routine in `trojan-compiler.c` so that it
-     scans its input for the start of the `login()` routine in `login.c`.
-     If it finds it, it should inject a backdoor that lets user `ken`
-     in without a password.  This is fairly easy/mechanical.
-
-  2. Similarly: modify the `compile()` routine in `trojan-compiler.c`
-     so that it scans its input for the `compile()` routine in
-     `compiler.c` and, if it finds it, injects a simple print statement
-     that will print each time `compile` runs --- this is a simple
-     placeholder for the final, subtle step in part 3.
-
-##### Make sure the repo code works.
-
-When you run `make` you should see something like:
+  0. Before modifying anything make sure the code works.
+     When you run `make` you should see something like:
 
         % make
         gcc -Og -g -Wall login.c -o login
@@ -288,21 +274,44 @@ When you run `make` you should see something like:
         diff login.out out
         success: compiler compiled login correctly!
 
+  1. Modify the `compile()` routine in `trojan-compiler.c` so that it
+     scans its input looking for the start of the `login()` routine in
+     `login.c`.  If it finds a match, it should inject a backdoor that
+     lets user `ken` in without a password.  This should be fairly
+     easy/mechanical.  From the intuition section above, it should
+     work as follows:
 
-#### Attack `login`
+            % compiler login.c -o login
+            % login
+            username: ken
+            Invalid user!
 
-Here you'll inject an trivial attack in the login program that will make
-`login` return true for user `ken` without asking for a password.
+            % trojan-compiler login.c -o login
+            % login
+            username: ken
+            successful login: <ken>
+
+  2. Add a second modification to the `compile()` routine in
+    `trojan-compiler.c` so that it scans its input for the `compile()`
+    routine in `compiler.c` and, if it finds it, injects a simple print
+    statement that will print each time `compile()` runs --- this is
+    obviously not a useful "attack", but rather rather serves as a
+    placeholder for the final, subtle step in part 3.
+
+##### Details of attacking `login`
+
+Here you'll inject an trivial attack in the `login` program that will
+make the `login()` routine return true for user `ken` without asking
+for a password.
 
 The basic approach: 
-   0. To save you time we created a copy of `compiler.c` as `trojan-compiler.c`.
 
-   1. Modify `trojan-compiler` so that if it matches the string `int login(char
-      *user) {` in the input code, then inject the attack:
+   1. Modify `trojan-compiler.c` so that if it matches the string
+      `int login(char *user) {` in the input code, then inject the attack:
 
-        if(strcmp(user, \"ken\") == 0) return 1;
+            if(strcmp(user, \"ken\") == 0) return 1;
 
-      at the beginning of `login`.  Emit all other code identically.
+      at the beginning of `login()`.  Emit all other code identically.
 
    2. When you type `ken` as a user, `login` should give you success:
 
@@ -318,20 +327,20 @@ The basic approach:
         passwd: password
         successful login: <guest>
 
-#### step 2: do a dumb attack on `compiler`
+##### Details of attacking `compiler`
 
 Before doing the fancy Thompson trick we'll just make sure everyting
-works by injecting a dumb "attack" into the compiler that will cause it
-to add the `printf`:
+works by injecting a dumb "attack" into the `complile()` routine
+in `compiler.c` that will cause it to add the `printf`:
 
         printf("%s:%d: could have run your attack here!!\n\", 
                                         __FUNCTION__, __LINE__);
 
-As the very first `fprintf` in `compile`.
+As the very first `printf` in `compile()`.
 
 It should work similar to the `login` attack:
 
-   1. Match the beginning of compile:
+   1. Match the beginning of the `compile()` routine:
 
         static void compile(char *program, char *outname) {
             FILE *fp = fopen("./temp-out.c", "w\");
@@ -346,26 +355,20 @@ It should work similar to the `login` attack:
         % ./cc-attacked login.c -o login
         compile:19: could have run your attack here!!
 
-Obviously, this isn't very interesting; we just do it to make debugging simple
-before the next step.
-
-#### Summary 
+Obviously, this isn't very interesting; we just do it to make debugging
+simple before the next step.
 
 Cool!  These two are the easier steps just to make sure you can attack
 the programs you want.  
 
-The next one is the tricky step where you will:
-    - inject the code to
-    - inject these attacks 
-    - into the compiler so that it can 
-    - inject them into the compiler :)
+--------------------------------------------------------------------------
+#### step3: inject an attack that will inject an attack into the compiler.
 
-You will use the trick from `code/step1` to inject a self-replicating
-copy of the attack into `compiler.c` while compiling it.
+Clearly we have to develop the compiler injection "attack" since it only
+prints an annoying message rather than doing something evil.  But what
+exactly does it have to do?   Our problem is that we need the attack to
+be self-replicating.
 
-Why do we have to do anything more?   The big problem of course is that 
-after you replace the trojan-compiler `compiler` with the code it 
-generates it will no longer contain the attack.  
 
 So, for Ken, if anyone ever re-compiled the system C compiler and
 replaced his binary of it that contains his attack, the attack is gone.
@@ -385,12 +388,11 @@ For example using our toys to see the tragedy:
 
         # now recompile the system compiler using the 
         # attacked compiler
-        % ./compiler compiler.c -o compiler.2 
+        % ./compiler compiler.c -o compiler
         compile:19: could have run your attack here!!  
-        % mv ./compiler.2 ./compiler
 
         # and see if it still has the login attack.
-        % ./compiler login.c -o login
+        % compiler login.c -o login
         compile:19: could have run your attack here!!
         % ./login
         user: ken
@@ -399,21 +401,62 @@ For example using our toys to see the tragedy:
 
         # uh oh, login attack does not work anymore.
 
-The fancy step (next) is to fix this.
+The fancy step (next) is to use the trick from `code/step1` to fix
+this problem by injecting a self-replicating copy of the attack into
+`compiler.c` while compiling it.
 
+I'll give some hints below, but you're more than welcome to do this
+on your own!  Just make sure you that you make a copy of your trojan
+(`trojan-compile2`) that injects a self-replicating attack and make sure
+the binary it generates when compiling a clean, virgin copy of the system
+compiler is the same:
 
---------------------------------------------------------------------------
-#### step3: inject an attack that will inject an attack into the compiler.
+    # checking that the attack will generate itself
+   
+    # 1. compile compile.c and generate an attacked binary.
+    % ./trojan-compile2 ../step2/compiler.c -o attacked-compiler.0
 
-Finally, we use the trick from Part 1 to inject a self-replicating attack
-into the compiler.
+    # 2. compile compiler.c with the attacked copy
+    % ./attacked-compiler.0 ../step2/compiler.c -o attacked-compiler.1
 
-Follow the [README.md](code/step3/README.md) in `code/step3` and
-combine the code from Part 1 and Part 2 so that your trojan compiler
-(`trojan-compiler.c`) will take a clean, virgin copy of the "system"
-compiler `compiler.c` and inject a self-replicating copy of its trojan
-attack into it.
+    # 3. make sure they are the same!
+    % diff attacked-compiler.0 attacked-compiler.1
 
+    # yea!  at this point we will automatically regenerate our attack
+    # whenever someone compiles the system compiler.
+
+    # 4. NOTE: step 3 is way too strong since it assumes same input 
+    # to gcc gives the same output (e.g., no embedded time stamps etc).  
+    # If it succeeds we know we have the same, but if it fails it doesn't 
+    # mean we have a problem --- the real test is the login.
+    % ./attacked-compiler.1 ../step2/login.c -o login-attacked
+    % ./login-attacked
+    user: ken
+    successful login: <ken>
+    
+    # success!
+
+### Hints
+
+The basic idea is to take your attack and create a self-replicating version
+using the code in `step1`.  Basic idea:
+  1. You'll have to generate an array of ASCII values of your attack code
+     as in `step1`.
+  2. You'll have to modify your attack on the compiler to inject both this
+     array and a printed version of it (i.e., the code) into the compiler
+     you are attacking.  This is why we looked at self-replicated programs.
+
+Overall this doesn't take much code.  You don't have to do things this
+way but: In order to make it easy to regenerate the attack as I changed
+it, I used an include to pull in the generated sort-of quine code:
+
+  1. Seperate out your attack into its own file (e.g., `attack.c`).
+  2. Use `step1/gen-quine` to produce a file `attack.c` that has
+     the array and the source code for the attack.
+  3. Include the file into `trojan-compile2.c`.
+  4. Profit.
+
+-----------------------------------------------------------------------
 #### Postscript
 
 You have now replicated Thompon's hack.  Startlingly, there seem to be
