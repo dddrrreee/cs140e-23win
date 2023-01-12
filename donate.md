@@ -1,5 +1,7 @@
 ### Consider donating to the class!  
 
+***PLEASE DO NOT DONATE IF YOU ARE IN THE CLASS OR MAY APPLY TO STANFORD.***
+
 Donation methods:
 
   - [paypalme/hackerfood](paypal.com/paypalme/hackerfood)

@@ -172,3 +172,20 @@ You get:
         40:   e583100c        str     r1, [r3, #12]
             cp.x_offset = cp.y_offset = 0;
         44:   e5832018        str     r2, [r3, #24]
+
+
+Some points:
+
+  1. This bug shows up because the device has stronger assumptions 
+     about device "memory" than the C language requires (i.e., that
+     writes to the storage location occur before its address is
+     assigned to a different device address).
+
+     
+  2. This bug will be extraordinary intermitent.  Not only will it
+     only be triggered 
+Bugs in device code that are triggered because the device 
+     has memory assumptions
+
+Bugs where device assumptions 
+
