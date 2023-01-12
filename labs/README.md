@@ -31,6 +31,8 @@ a hardware investment.
     compiler can do this translation.  What we cover will apply to every
     lab this quarter.
 
+We are here ===>
+
   - [2-trust](2-trusting-trust): Ken Thompson is arguably our patron
     saint of operating systems --- brilliant, with a gift for simple
     code that did powerful things.   We will reimplement a simplified
