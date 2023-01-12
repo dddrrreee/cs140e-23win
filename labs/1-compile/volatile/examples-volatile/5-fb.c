@@ -1,9 +1,6 @@
-// 2023: interesting!  The new version of gcc 
-// (10.3.1 20210824) no longer breaks this code.   
-// However: if you reorder the cp struct field 
-// assignments, it will break (see 5-fb.c).  
-// I'm guessing is an interaction b/n register
-// assignment and peephole optimization.
+// change from 4-fb.c: flip around 
+// structure assignments so the code
+// breaks.
 typedef struct {
   unsigned read;
   unsigned padding[3];
@@ -35,12 +32,14 @@ static fb_config_t cp;
 void write_mailbox_x(mailbox_t *mbox, unsigned channel) {
     while(mbox->status & MAILBOX_FULL)
         ;
-    cp.width = cp.virtual_width = 1280;
+    // interesting, if you flip around these assignments
+    // controls if the write assigment gets hoisted
     cp.height = cp.virtual_height = 960;
-    cp.depth = 32;
     cp.x_offset = cp.y_offset = 0;
+    cp.depth = 32;
+    cp.width = cp.virtual_width = 1280;
     cp.pointer = 0;
-
+//    asm volatile ("" : : : "memory");
     mbox->write = ((unsigned)(&cp) | channel | 0x40000000);
 }
 
