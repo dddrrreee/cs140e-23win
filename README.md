@@ -1,44 +1,31 @@
 ## CS140E: embedded operating systems (Engler, Winter, 2023)
 
-All material for CS140E, winter 2023.  Tl;dr:
+All material for CS140E, winter 2023.  
+
+Tl;dr:
   - It's a lab class, so [jump right to the labs](./labs/README.md).
 
   - If you find the material useful,
     [please consider donating](./donate.md) --- all donated funds go
-    entirely to buy food and equipment for the lab students.
+    entirely to buy food and equipment for the 2023 lab students.
 
-## What is CS 140E?
 
-CS 140E is an introductory operating systems course. It roughly covers the same
-high-level material as [CS 212][cs212] (formerly CS 140), but with a focus on
-embedded systems, interacting directly with hardware, and verification. Both
-courses cover concepts such as virtual memory, filesystems, networking, and
-scheduling, but take different approaches to doing so. By the end of 140E, you
-will have (hopefully) built your own simple, clean operating system for the
-widely-used, ARM-based [Raspberry Pi][raspberrypi].
+### Summary
 
-## Background Info
+CS140E is an introductory operating systems course. It roughly covers
+the same high-level material as [CS 212][cs212] (formerly CS 140), but
+with a focus on embedded systems, interacting directly with hardware,
+and verification. Both courses cover concepts such as virtual memory,
+filesystems, networking, and scheduling, but take different approaches
+to doing so. By the end of 140E, you will have (hopefully) built your
+own simple, clean operating system for the widely-used, ARM-based
+[Raspberry Pi][raspberrypi].
 
 - [Should I take CS 140E?](guides/why-140e.md)
 
-## Previous Iterations:
 
-- [Winter 2022][2022]
-- [Spring 2021][2021]
-- [Winter 2020][2020]
-- [Winter 2019][2019]
-- [Winter 2018][2018]
-
-[cs212]: https://cs212.stanford.edu
-[raspberrypi]: https://www.raspberrypi.org
-[2022]: https://github.com/dddrrreee/cs140e-22win
-[2021]: https://github.com/dddrrreee/cs140e-21spr
-[2020]: https://github.com/dddrrreee/cs140e-20win
-[2019]: https://github.com/dddrrreee/cs140e-win19
-[2018]: https://cs140e.sergio.bz
-
-
-## Details
+------------------------------------------------------------------------
+### Details
 
 140e is a lab-based class with no explicit lectures.  We will do two
 three-to-five hour labs each week.  You should be able to complete
@@ -68,7 +55,7 @@ works on real hardware.   This understanding will serve you in many other
 contexts.  For what it is worth, everything you build will be stuff we
 found personally useful.   There will be zero (intentional) busy-work.
 
-### Who should take this class.
+#### Who should take this class.
 
 The goal of the class is to help students who are very motivated and/or
 very good to go far, quickly.  We focus on building small, simple but
@@ -115,7 +102,7 @@ requirement.
       that's an unusual result :)
 
 
-### What this class is not
+#### What this class is not
 
 A quick skim might falsely pattern-match on a couple of things:
 
@@ -151,6 +138,7 @@ stories last year were from students that had an initially large gap
 between their understanding and the topic but started to really "get it"
 after some weeks of struggle.
 
+------------------------------------------------------------------------
 ### Lab policies.
 
    - You should be able to complete almost all of the lab in one sitting.
@@ -177,6 +165,7 @@ seriously lost.  Further, this year we short-staffed for the amount of
 students taking the course, so don't have the resources to walk a few
 students each week through makeup labs.
 
+------------------------------------------------------------------------
 ### Grading policy
 
 Since this is starting as a virtual class, and we are short-staffed,
@@ -195,6 +184,7 @@ Notes:
     and newsgroup replies. Students are allowed to miss 1-2 classes,
     but must notify the instructor beforehand.
 
+------------------------------------------------------------------------
 ### Staff
 
 Dawson Engler (engler), Akshay Srivatsan (akshay01), Alex Fu (afu625)
@@ -224,3 +214,20 @@ First things first:
 
  4. Look in the [labs](labs/README.md) directory and read through the labs 0
     and 1 (we're adding them).
+
+------------------------------------------------------------------------
+### Previous Iterations:
+
+- [Winter 2022][2022]
+- [Spring 2021][2021]
+- [Winter 2020][2020]
+- [Winter 2019][2019]
+- [Winter 2018][2018]
+
+[cs212]: https://cs212.stanford.edu
+[raspberrypi]: https://www.raspberrypi.org
+[2022]: https://github.com/dddrrreee/cs140e-22win
+[2021]: https://github.com/dddrrreee/cs140e-21spr
+[2020]: https://github.com/dddrrreee/cs140e-20win
+[2019]: https://github.com/dddrrreee/cs140e-win19
+[2018]: https://cs140e.sergio.bz
