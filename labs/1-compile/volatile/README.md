@@ -30,10 +30,9 @@ and on the dole.)
 
 Over-simplifying, the as-if substitution principle is: 
 
-   - Given a program P, if program P_better has the same observable
-   behavior ("side-effects") as P does --- i.e., it behaves "as if"
-   it was P ---  then we say they are equivalent and, for example,
-   we can replace P with P_better.
+   - Given X and X': if X' has the same observable external behavior
+   ("side-effects") as X does --- i.e., X' behaves "as if" it was X ---
+   then we say they are equivalent and we can replace X with X'.
 
    - Equivalence substitution can apply at any level: a single line of
    code (replacing an expensive multiply with a shift for power-of-two
@@ -48,9 +47,42 @@ exploit it, and sometimes be burned by it this quarter.  It shows up at
 every level of the computer systems.  It's the only reasons things work
 at all at any kind of speed.
 
+Examples from real life:
+
+  - Compiler optimization: your code is slow; a good chunk of the
+    compile is devoted to optimizating it.  The compiler replaces chunks
+    of code with faster or smaller equivalants that behave "as if" they
+    were the original.  If may even delete the code (dead code removal)
+    if an external observer could not tell.
+
+  - Hardware optimization: you may imagine the hardware runnings your
+    program's corresponding assembly code in order, and memory holds
+    a single, unique version of each variable.  But, of course, modern
+    hardware does no such thing.  It aggressively re-orders instructions,
+    speculatively executes paths, caches items in multiple locations
+    (first level cache, second level cache, write buffers, registers),
+    and many many other tricks.
+
+    Memory model is so important: who can observe what, when.  If we
+    can't answer this, then we can't reason about if an observer can
+    tell if we replaced code.
+
+  - The process abstraction: A crucial step in civilization is that you
+    can write your code as if it was sequential, running in isolation.
+    Of course, you've never written a true sequential program.  If you run
+    "ps aux" on your laptop you'll likely see hundreds of other programs
+    running concurrently with your code  (and thousands of interrupts
+    happening in the kernel).
+
+    By defining programming language and operating systems interfaces we
+    can allow you to write code "as if" it was sequential when, in fact,
+    its executing in massively parallel environment.  (How: by writing
+    to its own private memory.  Once you start sharing memory --- which
+    includes file system state --- then you get all the usual problems).
+
 Weirdly, despite being ubiquitous, it's rarely talked about explicitly.
 
-### Some general rules for equivalence  substitution
+### Compiler equivalence  substitution
 
 When you write code, you likely reason about how it behaves by looking
 at the source code at the source code (loops, variables, function
@@ -60,12 +92,12 @@ directly.  Thus the compiler translates your source code down to low-level
 "machine code" operations that --- aspirationally --- will behave "as if"
 it was the original (sort of: only if your program was well-defined).
 
-As part of this translation, compilers aggressively optimize code
-by replacing possibly large chunks with purportedly faster or smaller
+As part of this translation, compilers aggressively optimize code by
+replacing possibly large chunks with purportedly faster or smaller
 equivalents that behave "as if" they were the original.  The compiler
-will frequently reorder operations or delete them
-(dead code removal) if it believes an external
-observer could not tell.  A very small set of examples:
+will frequently reorder operations or delete them (dead code removal)
+if it believes an external observer could not tell.  A very small set
+of examples:
 
    - inlining.
    - common sub-expression elimination
@@ -78,6 +110,8 @@ observer could not tell.  A very small set of examples:
 The key issue for the compiler's game is what an "observer" is.  If the
 observer can tell the difference between P and P', then they are not
 equivalent. 
+
+#### Example: replace runtime operations with constants
 
 As an example of observation and equivalence, consider the 
 contrived code:
@@ -92,8 +126,9 @@ contrived code:
             return x*y+z*w;
         }
 
-If we compile this to machine code and then disassemble the machine
-code we can see exactly what the compiler did:
+If we compile this to machine code (so that the compiler optimizes it)
+and then disassemble the machine code (so we can understand it) we can
+see exactly what the compiler did:
 
     # compile with reasonable optimization using the 
     # arm gcc compiler for this class
@@ -115,17 +150,23 @@ a single constant `42` and return it (on ARMv6,
 an integer return result is put in register `r0`).
 
 A couple notes:
-  1. You should get used to looking at machine code!
+  1. You should get used to looking at machine code! 
   2. Even if you don't know how to write assembly code, or
      even understand all (most) of of the instructions, it's possible
      to get a sense for key events such as what locations are being read
      or written, what values returned, etc.
-  3. Even though your laptop almost certainly uses a different CPU than
-     the pi, we can still compile code for the pi on it ("cross-compilation").
+
+     A common question: we often want to know the order of reads or
+     writes to device memory locations and if any were removed.
+
 
   4. Further, since the code for `trivial.c` is well-defined, we can
      compile ito for other machine architectures and yet still see
-     similar behavior.  For example, using the native `gcc` and `objdump`
+     similar behavior.  
+
+     For example, even though your laptop almost certainly uses a
+     different CPU than the pi, we can still compile code for the pi on it
+     ("cross-compilation").  Using the native `gcc` and `objdump`
      on my 64-bit x86 laptop:
 
             % gcc -O2 -c trivial.c
@@ -138,9 +179,8 @@ A couple notes:
      Here, too, the compiler has computed 42 (`0x2a`) and returned it.
      Though, unsurprisingly, the machine code looks very different.
 
-
-   5. The reason the code addresses start at 0 is that we have not linked
-      the code.  We'll discuss this in later labs.
+   5. Detail: The reason the code addresses start at 0 is that we have
+      not linked the code.  We'll discuss this in later labs.
 
 ### Tradeoffs in observer power
 
@@ -148,16 +188,17 @@ If you think about it, a strong observer is good for correctness but
 bad for speed, and vice versa.  The more all-seeing and all-knowing the
 observer is:
 
-  1. The easier it is for us as programmers to reason about the code
-     (since the observations are what we are allowed to rely on).
-     If code can behave in exactly one way, it is easier to reason
-     about.  
+  1. The easier it is for us as programmers to reason about what the
+     code does (since the observations are what we are allowed to
+     rely on).  If code can behave in exactly one way, it is easier to
+     reason about.
 
-     For example, if we define every single operation as occuring in the
-     order its written (sequential consistency) exactly as written, this
-     is is easiest for us as programmers to reason about.  What does the
-     code do?  Exactly what it says, in exactly the order it's written,
-     with no changes.  What you see is what you get.
+     For example, the easiest language definition for programmers to
+     reason about:  every each operation executes exactly as written
+     and a series of operations run in the order they were written
+     (sequential consistency).  What does the code do?  Exactly what it
+     says, in exactly the order it's written, with no changes.  What you
+     see is what you get.
 
      On the other hand if the code is allowed to have different possible
      results (e.g., if it has a non-sequential memory model) it's harder
@@ -166,40 +207,48 @@ observer is:
   2. But the more changes the observer can detect,
      and the less substitution can occur.
 
-     With complete information (such as your CPU, a debugger, or even
-     a disassembler) can see exactly how code differs --- if we had to
-     satisfy the equivalence judgement of these observers, we could
-     never optimize anything, because they could detect any change.
-     For example, if you replaced a multiply with a shift or reordered
-     two stores, any disassembler or debugger could see this.
+     Observers with complete information --- such as your CPU, a debugger,
+     or even a disassembler (which will see any code transformation)
+     --- can see exactly how code differs.  If we had to satisfy the
+     equivalence judgement of these observers, we could never optimize
+     anything, because they could detect any change.  For example,
+     if you replaced a multiply with a shift or reordered two stores,
+     any disassembler or debugger could see this.
 
-The game we play is to --- perhaps counter-intuitively --- try to make
-the observer as weak as possible (while still being useful), since a weak
-observer can be fooled the most number of ways.  Of course, the kicker
-is "as possible": a human looking at the code must be able to look at
-(observe) the program and reason about what it does.  Humans already
-can't do simple, reliably --- adding non-deterministic behavior (e.g.,
-look up "memory models") can easily make correctness hopeless.
+Since a weak observer can be fooled the most number of ways and allows
+the most number of substitutions the game we play is to try to make the
+observer as weak as possible in every every way that "does not matter"
+(e.g., the exact order ALU operations execute) while making it as strong
+as possible in ways that do matter (e.g., the exact order that memory
+operations complete).  Of course, the kicker is "does not matter": a
+human looking at the code must be able to look at (observe) the program
+and reason about what it does.  Humans already can't do simple, reliably
+--- adding non-deterministic behavior (e.g., look up "memory models")
+can easily make correctness hopeless.
+
 
 In the big world, the rough place many systems settle on is that they
 ignore "how" a result is computed (what instructions actually run on
 the CPU), and instead only require that externally observable actions
-such as network messages, disk writes, output statements, exceptions,
-or launching a rocket happen in the order they are written, without
+(such as network messages, disk writes, output statements, exceptions,
+or launching a rocket) happen in the order they are written, without
 duplication or eliminating. As long as these observations remain the
 same, they treat code itself as a black box and (very roughly speaking)
-do not concern themselves with what actual CPU operations performed.
+do not concern themselves with the internal computation.  As an example:
 An entire program could be replaced with a lookup table if that gives
-equivalent results, or even deleted entirely if it has no output.
-There are interesting, subtle variations you can play for this (some
-covered in CS240), but we leave them aside for the moment.
+externally equivalent side-effects.  It could even be deleted entirely
+if it has no output.
+
+This is a subtle topic so we'll largely just ignore it 
+and get to examples.
 
 ### How as-if lets the compiler wtf-you.
 
 To bring our discussion back to the concrete , low-level of this class:
-roughly speaking, the C compiler `gcc` that we will use  assumes that only
-the source code you write can affect values, and only do so sequentially.
-It does not know about threads, interrupts, or hardware devices.
+roughly speaking, the C compiler `gcc` that we will use  assumes that
+only the source code you write can affect storage locations, and only
+do so within a single path of execution that runs sequentially.  It does
+not know about threads, interrupts, or hardware devices.
 
 Let's say it again, since one sentence will be the root of many of
 your problems:
@@ -243,6 +292,8 @@ problems.  Or consider a bit fancier code where `x` was called `lock`
 and was supposed to protect `y` --- if the compiler reorders writes to
 `lock` and `y` it's broken your critical section.
 
+We'll now show some example bugs that have burned us in this class.
+
 --------------------------------------------------------------------
 ### A specific way the compiler will break your code this quarter
 
@@ -254,19 +305,20 @@ the hardware device.
 
 Thus, unsurprisingly, the order of reads and writes to these locations
 matters very much.  (One way to see: take any signal or whatsapp message
-chain between two people that are dating and see how many breakups you 
+chain between two people that are dating and see how many breakups you
 could have caused by re-ordering just one or two messages.)
 
-Thus, this hardware is both a strict observer and a mutator of these
+Thus, device hardware is both a strict observer and a mutator of these
 special locations.  Unfortunately, `gcc` has no idea these locations
 are magic and falsely assumes:
 
 
-  1. The only way to change the value of a location is a store
-     within a program.
+  1. The only way to change the value of a storage location is mutation
+     within the program source (e.g., an assignment).
 
      The compiler does not realize that that there is an external device
-     that can spontaneously change the value without any visible prodding.
+     that can spontaneously change the value without any corresponding
+     source code.
 
      A cliched example of how this breaks, consider some typical code
      that waits until a status field says a hardware FIFO is not full:
@@ -283,10 +335,11 @@ are magic and falsely assumes:
 
      In this case, the compiler sees that the `while` loop contains no
      store that can affect `status`.  Because it assumes sequential
-     execution, it can replace the loop with an if-statement that
+     execution, it decides it can replace the loop with an if-statement that
      checks the loop condition once, and if it is true, infinite loops
      without reading the location again (this is not what we want).
      Otherwise falls through (this is fine).
+     To see this:
 
             % arm-none-eabi-gcc -O3 -c wait-not-full.c 
             % arm-none-eabi-objdump -d  wait-not-full.o 
@@ -306,9 +359,14 @@ are magic and falsely assumes:
             # one instruction.
             14:	2000b000 	.word	0x2000b000
 
-  2. The only way to read a location is via a load within the program.
-     The compiler does not realize there is a concurrent hardware device
-     that can see exactly what is written as soon as the change occurs.
+  2. The compiler also assumes the only way to read a location is via
+     an access  within the program source.  The compiler does not realize
+     there is a concurrent hardware device that can see exactly what is
+     written as soon as the change occurs.
+  
+     As with the previous point, this issue also arises with interrupt
+     or exception handlers which can interleave with code that modifies
+     a location.
 
      A contrived example of how this can be bad, assume we have an
      `initialized` variable and a `cnt` variable shared with an
@@ -329,8 +387,9 @@ are magic and falsely assumes:
             *cnt = 0;
             initialized = 1;
 
-     Given that the two assignments are independent for sequential code,
-     the compiler could potentially reorder this as:
+     Given that the two assignments to `cnt` and `initialized` are
+     independent for sequential code, the compiler could potentially
+     reorder this as:
 
             initialized = 1;
             cnt = malloc(sizeof *cnt);
@@ -339,28 +398,33 @@ are magic and falsely assumes:
      Which would cause memory corruption or reads of garbage values if the
      interrupt handler triggered during this process.
 
-     Note: usually the code would work.  If it didn't, not many people
-     could figure out the issue.
+
+Note: in both cases usually the code would work.  As a result, the bugs
+do not deterministically show up each time they run (``bohr bugs'') but
+rather are intermittent ``Heisenbugs'' that come and go.  Add a `printk`?
+Goes away.  Run again?  Goes away.   Ship the code to a million customers?
+10 get hit, sometimes, but not when you send a kernel genius to go debug
+the problem.
 
 
-To repeat: threads, interrupt handlers, and devices are all external
-agent that can see or affect program values in ways that violate the
-compilers assumptions.  Thus, since it does transformations without
-an accurate notion of what can see the result, its optimizations can
-totally destroy the intended semantics.  (It can be very hard to detect
-such problems without looking at the machine code it generates; which
-is a good reason to get in the habit of doing so!)
+To summarize on repeat: threads, interrupt handlers, and devices are
+all external agent that can see or affect program values in ways that
+violate the compilers assumptions.  Thus, since it does transformations
+without an accurate notion of what can see the result, its optimizations
+can totally destroy the intended semantics.  (It can be very hard to
+detect such problems without looking at the machine code it generates;
+which is a good reason to get in the habit of doing so!)
 
 --------------------------------------------------------------------
 ### volatile
 
 One method to handle this problem is to mark any shared memory location
-as `volatile` which, crudely, tells the compiler this marked location
-is magic and can spontaneously change or instantaneously, continuously
-be read.  The rough rule for `volatile` in `gcc` is that it will
-not remove, add, or reorder loads and stores to volatile locations.
-(Even rougher: volatile has whatever semantics  is needed so the the
-linux kernel roughly works when compiled with gcc.)
+as `volatile` which, crudely, tells the compiler this marked location is
+magic and can spontaneously change or instantaneously, continuously be
+read.  The rough rule for `volatile` in `gcc` is that it will not remove,
+add, or reorder loads and stores to volatile locations.  (Even rougher:
+`volatile` has whatever semantics  is needed so the the linux kernel
+roughly works when compiled with `gcc`.)
 
 Some high level rules from the very useful
 [blog](https://blog.regehr.org/archives/28):
@@ -384,14 +448,18 @@ As a more cynical counter-point from someone who should know:
 
             Ken Thompson, "A New C Compiler"
 
+#### We almost never use `volatile` in this class.
+
 It's easy to forget to add `volatile` in each place you need it.
 Even worse, if you forget, often the code will almost-always work and
 only occasionally break.  Tracking down the problem is a nightmare (add
 a `printf`?   Problem goes away.  Remove some code?  Same.  Add some
-code?  Same.)  As a result, for this class we only ever read/write
-device memory using trivial assembly functions `get32` and `put32`
-(discussed in lab `1-gpio`) since this defeats any attempt of current
-compilers to optimize the operations they perform.   
+code?  Same.)  
+
+As a result, for this class we only ever read/write device memory
+using trivial assembly functions `get32` and `put32` (discussed in lab
+`3-gpio`) since this defeats any attempt of current compilers to optimize
+the operations they perform.
 
 A contrived example:
 
