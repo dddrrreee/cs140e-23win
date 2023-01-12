@@ -178,14 +178,103 @@ Some points:
 
   1. This bug shows up because the device has stronger assumptions 
      about device "memory" than the C language requires (i.e., that
-     writes to the storage location occur before its address is
-     assigned to a different device address).
-
+     all writes to the storage location complete before its address is
+     assigned to a different device address).   
      
   2. This bug will be extraordinary intermitent.  Not only will it
-     only be triggered 
-Bugs in device code that are triggered because the device 
-     has memory assumptions
+     only be triggered erratically because its timing dependent,
+     it will come and go with compiler versions and also come
+     and go with different statement orderings.
 
-Bugs where device assumptions 
 
+#### How to fix?
+
+The problem with the code above is that it has an invisible requirement
+on memory stores: all stores to the `cp` message structure must complete
+before its address is written to the `mbox->write` "message send" address.
+
+It's not uncommon for programs to need a guarantee that memory access are
+not re-ordered.  To prevent language level re-orderings,
+most compilers will provide various "memory barriers".
+
+For `gcc` this is an inline assembly statement:
+
+        asm volatile ("" : : : "memory")
+
+Where:
+
+   - `asm` indicates this is "inline assembly" (you'll be using this
+     in a bunch of places this quarter).
+   - `volatile` tells `gcc` not to move this statement.
+   - and the `memory` annotation states the empty assembly instruction `""`
+     can read or write all memory.
+     
+Operationally, this gives two guarantees:
+  1. No load or store above the statement can be pushed below it.
+  2. No load or store below it can be pushed above it.
+
+This is enough to guarantee our sequence.
+
+Note:
+  - It only prevents the compiler from reordering memory accesses
+    across the barrier.
+
+  - This barrier is *not* a hardware memory barrier. It *does not*
+    guarantee that previous loads or stores complete at the hardware level
+    (e.g., all the way to memory, or to other CPU caches etc)
+
+    As one example: If you were sharing memory between threads on a modern
+    multi-processor (i.e., multiple CPUs) you would need to do hardware
+    memory barriers to ensure that the memory was synchronized between
+    these CPUs.  Even if you used our compiler memory barrier to ensure
+    that loads and stores would occur in order, modern hardware systems
+    do not provide "sequential consistency" (where a load is guaranteed
+    to get the value of the last store) but instead only give consistency
+    after a (typically expensive) hardware memmory barrier of some kind
+    is performed.
+
+
+With all that said, we can fix this code using a barrier as follows:
+
+```cpp
+    cp.height = cp.virtual_height = 960;
+    cp.x_offset = cp.y_offset = 0;
+    cp.depth = 32;
+    cp.width = cp.virtual_width = 1280;
+    cp.pointer = 0;
+    asm volatile ("" : : : "memory");
+    mbox->write = ((unsigned)(&cp) | channel | 0x40000000);
+```
+
+
+And things get fixed:
+
+        24:	e59f302c 	ldr	r3, [pc, #44]	; 58 <write_mailbox_x+0x58>
+            cp.width = cp.virtual_width = 1280;
+        28:	e8830030 	stm	r3, {r4, r5}
+        2c:	e5834008 	str	r4, [r3, #8]
+        30:	e583500c 	str	r5, [r3, #12]
+            cp.x_offset = cp.y_offset = 0;
+        34:	e583201c 	str	r2, [r3, #28]
+        38:	e5832018 	str	r2, [r3, #24]
+            cp.pointer = 0;
+        3c:	e5832020 	str	r2, [r3, #32]
+            cp.depth = 32;
+        40:	e583c014 	str	ip, [r3, #20]
+            asm volatile ("" : : : "memory");
+            mbox->write = ((unsigned)(&cp) | channel | 0x40000000);
+        44:	e1833001 	orr	r3, r3, r1
+        48:	e3833101 	orr	r3, r3, #1073741824	; 0x40000000
+        4c:	e5803020 	str	r3, [r0, #32]
+
+Other methods:
+
+  - You could also make the `cp` structure `volatile`.  (But note 
+    this adds much more ordering requirements!)
+
+  - You can use `put32` to store all the `struct` fields or write
+    and assembly routine that took the `cp` address and stored it
+    to `mbox->write`.
+
+In any case: worth playing around with.  This is not a fake problem
+and shows up whenever operating systems interact with devices.

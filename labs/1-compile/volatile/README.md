@@ -10,6 +10,9 @@ things we do in this course.)
 This is a good example of how the hardware-level programming we do in
 this class is different from what you are used to at application level.
 
+After you read this document, look at [BUG](./BUG.md) for a deep dive
+through a subtle, not-uncommon bug.
+
 --------------------------------------------------------------------
 ### The "As-if" substitution principle.
 
