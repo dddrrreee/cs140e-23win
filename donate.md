@@ -42,7 +42,7 @@ domino's pizza with all coupons the food budget is going to be around
 $1000 a week.  (So about 4k a month.) 
 
 You would think Stanford would pay for food and equipment, but they
-do not. 
+do not.    
 
 In any case, the students have to get fed and equip'd, so please donate
 if you find the material useful.
