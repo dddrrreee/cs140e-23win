@@ -456,6 +456,8 @@ it, I used an include to pull in the generated sort-of quine code:
   3. Include the file into `trojan-compile2.c`.
   4. Profit.
 
+A few more details to get started are in `step3/README.md`
+	
 -----------------------------------------------------------------------
 #### Postscript
 
