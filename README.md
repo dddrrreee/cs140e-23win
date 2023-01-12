@@ -9,7 +9,6 @@ Tl;dr:
     [please consider donating](./donate.md) --- all donated funds go
     entirely to buy food and equipment for the 2023 lab students.
 
-
 ### Summary
 
 CS140E is an introductory operating systems course. It roughly covers
@@ -23,6 +22,11 @@ own simple, clean operating system for the widely-used, ARM-based
 
 - [Should I take CS 140E?](guides/why-140e.md)
 
+Staff:
+  - Dawson Engler (engler);
+  - Akshay Srivatsan (akshay01);
+  - Alex Fu (afu625);
+  - Manya Bansal (manya227).
 
 ------------------------------------------------------------------------
 ### Details
@@ -185,11 +189,6 @@ Notes:
     but must notify the instructor beforehand.
 
 ------------------------------------------------------------------------
-### Staff
-
-Dawson Engler (engler), Akshay Srivatsan (akshay01), Alex Fu (afu625)
-and Manya Bansal (manya227).
-
 ### What to do now.
 
 First things first: 
