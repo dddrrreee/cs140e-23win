@@ -1,4 +1,4 @@
-SUBDIRS=1-make
+SUBDIRS=# 1-make
 
 .PHONY: all check clean
 all check clean: $(SUBDIRS)
