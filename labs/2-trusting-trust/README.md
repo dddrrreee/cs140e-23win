@@ -25,29 +25,92 @@ that let him login to any system.  What is interesting about the trick:
     straightforward. 
 
   - But you also couldn't see the attack by inspecting the `cc` compiler's
-    source because the shipped compiler binary `bin/cc` would inject the
-    the code that would inject the `login-backdoor` attack into `login`
-    whenever `bin/cc` compiled the `cc` source code.
+    source because it wasn't in there --- the shipped compiler binary 
+    would detect when it was compiling the compiler source code and 
+    automatically inject the code into the compiler that in turn could
+    inject the backdoor into the login program.
 
-    This means (1) the `cc` source code was clean and contained no attack
-    injection code but (2) if you compiled `cc` source with the infected
-    `cc` binary, the infected `cc` would produce another the infected
-    `cc` binary from the clean `cc` source.
+    This is both devious and not straightfordward.
 
-    This hack is devious and very not conceptually straightforward.
 
-  - The magic trick is the initial induction.  At some point, Ken wrote
-    `cc` source that *did* have the attack --- if you looked at the source
-    you would see it.  However, he then compiled this flawed source with
-    a non-flawed `cc` compiler binary to produce an infected binary `cc`.
-    He then deleted the flawed compiler source and reverted to an older
-    clean source code, but kept the flawed `cc` binary.  This is all
-    that was needed to do induction: when anyone recompiled the clean
-    `cc` implementation using the infected `cc` it would produce another
-    infected `cc` binary.
+Words make this awkward.  To make it concrete, we have three programs:
 
-    This is a weird result that should seem to flirt with the impossible
-    if you think about it long enough.
+  - `compiler.c`: the clean unhacked compiler, with no attack.
+    It can compile itself.
+            
+                # generate a new compiler binary
+                % compiler compiler.c -o compiler
+
+  - `login.c`: the clean unhacked login program.   When run
+    it prompts for a user name.  If the user does not exist
+    it exits.  For example:
+
+                % compiler login.c -o login
+                % login
+                username: ken
+                Not such user: exiting.
+
+  - `hacked-compiler.c`: a hacked version of `compiler.c` that 
+    can inject an attack into login:
+
+                % hacked-compiler login.c -o login
+                % login
+                username: ken
+                Successful login!
+
+    Because the compiler automatically injects the backdoor into
+    it is impossible to inspect `login.c` to see the attack.
+    (Note: we ignore the fact that login would be remote to make
+    the prompts easier.)
+
+    The big magic trick of `hacked-compiler.c` is that it *also*
+    automatically injects the code to inject this login backdoor
+    when compiling `compiler.c`.  (I.e., it is self-replicating.)
+    When this means is that after you compile `compiler.c` with it:
+
+               % hacked-compiler compiler.c -o compiler
+
+    The `compiler` binary it produces is equivalent to the original
+    `hacked-compiler` binary in that the `compiler` binary contains
+    all the code used by `hacked-compiler.c` to inject attacks both
+    into `login.c` and `compiler.c`.  In other words, `compiler`
+    will self-replicate the attack when it compiles (`compiler.c`)
+    itself *even though the attack is not in `compiler.c`!
+
+    In other words if we do:
+
+               % hacked-compiler compiler.c -o compiler
+               % compiler compiler.c -o compiler
+               % compiler compiler.c -o compiler
+               % compiler compiler.c -o compiler
+               % compiler compiler.c -o compiler
+               % compiler compiler.c -o compiler
+               % compiler compiler.c -o compiler
+               % compiler compiler.c -o compiler
+               % compiler compiler.c -o compiler
+
+    The final `compiler` binary will be equivalant to the 
+    original `hacked-compiler` binary.
+
+    Thus, when you compile `login` with this `compiler` binary it
+    will inject the backdoor:
+
+               % compiler compiler.c -o compiler
+               % compiler login.c -o login
+               % login
+               username: ken
+               Successful login!
+    
+    To re-iterate: if you look in compiler.c there is no attack.
+    If you look in `login.c` there is no attack.   We can even 
+    delete everything to do with the hack:
+
+               % rm hacked-compiler hacked-compiler.c
+    
+    And the flawed binary `compiler` will keep injecting it each
+    time you recompile `compiler.c`.
+
+    This is a weird result that should seem to flirt with the impossible.
 
 We will write the code for his hack.  While the paper is short, and the
 hack seems not that hard, when you actually have to write out the code,
@@ -94,17 +157,24 @@ Hard check-off:
 
 To get started, we'll first finish implementing the self-reproducing
 program (a [quine](https://en.wikipedia.org/wiki/Quine_(computing)))
-based on Figure 1 in Thompson's paper:
+based on Figure 1 in Thompson's paper.
 
-   - If `make check` passes in `code/step1` then your code works.
+You are given:
+
+  - `seed.c`: the main part of the C code in the paper (so
+     you don't have to type it in).
+
+   - the `check` recipe in the `Makefile` for making and checking
+     the program (see below).  If `make check` passes in `code/step1`
+     then your code works.
 
 
 #### What to do
 
-Finish implementing `code/step1/quine-gen.c` which
-when fed `code/step1/seed.c`  will spit out a self-contained
-quine that contains (1) a character array describing the input
-and (2) the input itself (as shown in the beginning of Figure 1).
+Finish implementing `code/step1/quine-gen.c` which when fed
+`code/step1/seed.c`  will spit out a self-contained quine that contains
+(1) a character array describing the input `seed.c` and (2) the input
+itself.  This will be the code as shown at the beginning of Figure 1.
 
   - We give you `code/step1/seed.c`: the main part of the C code in
     the paper (so you don't have to type it in).
@@ -138,52 +208,56 @@ and (2) the input itself (as shown in the beginning of Figure 1).
   - You can then test that your `quine-gen` will produce a quine program
     that will emit itself as follows:
 
-	    # 1. Generate the paper quine
+	    # 1. Generate the paper's quine from seed.c
 	    % ./quine-gen < seed.c > quine.c
-	    # 2. Use quine to generate itself
+	    # 2. Use quine.c to generate itself
 	    % cc quine.c -o quine
 	    % ./quine > quine-out.c
-	    # 3. Check generated quine matches quine
+	    # 3. Check generated quine-out.c matches quine.c
 	    % diff quine.c quine-out.c
         
     If the `diff` matches: Congratulations!  This is the first step in
     replicating Thompson's hack.  If not start running each one at a
     time and look at the output.
   
-    To make this easier, we've added a target `check` in the
-    `step1/Makefile`: you can check using `make check`.
+    As mentioned above, to make this easier, we've added a target `check`
+    in the `step1/Makefile`: you can check using `make check`.
 
 --------------------------------------------------------------------------
 #### step2: inject an attack into `step2/login` and `step2/compiler`
 
-We now start writing a simple version of the compiler code injection
-attack Thompson described by 
-manually implementing (1) the backdoor in `step2/login` and (2) 
-the code in `step2/compiler`.
-that will inject the backdoor into `login` when compiling it.
+In this second step we're going to inject trivial attacks into trivial
+`step2/login` and `step2/compiler` programs in the obvious way and check
+that these work.
+
+As noted at the start of the lab: You can do all this on your own from
+the Thompson paper and ignore our code (as long as it checks out!).
+
 
 
 We give you:
 
-  - `step2/login.c`: a dumb login program.
-  - `step2/compile.c`: a trivial "compiler" that just reading in a file and
+  - `login.c`: a dumb login program.
+  - `compile.c`: a trivial "compiler" that just reading in a file and
     runs `gcc` on it.
-  - `step2/trojan-compiler.c`: a copy of `step2/compile.c` that you will
-    modify to insert "attacks".
+  - `trojan-compiler.c`: a copy of `compile.c` that you will modify to
+    insert "attacks".
 
-What you will do:
 
-You will modify a copy of `compile.c`, `trojan-compiler.c` so that:
-  1. Modify `compile` in `trojan-compiler.c` so that it scans its input for
-     the start of the `login` routine in `login.c` and if it finds it,
-     inject a backdoor.  This is fairly easy/mechanical.
+What you should do:
 
-  2. Similarly: modify `compile` in `trojan-compiler.c` so that it scans its
-     input for the `compile` routine and, if it finds it, injects a
-     simple print statement that will print each time `compile` runs ---
-     this is a placeholder for the final, subtle step.
+  1. Modify the `compile()` routine in `trojan-compiler.c` so that it
+     scans its input for the start of the `login()` routine in `login.c`.
+     If it finds it, it should inject a backdoor that lets user `ken`
+     in without a password.  This is fairly easy/mechanical.
 
-#### Step 0: Check that `make` completes successfully.
+  2. Similarly: modify the `compile()` routine in `trojan-compiler.c`
+     so that it scans its input for the `compile()` routine in
+     `compiler.c` and, if it finds it, injects a simple print statement
+     that will print each time `compile` runs --- this is a simple
+     placeholder for the final, subtle step in part 3.
+
+##### Make sure the repo code works.
 
 When you run `make` you should see something like:
 
@@ -198,7 +272,8 @@ When you run `make` you should see something like:
         diff login.out out
         success: compiler compiled login correctly!
 
-#### Step 1: attack `login`
+
+#### Attack `login`
 
 Here you'll inject an trivial attack in the login program that will make
 `login` return true for user `ken` without asking for a password.
