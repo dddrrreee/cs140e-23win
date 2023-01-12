@@ -75,7 +75,8 @@ claimed bug did not show up:
         % arm-none-eabi-gcc -g -O3 -c 4-fb.c
         % arm-none-eabi-objdump -S -d 4-fb.o
 
-        [*** all the initialization starts here *** ]
+
+     ====> all the initialization starts here.
 
         10:	e3a02020 	mov	r2, #32
             cp.width = cp.virtual_width = 1280;
@@ -102,10 +103,9 @@ claimed bug did not show up:
         40:	e5832020 	str	r2, [r3, #32]
             cp.x_offset = cp.y_offset = 0;
         44:	e583201c 	str	r2, [r3, #28]
+     ====> all the initialization ends here.
 
-        [*** all the initialization ends here *** ]
-
-        [this is where the assignment (store) occurs]
+     ====> this is where the assignment (store) occurs.
         48:	e5832018 	str	r2, [r3, #24]
             mbox->write = ((unsigned)(&cp) | channel | 0x40000000);
         4c:	e5801020 	str	r1, [r0, #32]
@@ -139,9 +139,16 @@ To:
  cp.pointer = 0;
 ```
 
+
+And then run the compiler on the result (`5-fb.c`):
+
+
+        % arm-none-eabi-gcc -g -O3 -c 5-fb.c
+        % arm-none-eabi-objdump -S -d 5-fb.o
+
 You get:
 
-        ...
+
         mbox->write = ((unsigned)(&cp) | channel | 0x40000000);
         18:   e1831001        orr     r1, r3, r1
         1c:   e3811101        orr     r1, r1, #1073741824     ; 0x40000000
@@ -152,7 +159,7 @@ You get:
      ==> this is the write to mbox->write
         mbox->write = ((unsigned)(&cp) | channel | 0x40000000);
 
-     ==> all initializations afterwards occur after send!
+     ==> BUG: all these initializations happen after send!
         28:   e5801020        str     r1, [r0, #32]
             cp.width = cp.virtual_width = 1280;
         2c:   e3a00c05        mov     r0, #1280       ; 0x500
