@@ -6,7 +6,7 @@ the favorite of the quarter.
 Before lab:
   - Make sure you read the [PRELAB](./PRELAB.md)
   - Read the paper for today: [trusting-trust.pdf](./trusting-trust.pdf)
-    carefully (I'd say at least three times).
+    carefully (I'd say at least three times).  To check your understanding
   - Make sure you can answer the reading questions [READING-Q](./READING-Q.md).
   - Look through the code in `code/step1`, `code/step2` and `code/step3`:
     you will be implementing the missing pieces.
@@ -94,10 +94,10 @@ What is interesting about his hack:
 
     The attack lived only in the shipped compiler binary, which detected
     when it was compiling the clean, non-hacked compiler source code
-    and automatically inject the attack code into the produced binary.
-    This flawed binary was then able to inject attacks both into 
-    login and into the original compiler source.
-    
+    and automatically injected a self-replicating copy of the attack
+    code into the produced binary.  This flawed binary was then able to
+    inject attacks both into login and into the original compiler source.
+
     Devious and not straightfordward.
 
 Words make this awkward.  To make it concrete, assume
@@ -111,7 +111,7 @@ we have three single-file programs:
 
   - `login.c`: the clean unhacked login program.   When run
     it prompts for a user name.  If the user does not exist
-    it exits.  For example:
+    it whines and exits.  For example:
 
             % compiler login.c -o login
             % login
@@ -150,11 +150,12 @@ we have three single-file programs:
 
     In other words, during compilation the `trojan-compiler` binary
     essentially turns `compiler.c` into `trojan-compiler.c` and generates
-    a binary from it. This new `compile` binary will now inject attacks
+    a binary from it. This new hacked `compile` binary will now inject attacks
     both into `login.c` and `compiler.c` just as `trojan-compiler` does.
-    Further, the `compiler` binary also self-replicates the attack
+    Further, the hacked `compiler` binary also self-replicates the attack
     when used to compile itself *even though the attack is not in
-    `compiler.c`*!  (Think about this.)
+    `compiler.c`*!  (Think about this: it's as close to a koan as I know
+    in systems.)
 
     To take this a step further, we can even delete everything to do
     with the hack and recompile `compiler.c` with its flawed binary over
