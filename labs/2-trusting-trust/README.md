@@ -258,13 +258,14 @@ itself.  This will be the code as shown at the beginning of Figure 1.
 Notes:
   1. We probably should have picked a better name for `quine-gen` --- it
      doesn't really generate a quine from arbitary input but instead merely
-     converts and input to an array and then emits the array and the input.
-     This caused some confusion when people did step 3.
+     converts its input to an array and then emits the array and the input.
+     This naming caused some confusion when people did step 3.
 
   2. If you get syntax errors in the quine file you generate it --- just
-     open up the file in your editor and see what you need to do to change
-     it.  Just because you automatically emitted the code rather than
-     typed it the rules are the same: treat the code as if you wrote it.
+     open up the file in your editor and see what you would need to fix
+     these errors and then put those fixes in `quine-gen.c`.  Just because
+     you automatically emitted the code rather than typed it, the rules
+     are the same: treat the code as if you wrote it.
 
 --------------------------------------------------------------------------
 #### step2: inject attacks into `step2/login` and `step2/compiler`
@@ -318,18 +319,18 @@ What you should do:
             username: ken
             successful login: <ken>
 
-  2. Add a second modification to the `compile()` routine in
+  2. Finally, also modify the `compile()` routine in
     `trojan-compiler.c` so that it scans its input for the `compile()`
     routine in `compiler.c` and, if it finds it, injects a simple print
     statement that will print each time `compile()` runs --- this is
     obviously not a useful "attack", but rather rather serves as a
     placeholder for the final, subtle step in part 3.
 
-##### Details of attacking `login`
+##### More details about attacking `login`
 
-Here you'll inject an trivial attack in the `login` program that will
-make the `login()` routine return true for user `ken` without asking
-for a password.
+As stated, you'll first inject an trivial attack in the `login` program
+that will make the `login()` routine return true for user `ken` without
+asking for a password.
 
 The basic approach: 
 
