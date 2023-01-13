@@ -152,10 +152,10 @@ we have three single-file programs:
     essentially turns `compiler.c` into `trojan-compiler.c` and generates
     a binary from it. This new hacked `compile` binary will now inject attacks
     both into `login.c` and `compiler.c` just as `trojan-compiler` does.
-    Further, the hacked `compiler` binary also self-replicates the attack
-    when used to compile itself *even though the attack is not in
-    `compiler.c`*!  (Think about this: it's as close to a koan as I know
-    in systems.)
+    Further, the hacked `compiler` binary also self-replicates the
+    attack when used to compile itself *even though the attack is not in
+    `compiler.c`*!  (Think about this weirdness: it's as close to a koan
+    as I know in systems.)
 
     To take this a step further, we can even delete everything to do
     with the hack and recompile `compiler.c` with its flawed binary over
