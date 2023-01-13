@@ -195,7 +195,7 @@ based on Figure 1 in Thompson's paper.
 
 You are given:
 
-  - `seed.c`: the main part of the C code in the paper (so
+  - `code/step1/seed.c`: the main part of the C code in the paper (so
      you don't have to type it in).
 
    - the `check` recipe in the `Makefile` for making and checking
@@ -210,14 +210,11 @@ Finish implementing `code/step1/quine-gen.c` which when fed
 (1) a character array describing the input `seed.c` and (2) the input
 itself.  This will be the code as shown at the beginning of Figure 1.
 
-  - We give you `code/step1/seed.c`: the main part of the C code in
-    the paper (so you don't have to type it in).
-
   - After you implement `quine-gen.c` and then run it:
 
             % ./quine-gen < seed.c 
 
-    You should get something that looks like:
+    You should get something that looks something like:
 
             char prog[] = {
 	            47, 	47, 	32, 	99, 	97, 	110, 	
