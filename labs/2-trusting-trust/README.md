@@ -47,18 +47,24 @@ then `code/step3` (hardest).
 
 Standard check-off:
    - When you type `make` in `code/step3` the test passes.
-   - Extension: redo all the steps in a different programming language.
 
-Hard check-off:
+Hard check-off (if you're exceptionally ambitious):
 
   - Do not use our code at all but write everything on your own
     from the paper.  This will maximize difficulty, but also understanding
-    Just make sure it passes our `make check` in `step3`.
+    Just make sure you name things so that they pass our `make check`
+    in `step3`.
 
-    NOTE: in general for any lab you can always ignore
-    our code and just implement your own from scratch as long
-    as the provided tests pass.
+    NOTE: in general for any lab you can always ignore our code and just
+    implement your own from scratch as long as the provided tests pass.
+    This will count as an extension (either major or minor depending on 
+    the lab).
 
+Extensions:
+  - Redo everything in a different language (e.g., rust).
+  - Inject attacks into a binary program rather than source code.
+  - Attack a different program (this could be a minor or major extension
+    depending.)
 
 -------------------------------------------------------------------
 ### Intuition: self-replicating attack injection
