@@ -474,7 +474,7 @@ compiler is the same:
 ### Hints
 
 The basic idea is to take your attack and create a self-replicating version
-using the code in `step1`.  Basic idea:
+using the code in `step1`:
   1. You'll have to generate an array of ASCII values of your attack code
      as in `step1`.
   2. You'll have to modify your attack on the compiler to inject both this
@@ -488,7 +488,9 @@ it, I used an include to pull in the generated sort-of quine code:
   1. Seperate out your attack into its own file (e.g., `attack.c`).
   2. Use `step1/gen-quine` to produce a file `attack.c` that has
      the array and the source code for the attack.
-  3. Include the file into `trojan-compile2.c`.
+  3. Include the file into `trojan-compile2.c`: note, this `#include`
+     will be in the middle of your `compile` routine, not at the 
+     top of the file (where it wouldn't do anything).
   4. Profit.
 
 Note:
