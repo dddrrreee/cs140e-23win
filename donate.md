@@ -1,6 +1,6 @@
 ### Consider donating to the class!  
 
-***PlEASE, PLEASE DO NOT DONATE IF YOU ARE IN THE CLASS OR MAY APPLY TO STANFORD.***
+***PLEASE DO NOT DONATE IF YOU ARE IN THE CLASS OR MAY APPLY TO STANFORD.***
 
 Donation methods:
 
