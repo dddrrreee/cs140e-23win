@@ -23,8 +23,13 @@ We will write the code for his hack.  While the paper is short, and the
 hack seems not that hard, when you actually have to write out the code,
 you'll likely realize you don't actually know the next thing to type.
 
-Is a neat example of how circular, recursive definitions work when
-you have a compiler that can compile itself.  
+The hack is a neat example of how circular, recursive definitions
+work when you have a compiler that can compile itself.    For example,
+a C compiler written in C implements code to implement `while` loops,
+`for` loops and `if` statements *using code written with `while` loops,
+`for` loops and `if` statements*.  Seems impossible.  Didn't Godel say
+something about it?    After the lab you'll have a bit firmer grip
+on this slippery weirdness.  
 
 Everyone I've met above a certain age in systems has read this paper
 and they all seem to think they understand it.  However, I've not met
@@ -245,6 +250,18 @@ itself.  This will be the code as shown at the beginning of Figure 1.
     As mentioned above, to make this easier, we've added a target `check`
     in the `step1/Makefile`: you can check using `make check`.
 
+
+Notes:
+  1. We probably should have picked a better name for `quine-gen` --- it
+     doesn't really generate a quine from arbitary input but instead merely
+     converts and input to an array and then emits the array and the input.
+     This caused some confusion when people did step 3.
+
+  2. If you get syntax errors in the quine file you generate it --- just
+     open up the file in your editor and see what you need to do to change
+     it.  Just because you automatically emitted the code rather than
+     typed it the rules are the same: treat the code as if you wrote it.
+
 --------------------------------------------------------------------------
 #### step2: inject attacks into `step2/login` and `step2/compiler`
 
@@ -375,7 +392,6 @@ prints an annoying message rather than doing something evil.  But what
 exactly does it have to do?   Our problem is that we need the attack to
 be self-replicating.
 
-
 So, for Ken, if anyone ever re-compiled the system C compiler and
 replaced his binary of it that contains his attack, the attack is gone.
 For example using our toys to see the tragedy:
@@ -409,7 +425,14 @@ For example using our toys to see the tragedy:
 
 The fancy step (next) is to use the trick from `code/step1` to fix
 this problem by injecting a self-replicating copy of the attack into
-`compiler.c` while compiling it.
+`compiler.c` while compiling it.  
+
+This may or may not help, but:
+
+  - In a sense you can see step 2 as implementing an `attack.c`
+    that is roughly the source code difference between `compiler.c`
+    and `trojan-compiler.c`, and this step (3) turns the attack into
+    `attack-quine.c`
 
 I'll give some hints below, but you're more than welcome to do this
 on your own!  Just make sure you that you make a copy of your trojan
@@ -442,6 +465,7 @@ compiler is the same:
     
     # success!
 
+
 ### Hints
 
 The basic idea is to take your attack and create a self-replicating version
@@ -462,7 +486,16 @@ it, I used an include to pull in the generated sort-of quine code:
   3. Include the file into `trojan-compile2.c`.
   4. Profit.
 
-A few more details to get started are in `step3/README.md`
+Note:
+  - One thing you should *not* do is read in some code at runtime (other
+    than the input) and use that as part of the attack.  We want to 
+    be able to copy the infected `compile` to another machine and 
+    have it able to start replicating the attack rather than immediately
+    break because it depended on some file on the original machine.
+
+    If the `diff` check in the makefile fails, it could be because you
+    did this mistake.  (It could also just be failing because there is
+    non-determinism in compilation.)
 	
 -----------------------------------------------------------------------
 #### Postscript
