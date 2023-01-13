@@ -200,7 +200,8 @@ First things first:
 
     You may need to install `git`, create a `github` account and register
     a key with github (if you don't want to do the latter, use the
-    `http` clone method).  See the [PRELAB](labs/0-blink/PRELAB.md)
+    `http` clone method).  See the our [git instructions]
+    (guides/git.md)
     for more discussion.
 
  2. Make sure you have access to the 
