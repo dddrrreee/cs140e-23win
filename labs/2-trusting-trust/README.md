@@ -51,18 +51,24 @@ steps: start with `code/step1` (easy), then `code/step2` (medium),
 then `code/step3` (hardest).
 
 Standard check-off:
-   - When you type `make` in `code/step3` the test passes.
+  - When you type `make` in `code/step3` the test passes.
+
+    NOTE: the most common mistake on this lab: making code much more
+    complicated by implementing the attacks by buffering and manipulating
+    temporary `char` arrays rather than emiting the code immediately to
+    the file using `fprintf`.  Quick test: your code shouldn't be using
+    `strcpy` or `strcat` --- not needed and creates bugs.
 
 Hard check-off (if you're exceptionally ambitious):
 
   - Do not use our code at all but write everything on your own
-    from the paper.  This will maximize difficulty, but also understanding
-    Just make sure you name things so that they pass our `make check`
-    in `step3`.
+    based entirely on the paper.  This will maximize difficulty, but also
+    understanding. Just make sure you name your programs
+    so that they pass our `make check` in `step3`.
 
     NOTE: in general for any lab you can always ignore our code and just
     implement your own from scratch as long as the provided tests pass.
-    This will count as an extension (either major or minor depending on 
+    This will count as an extension (either major or minor depending on
     the lab).
 
 Extensions:
@@ -504,3 +510,5 @@ You have now replicated Thompon's hack.  Startlingly, there seem to be
 only a few people that have ever done so, and most that believe they
 understand the paper woulnd't actually be able to write out the code.
 You can probably really stand out at parties by explaining what you did.
+
+***Lab food paid for by: Michelle J!***
