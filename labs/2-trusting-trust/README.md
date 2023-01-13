@@ -502,7 +502,7 @@ Note:
 
     If the `diff` check in the makefile fails, it could be because you
     did this mistake.  (It could also just be failing because there is
-    non-determinism in compilation.)
+    non-determinism in compilation on MacOS M1's laptops.)
 	
 -----------------------------------------------------------------------
 #### Postscript
