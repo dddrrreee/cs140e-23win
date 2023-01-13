@@ -1,16 +1,26 @@
 ### Bug
 
-We have been claiming that device bugs are intimittent and an interesting
-example showed up when doing the lecture in the first class.
+We have been claiming that device bugs are intimittent.  As a meta-joke
+an interesting example showed up during the first lecture when something
+I claimed had a bug didn't have it anymore.   It turns out it was
+compiler dependent in a funny way.  We'll discuss below since it shows
+a bunch of general issues in a concrete way.
 
 We had the following simplified code that tries to initialize the
 r/pi framebuffer by:
 
   1. Filling in a message structe `cp`.
-  2. After (1) completes: send the message by setting assigning its
-     address to the mailbox `write` field.
+  2. After step 1 completes: send the message by setting assigning the
+     address of `cp  to the mailbox `write` field.
      
-We had the code:
+Why it works like this isn't that important, the main thing you need
+to understand is the sort-of obvious requirement that you shouldn't
+initiate a send of some kind before you finish initializing the
+message you are sending.
+
+
+We had the code taken from an old piece of cs107e code (this bug was
+maybe the hardest bug I had in 2015):
 
 ```cpp
 
@@ -47,14 +57,14 @@ void write_mailbox_x(mailbox_t *mbox, unsigned channel) {
     while(mbox->status & MAILBOX_FULL)
         ;
 
-    // 1: initialize the message fields in <cp>
+    // step 1: initialize the message fields in <cp>
     cp.width = cp.virtual_width = 1280;
     cp.height = cp.virtual_height = 960;
     cp.depth = 32;
     cp.x_offset = cp.y_offset = 0;
     cp.pointer = 0;
 
-    // 2. send the <cp> message by writing its address
+    // step 2. send the <cp> message by writing its address
     //    to mbox->write.
     mbox->write = ((unsigned)(&cp) | channel | 0x40000000);
 }
@@ -63,14 +73,14 @@ void write_mailbox_x(mailbox_t *mbox, unsigned channel) {
 
 In class the claim was that because `gcc` didn't know there was a device
 ordering requirement between step 1 and step 2 that at higher optimization
-levels some of the assignments to `cp` would trickle down below the send.
-(This reordering is perfectly legal in C: modifying the contents of a
-storage location does not change its address.)
+levels some of the assignments to `cp` (step 1) would trickle down below
+the send (step 2).  Note: such reorderings are perfectly legal in C:
+modifying the contents of a storage location does not change whether
+you can assign its address to anything.
 
 
-
-However, when I ran our r/pi compiler and looked at the result the
-claimed bug did not show up:  
+However, when I ran our r/pi compiler and we looked at the result in
+class, the bug I claimed was there did not show up:
 
         % arm-none-eabi-gcc -g -O3 -c 4-fb.c
         % arm-none-eabi-objdump -S -d 4-fb.o
@@ -110,13 +120,17 @@ claimed bug did not show up:
             mbox->write = ((unsigned)(&cp) | channel | 0x40000000);
         4c:	e5801020 	str	r1, [r0, #32]
 
-While embarassing, after some poking around, it is also interesting.
+I.e., all initializations completed before the send occured.  While
+embarassing that I wasted everyone's time, after some poking around,
+it is also interesting.
 
-To jump over some steps, it turns out that if you reorder some of the
-assignments and recompile the bug *does show up*.   My current guess
-is that there is an interaction between register assignments and a low
-level "peephole" optimization pass later in the compiler that reorders
-instructions.
+To jump over some steps, it turns out that the newer version of `gcc`
+we use translates this code slightly differently and this difference
+hides the bug.  But, it turns out that if you reorder some of the
+assignments to `cp` and recompile the bug *does show up*.   My current
+guess is that there is an interaction between register assignments and
+a low level "peephole" optimization pass later in the compiler that
+reorders instructions.
 
 In any case, if you change the assignmnts from:
 
