@@ -51,7 +51,7 @@ steps: start with `code/step1` (easy), then `code/step2` (medium),
 then `code/step3` (hardest).
 
 Standard check-off:
-  - When you type `make` in `code/step3` the test passes.
+  - When you type `make check` in `code/step3` the test passes.
 
     NOTE: the most common mistake on this lab: making code much more
     complicated by implementing the attacks by buffering and manipulating
