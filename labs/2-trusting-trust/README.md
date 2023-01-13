@@ -343,17 +343,17 @@ The basic approach:
 
    2. When you type `ken` as a user, `login` should give you success:
 
-        % ./trojan-compiler login.c -o login-attacked
-        % ./login-attacked 
-        user: ken
-        successful login: <ken>
+            % ./trojan-compiler login.c -o login-attacked
+            % ./login-attacked 
+            user: ken
+            successful login: <ken>
 
       And, of course, the one other user should still work:
 
-        % ./login-attacked
-        user: guest
-        passwd: password
-        successful login: <guest>
+            % ./login-attacked
+            user: guest
+            passwd: password
+            successful login: <guest>
 
 ##### Details of attacking `compiler`
 
