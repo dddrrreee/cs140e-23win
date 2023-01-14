@@ -48,13 +48,13 @@ the pi and Unix side will be written by you:
 
 ***We are here*** ===>
 
-  - [3-blink](3-blink/): get everyone up to speed and all
-    necessary software installed.  This should be a fast lab.
+  - [3-gpio](3-gpio/):  Two parts.  First, we will give out the 
+    hardware and make sure it works (this should be fast).
 
-  - [4-gpio](4-gpio/): start getting used to understanding hardware
-    datasheets by writing your own code to control the r/pi `GPIO` pins
-    using the Broadcom document GPIO description.  You will use this to
-    implement your own blink and a simple network between your r/pi's.
+    Second start getting used to understanding hardware datasheets by
+    writing your own code to control the r/pi `GPIO` pins using the
+    Broadcom document GPIO description.  You will use this to implement
+    your own blink and a simple network between your r/pi's.
 
   - ***cross-check***: you will use read-write logging
     of all loads and stores to device memory to verify that your GPIO

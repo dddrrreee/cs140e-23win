@@ -288,6 +288,7 @@ We give you:
     insert attacks.
 
 What you should do:
+
   0. Before modifying anything make sure the code works.
      When you run `make` you should see something like:
 
