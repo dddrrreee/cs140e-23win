@@ -32,12 +32,11 @@ a hardware investment.
     lab this quarter.
 
 
-  - [2-trust](2-trusting-trust): Ken Thompson is arguably our patron
-    saint of operating systems --- brilliant, with a gift for simple
-    code that did powerful things.   We will reimplement a simplified
-    version of a crazy hack he described in his Turing award lecture
-    that let him log into any Unix system in a way hidden even from
-    careful code inspection.
+  - [2-trusting-trust](2-trusting-trust): Ken Thompson is arguably our patron
+    saint of operating systems --- brilliant, with a gift for simple code that
+    did powerful things.   We will reimplement a simplified version of a crazy
+    hack he described in his Turing award lecture that let him log into any
+    Unix system in a way hidden even from careful code inspection.
 
 ---------------------------------------------------------------------
 ### Part 1: Going down to metal.
