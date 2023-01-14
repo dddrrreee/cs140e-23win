@@ -214,10 +214,20 @@ comfort with using it.
     write will corrupt the system, no matter where it crashes.
 
 ---------------------------------------------------------------------
-### Part 5: Putting it all together.
+### Part 5: Networking
+
+   - ***nrf transmit/receive***: your system gets much more useful
+     if it can control computation remotely.  To this end we write a
+     simple bi-directional network implementation using the common,
+     cheap NRF24L01+ RF trancievers.   As an extension you will build
+     a network bootloader.
+
+---------------------------------------------------------------------
+### Part 6: Putting it all together.
 
 For the last labs we put everything all together:
 
   - ***complete OS***:
     you will combine user-processes, virtual memory, system calls,
     and threads into a capstone implementation.
+
