@@ -89,7 +89,6 @@ the pi and Unix side will be written by you:
 ---------------------------------------------------------------------
 ### Part 2: execution: threads, interrupts, exceptions, processes
 
-
 Execution comes in many forms.  It can be a tricky topic both
 because of its thickets of low-level, hardware specific details and
 because of how hard mistakes are to debug.  You will build and use four
@@ -161,6 +160,11 @@ comfort with using it.
 ---------------------------------------------------------------------
 ### Part 3: virtual memory
 
+Building virtual memory will require the most reading --- about 100 pages
+of the ARMv6 manual.  There's just no way around this; but after you
+understdand how to build virtual memory there's nothing more complicated,
+so anything else should be relatively easy.
+
   - ***pinned virtual memory***: you will build a simple virtual memory
     system from ARM documents.   The interesting thing about this will
     be how little code is required.  You will exploit a neat, novel
@@ -185,6 +189,17 @@ comfort with using it.
 
 ---------------------------------------------------------------------
 ### Part 4: file systems
+
+So far, if you do anything useful on your pi, this work evaporates when
+you unplug it.  We will implement files and directories so that you can
+make data persistent.  (In a sense, networking sends data across distance
+and files/directories/memory sends it across time.)
+
+This code will likely be the most  substantial of the quarter.  
+
+On the plus side: from a purely mercenary angle, if you do an embedded
+startup, you'll need a FAT32 file system that has no license restrictions
+and these labs will get you much of the way there.
 
   - ***fuse***:
     In this lab you will use the FUSE file system to wrap up your pi
@@ -215,6 +230,9 @@ comfort with using it.
 ---------------------------------------------------------------------
 ### Part 5: Networking
 
+Having one pi that can only talk to itself is much less useful even two
+pi's that can talk to each other.   So we'll do some simple networking.
+
    - ***nrf transmit/receive***: your system gets much more useful
      if it can control computation remotely.  To this end we write a
      simple bi-directional network implementation using the common,
@@ -229,4 +247,3 @@ For the last labs we put everything all together:
   - ***complete OS***:
     you will combine user-processes, virtual memory, system calls,
     and threads into a capstone implementation.
-
