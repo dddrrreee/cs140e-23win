@@ -162,17 +162,20 @@ comfort with using it.
 
 We now build virtual memory which will let us add (1) general memory
 protection and (2) user processes that can safely run with their own
-private memory.
+private address space.
 
-Virtual memory is a simple concept --- it just replaces one
-integer (a virtual address) with another (a physical address).
-However, since this occurs on every memory access it has to be fast.
-This speed has hardware for virtual memory eye-poppingly complicated.
+Conceptually, virtual memory is simple: it just involves building an
+integer function (usually using a table lookup; see: "page table") that
+can replaces one integer (a virtual address) with another (a physical
+address).  However, since this replacement occurs on every memory access,
+it must be fast.  This need for speed makes modern hardware for virtual
+memory wildly complicated.
 
 As a result, this topic will require the most reading --- about 100
 pages of the ARMv6 manual.  (You should start now.)  There's just no way
-around this; but after you understdand how to build virtual memory there's
-nothing more complicated, so anything else should be relatively easy.
+around this complexity.  But, after you understand how to build virtual
+memory there's nothing more complicated, so anything else should be
+relatively easy.
 
   - ***pinned virtual memory***: you will build a simple virtual memory
     system from ARM documents.   The interesting thing about this will
@@ -233,7 +236,7 @@ and these labs will get you much of the way there.
     card, jump to it and run it.
 
   - ***fat32 write***: you will extend your FAT32 file system to add
-    writes.  You'll use a noval model-checking trick to ensure that no
+    writes.  You'll use a novel model-checking trick to ensure that no
     write will corrupt the system, no matter where it crashes.
 
 ---------------------------------------------------------------------
