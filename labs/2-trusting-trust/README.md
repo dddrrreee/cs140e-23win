@@ -25,7 +25,7 @@ you'll likely realize you don't actually know the next thing to type.
 
 The hack is a neat example of how circular, recursive definitions
 work when you have a compiler that can compile itself.    For example,
-a C compiler written in C has code to implement `while` loops,
+a C compiler written in C implements `while` loops,
 `for` loops and `if` statements *using code written with `while` loops,
 `for` loops and `if` statements*.  Seems impossible.  Didn't Godel say
 something about it?    After the lab you'll have a bit firmer grip
