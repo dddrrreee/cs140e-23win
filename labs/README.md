@@ -160,10 +160,19 @@ comfort with using it.
 ---------------------------------------------------------------------
 ### Part 3: virtual memory
 
-Building virtual memory will require the most reading --- about 100 pages
-of the ARMv6 manual.  There's just no way around this; but after you
-understdand how to build virtual memory there's nothing more complicated,
-so anything else should be relatively easy.
+We now build virtual memory which will let us add (1) general memory
+protection and (2) user processes that can safely run with their own
+private memory.
+
+Virtual memory is a simple concept --- it just replaces one
+integer (a virtual address) with another (a physical address).
+However, since this occurs on every memory access it has to be fast.
+This speed has hardware for virtual memory eye-poppingly complicated.
+
+As a result, this topic will require the most reading --- about 100
+pages of the ARMv6 manual.  (You should start now.)  There's just no way
+around this; but after you understdand how to build virtual memory there's
+nothing more complicated, so anything else should be relatively easy.
 
   - ***pinned virtual memory***: you will build a simple virtual memory
     system from ARM documents.   The interesting thing about this will
