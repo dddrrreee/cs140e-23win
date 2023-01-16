@@ -176,7 +176,7 @@ values) to read and write addresses with 32-bit values.
 For example, we would rewrite above as:
 
         // *(volatile unsigned *)0x2020001C = (1 << 20);
-        PUT32(0x2020202, (1 << 20));
+        PUT32(0x2020001C, (1 << 20));
 
 The call `PUT32(...)` will jump to assembly code in another file (`gcc`
 currently cannot optimize this) which writes the value of the second
