@@ -9,7 +9,7 @@ than nothing.
 
 Table of Contents
 - [Crash course: Devices](#crash-course)
-  - [What](#-device-driver:-what's-that.)
+  - [What](#device-driver:-what's-that.)
 
 
 ------------------------------------------------------------
