@@ -56,6 +56,10 @@ the pi and Unix side will be written by you:
     Broadcom document GPIO description.  You will use this to implement
     your own blink and a simple network between your r/pi's.
 
+    ***READING***: the notes on [GPIO](3-gpio/GPIO.md) and 
+    [DEVICES](3-gpio/DEVICES.md) as well as pages 4--7 and 91---96 
+    of the broadcom datasheet (`docs/BCM2835-ARM-Peripherals.annot.PDF`)
+
   - ***cross-check***: you will use read-write logging
     of all loads and stores to device memory to verify that your GPIO
     code is equivalent to everyone else's.  If one person got the code
