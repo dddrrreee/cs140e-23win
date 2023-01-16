@@ -9,7 +9,9 @@ than nothing.
 
 Table of Contents
 - [Crash course: Devices](#crash-course)
-  - [What](#device-driver)
+  - [The first rule](#errata-everything-is-broken)
+  - [What is a device driver](#device-driver-whats-that)
+  - [Expectations and heuristics for datasheets](#expectations-and-heuristics-for-datasheets)
 
 ------------------------------------------------------------
 ### Device driver: What's that.
@@ -61,8 +63,11 @@ and get used to; this note will talk about some of them.
 
 So, let me tell you about devices.
 
-----------------------------------------------------------------
+--------------------------------------------------------------------
 #### Errata: Everything is broken
+
+The first rule of software is that everything is broken.  Since hardware
+is just software run through a fab, it has the same rule, too.
 
 Check for datasheet errata! Datasheets often have errors.  The Broadcom
 document is no different. Fortunately it has been worked over enough that
@@ -73,15 +78,18 @@ Linux kernel code, since Linux devs often have back-channel access
 to manufacturers, who are highly incentivized to have Linux work with
 their devices.
 
-The hardest task is to be the first one to boot up a system or configure
-a device.  Any datasheet mistake can easily prevent all progress.
-Isolating the root cause using differential analysis is hard because
-a datasheet error in any of the multiple setup steps  causes the same
-effect: the device doesn't work.  Multiply the above by: are you sure
-both your code and your understanding of the datasheet is correct?
+With that said, if the device doesn't work, the problem is almost
+certainly in your code or your understanding.  Did you hook up to the
+right power?  Did you off-by-one miscount a pin or use a loose jumper?
+Did you mistype an address?  A register name?  Not wait for initialation
+to complete?  Write a bunch of code all-at-once and expect it to work?
+For some reason, many people immediately blame hardware.  Hardware does
+go bad.  But it's a good chance the bug is in your code, just like all
+the preceeding yesterdays,
+
 
 --------------------------------------------------------------------
-### Some expectations and strategies for datasheets
+### Expectations and heuristics for datasheets
 
 If expectation management makes happiness, then the key to getting
 through datasheets is a clear-eyed view of the ways they often suck,
