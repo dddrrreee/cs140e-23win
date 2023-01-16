@@ -4,7 +4,7 @@
 
 This note gives a give a crash course in thinking about devices and
 their datasheets.  It's both incomplete and yet somewhat repetitive with
-both itself and the [GPIO](./GPIO.md) writeup.  But hopeflly better
+both itself and the [GPIO](./GPIO.md) writeup.  But hopefully better
 than nothing.
 
 ------------------------------------------------------------
@@ -22,7 +22,7 @@ and device complexity, about 90% of Linux or BSD is device drivers.
 
 However, weirdly, not much gets written about driver code other than to
 sneer at its high number of bugs or low elegance.  While you can find
-tens of thousands of resarch papers and hundreds of book chapters on
+tens of thousands of research papers and hundreds of book chapters on
 "core" operating system topics such as virtual memory, processes or file
 systems, comparatively little gets written about devices despite them
 making up the monster proportion of the code.
@@ -37,7 +37,7 @@ of writing a small system from scratch on a hardware platform like the
 r/pi is that we can easily connect devices and do things with them that
 a general-purpose system such as your laptop can't.  Especially true
 if the device has tight real time requirements.  For example: Try to
-plug accelerometer into your laptop, or get consisent small nanosecond
+plug accelerometer into your laptop, or get consistent small nanosecond
 accurate timings on MacOS (hahaha, sorry, that's mean), or build any of
 the wearable devices you might buy, etc.
 
@@ -46,7 +46,7 @@ see some cool new device, you can quickly grab its datasheet, code up a
 driver for it without panic or much fuss, and then be able to exploit
 whatever interesting power it gives.  This ability will also make it
 easy for you to have an interesting idea and then back solve for how to
-build it by looking at the the massive catelogue of devices out there,
+build it by looking at the the massive catalogue of devices out there,
 secure in the knowledge that you can write any code you need.
 
 Partly you'll develop this superpower because after you get through about
@@ -84,7 +84,7 @@ through datasheets is a clear-eyed view of the ways they often suck,
 just expecting it, and doing enough that their surprises become routine
 and you can flow through without a lot of drama.
 
-The following comments also generally apply to architecture manauals,
+The following comments also generally apply to architecture manuals,
 though these often get vetted much more heavily.
 
 Some crude patterns for datasheets:
@@ -107,7 +107,7 @@ Some crude patterns for datasheets:
 
     The most extreme example of non-operational, definitions-only prose
     I recall is the I2C device protocol "chapter" in the HiFive1 RISC-V
-    manual: they simply give a table of device addreses with the sentence
+    manual: they simply give a table of device addresses with the sentence
     that you should go "read the the I2C spec."
 
   - Related: fields are generally defined linearly --- e.g., in order
@@ -172,7 +172,7 @@ Some crude patterns for datasheets:
           privileged mode ... it is ignored"
 
     I.e., if you try to single-step in privileged mode rather than
-    user-mode, nothing happens.  The preceeding chapter 13 pages have
+    user-mode, nothing happens.  The preceding chapter 13 pages have
     a bunch of prose on configuring the debug hardware --- nowhere do
     they imply processor state matters.  It's very easy to miss this
     unflagged sentence and try to do single stepping of kernel code,
@@ -183,7 +183,7 @@ Some crude patterns for datasheets:
 
   - More for architecture manuals:  just because something is in there
     and your CPU chip claims that it implements that version, it does
-    not mean you have that functionaliy!
+    not mean you have that functionally!
 
     An imperfect safety net for chips: scan the manual for architecture
     feature registers that you can read to get the list of features the
@@ -240,14 +240,14 @@ complex remote procedure calls where:
 
 Some common device configuration details for complex devices:
 
-   - As stated above, device enable can be extrmely expensive.  Just
+   - As stated above, device enable can be extremely expensive.  Just
      because your final store instruction to set the device's
      enable field was "completed" from the point of view of the CPU,
-     which has started running the intructions after: ***this does not
+     which has started running the instructions after: ***this does not
      mean the device is up and running!***
 
      Complex devices (such as gyroscope, accelerometer, network
-     transciever) is not going to be instantaneously active.  It's not
+     transceiver) is not going to be instantaneously active.  It's not
      uncommon for such devices to need 10 or more milliseconds (on the
      pi: million of cycles).  
 
@@ -267,7 +267,7 @@ Some common device configuration details for complex devices:
 
    - For devices that have multi-step configurations, usually you will
      set the device to an "on" but disabled state when you (re-)configure
-     it.  Otherise, it may start sending garbage out the world when you
+     it.  Otherwise, it may start sending garbage out the world when you
      are halfway done with configuration.
 
 ----------------------------------------------------------------
@@ -333,10 +333,10 @@ is false.  You can always poll.  And, in fact, polling is the superior
 solution in many of the use cases we will see.  E.g., if you are building
 a single-purpose device, rather than a general purpose OS, you can sit
 in a loop pretty easily checking all the different devices you have to
-see if something interesting occured.  A polling loop makes it feasible
+see if something interesting occurred.  A polling loop makes it feasible
 to much more thoroughly test your system --- maybe even to the point
 that you are surprised if it breaks.  However, if you add interrupts,
-I'd say you now almost-certainly made you system impossilbe-to-test ---
+I'd say you now almost-certainly made you system impossible-to-test ---
 the interrupt routine can run at any time, 
 exponentially blowing up your code's state space.  You can't exhaust
 this space with brute force testing.  (There are other tricks you can
@@ -444,11 +444,11 @@ For multiple devices:
   - If you have two devices that communicate, set up your pi in a
     "loop back" configuration where it can send and receive to itself.
     This will be at least 2x (maybe more) faster to develop since the
-    single pi knows exactly what it intends to do and what occured.
+    single pi knows exactly what it intends to do and what occurred.
 
   - If you are doing networking: in our experience, sending is pretty
-    robust, but receiving --- where an antennea has to cleanly decode
-    signals --- can be very sentitive to dirty power and cause receive
+    robust, but receiving --- where an antennae has to cleanly decode
+    signals --- can be very sensitive to dirty power and cause receive
     to fail.  This can be hard to figure out since the fact send "works"
     means you will assume there is no hardware problem.
 
@@ -467,15 +467,15 @@ For multiple devices:
     If there are FIFO queues you almost certainly want to clear them so
     that after a re-config you don't send or receive garbage.  An easy
     race condition: enable the device and then clear the FIFOs --- a
-    messaage from a previous session could arrive.  You want to clear
+    message from a previous session could arrive.  You want to clear
     with the device disabled.
 
   - Use `put32` and `get32` to read or write the device locations
     so that the compiler optimization does not blow up your code.
  
- - A very minor point but I have made this mistake: a revesion 2.0
+ - A very minor point but I have made this mistake: a revision 2.0
    might just be indicated with a "+" rather than a big red "version 2"
-   or a different device number.   If you're careles it's easy to buy the
+   or a different device number.   If you're careless it's easy to buy the
    older version (e.g., because its getting liquidated at good prices)
    but pick up the later datasheet and spend a ton of time writing code
    to use functionality that simply does not exist on the device you have.
@@ -525,20 +525,20 @@ virtual memory hardware. We don't worry about this for the current lab.
 
 
 ----------------------------------------------------------------
-#### Correctness: Read reset values to santity check.
+#### Correctness: Read reset values to sanity check.
 
 Of 
 
 ----------------------------------------------------------------
-#### Correctness: I get 12517 from the devide, is that right?
+#### Correctness: I get 12517 from the device, is that right?
 
 Who knows?
 
 Often have no idea if the value of the device is right.
 So find special cases where you can detect.
 For an analogue to digital converter, attach an attenuator that
-you can cycle between off and on (and multple that have different
-recistence)
+you can cycle between off and on (and multiple that have different
+resistance)
 
 part of this:  datasheets will give value
 
