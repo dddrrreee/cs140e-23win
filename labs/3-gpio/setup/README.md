@@ -268,7 +268,7 @@ Mechanically:
 
     It exits in such a way that you can rerun it multiple times.
 
-Troubleshooting:
+There are some troubleshooting hints in the [hints file](./HINTS.md)
 
 ---
 
