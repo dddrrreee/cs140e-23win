@@ -16,7 +16,7 @@ You likely have a short somewhere and in the worst-case can fry your laptop.
 
 This is broken down some more below, but please make sure:
 
-1. You've done the Broadcom reading (see below).
+1. You've done the reading (see below), especially the Broadcom reading.
 2. You've done the prelab questions on
    [Gradescope](https://www.gradescope.com/courses/488143/assignments/2568938).
 3. You've installed the `arm-none-eabi-gcc` toolchain (see
@@ -31,9 +31,10 @@ under-explain; future labs will be more succinct.
 
 ## Reading
 
-1. Read through the [GPIO and device memory crash course](../../guides/GPIO.md)
-   in the guides directory. You should have the Broadcom document open so you
-   can go through the examples in the crash course
+1. Read through the [GPIO](./GPIO.md) and [device memory](./DEVICES.md) crash
+   courses. You should have the [Broadcom
+   document](../../docs/BCM2835-ARM-Peripherals.annot.pdf) open so you can go
+   through the examples in the crash course
    (`../../docs/BCM2835-ARM-Peripherals.annot.pdf`).
 
 2. After doing so, read through pages 4--7 and 91---96 of the broadcom

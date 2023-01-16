@@ -1,0 +1,11 @@
+gpu_mem=64
+
+arm_freq=700
+core_freq=250
+
+kernel=kernel.img
+kernel_address=0x8000
+
+# on the pi zero w you need this line or it won't work.
+# zhouheng sun found this!
+enable_uart=1 

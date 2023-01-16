@@ -3,43 +3,42 @@
 This note describes how to configure and use the r/pi GPIO pins.
 The GPIO device is a good "hello world" case study for getting used to
 reading a device datasheet description and writing driver code to control
-the device.  We will do more advanced ones later in the quarter (e.g.,
+the device. We will do more advanced ones later in the quarter (e.g.,
 UART and the NRF24L01P RF transceiver).
 
 Primary sources:
 
-  - All GPIO device information is from the Broadcom BCM2835 datasheet: 
-    `/docs/BCM2835-ARM-Peripherals.annot.pdf`. 
+- All GPIO device information is from the Broadcom BCM2835 datasheet:
+  `/docs/BCM2835-ARM-Peripherals.annot.pdf`.
 
-  - [Errata](https://elinux.org/BCM2835_datasheet_errata).
+- [Errata](https://elinux.org/BCM2835_datasheet_errata).
 
-    Always check for datasheet errata! Datasheets often have
-    errors.  The Broadcom document is no different. Fortunately
-    it has been worked over enough that it has a [nice
-    errata](https://elinux.org/BCM2835_datasheet_errata).  Sometimes you
-    can figure out bugs from contradictions, sometimes from errata. One
-    perhaps surprisingly good source is looking at the Linux kernel code,
-    since Linux devs often have back-channel access to manufacturers,
-    who are highly incentivized to have Linux work with their devices.
+  Always check for datasheet errata! Datasheets often have
+  errors. The Broadcom document is no different. Fortunately
+  it has been worked over enough that it has a [nice
+  errata](https://elinux.org/BCM2835_datasheet_errata). Sometimes you
+  can figure out bugs from contradictions, sometimes from errata. One
+  perhaps surprisingly good source is looking at the Linux kernel code,
+  since Linux devs often have back-channel access to manufacturers,
+  who are highly incentivized to have Linux work with their devices.
 
-    The hardest task is to be the first one to boot up a system or
-    configure a device.  Any datasheet mistake can easily prevent all
-    progress.  Isolating the root cause using differential analysis is
-    hard because a datasheet error in any of the multiple setup steps
-    causes the same effect: the device doesn't work.  Multiply the
-    above by: are you sure both your code and your understanding of the
-    datasheet is correct?
-
+  The hardest task is to be the first one to boot up a system or
+  configure a device. Any datasheet mistake can easily prevent all
+  progress. Isolating the root cause using differential analysis is
+  hard because a datasheet error in any of the multiple setup steps
+  causes the same effect: the device doesn't work. Multiply the
+  above by: are you sure both your code and your understanding of the
+  datasheet is correct?
 
 Also read:
 
-  - The [DEVICES.md](DEVICES.md) note to get a crash course on general
-    device patterns and heuristics.  Most datasheets suck, but they 
-    suck in similar ways, so you can improve your life by understanding
-    what to expect and how to work with it.
+- The [DEVICES.md](DEVICES.md) note to get a crash course on general
+  device patterns and heuristics. Most datasheets suck, but they
+  suck in similar ways, so you can improve your life by understanding
+  what to expect and how to work with it.
 
+---
 
--------------------------------------------------------------------
 #### How devices work on the r/pi
 
 The r/pi, like most processors has a bunch of different devices it can
@@ -49,9 +48,9 @@ document: UART (you'll write a driver for this), I2C, SPI, the SD card
 reader, etc. Obviously, to use these devices, the pi must have a way
 to communicate with them.
 
-An old-school, obsolete approach (circa 1950s) 
+An old-school, obsolete approach (circa 1950s)
 for device communication is to have special assembly instructions for each
-device and its operations.  (You can see what ARM assembly looks like
+device and its operations. (You can see what ARM assembly looks like
 by looking at any of the `.list` files our `Makefile`s generate during
 compilation.) This method sucks, since each new device needs its own set
 of instructions: the hardware designer would have to anticipate all of
@@ -92,22 +91,23 @@ Of course, everything has a cost. A couple of downsides to this approach:
 
 Great. Lets do an example.
 
--------------------------------------------------------------------
+---
+
 #### GPIO on our r/pi
 
 GPIO is an acrynym for [General Purpose Input Output](https://en.wikipedia.org/wiki/General-purpose_input/output).
 
 On the r/pi: physically GPIO pins are the double row of 26 metal pins
-sticking on the side of the PCB.  (Add a photo.)  You'll use these to
-connect your r/pi different devices.  Some of these have have a dedicated
-purpose such as providing 5v or 3v power or ground.  The rest can be
+sticking on the side of the PCB. (Add a photo.) You'll use these to
+connect your r/pi different devices. Some of these have have a dedicated
+purpose such as providing 5v or 3v power or ground. The rest can be
 configured for output (producing 0 or 3.3v), input (where they convert
 3.3v or less than 3.3v to a digital 1 or 0 respectively) and a range of
 more esoteric features (you will do some).
 
 GPIO is a descriptor for a pin that has no inherent dedicated purpose.
 Instead, it can be programmatically toggled between input/output mode,
-and high/low signals in order to control some electronic device.  26 out
+and high/low signals in order to control some electronic device. 26 out
 of the 40 RPi pins are GPIO pins, while the others have assigned purpose
 (e.g. 5v, ground pins, etc...). We can use the pi to control these GPIO
 pins as needed.
@@ -211,7 +211,8 @@ powerful tricks:
 
 3. Many many others!
 
--------------------------------------------------------------------
+---
+
 #### Bigger picture: controlling devices
 
 Generally, whenever you need to control a device, you'll do something
