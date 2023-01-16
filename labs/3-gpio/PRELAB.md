@@ -33,9 +33,9 @@ under-explain; future labs will be more succinct.
 
 1. Read through the [GPIO](./GPIO.md) and [device memory](./DEVICES.md) crash
    courses. You should have the [Broadcom
-   document](../../docs/BCM2835-ARM-Peripherals.annot.pdf) open so you can go
+   document](../../docs/BCM2835-ARM-Peripherals.annot.PDF) open so you can go
    through the examples in the crash course
-   (`../../docs/BCM2835-ARM-Peripherals.annot.pdf`).
+   (`../../docs/BCM2835-ARM-Peripherals.annot.PDF`).
 
 2. After doing so, read through pages 4--7 and 91---96 of the broadcom
    document to see what memory addresses to read and write to get the GPIO pins
