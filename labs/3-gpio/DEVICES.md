@@ -7,6 +7,11 @@ their datasheets.  It's both incomplete and yet somewhat repetitive with
 both itself and the [GPIO](./GPIO.md) writeup.  But hopefully better
 than nothing.
 
+Table of Contents
+- [Crash course: Devices](#crash-course)
+  - [What](#device-driver)
+
+
 ------------------------------------------------------------
 ###  Device driver: What's that.
 
