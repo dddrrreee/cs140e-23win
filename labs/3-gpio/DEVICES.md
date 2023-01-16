@@ -9,11 +9,11 @@ than nothing.
 
 Table of Contents
 - [Crash course: Devices](#crash-course)
-  - [What](#device-driver)
+  - [What](#-device-driver:-what's-that.)
 
 
 ------------------------------------------------------------
-###  Device driver: What's that.
+### Device driver: What's that.
 
 Each hardware device an operating system supports requires a "device
 driver" that can configure and use the device.  Since there are thousands
