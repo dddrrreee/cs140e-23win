@@ -15,6 +15,15 @@ every line, you should understand why we needed it or what it does.
 And on second reading, you'll likely find some lines that we could have
 cut out!
 
+
+Labs usually have some notes about key concepts --- you must read
+these before the lab or you'll be lost.   We also suggest re-reading
+some number of labs later after the concepts have sat for a bit
+so you get a deeper view.  Note summary (so far):
+  - [COMPILATION](1-compile/volatile/README.md)
+  - [GPIO](3-gpio/GPIO.md)
+  - [DEVICES](3-gpio/DEVICES.md)
+
 ---------------------------------------------------------------------
 ### Part 0: non-pi hacking
 
