@@ -31,6 +31,9 @@ a hardware investment.
     compiler can do this translation.  What we cover will apply to every
     lab this quarter.
 
+    ***READING***: our note on [COMPILATION](1-compile/volatile/README.md)
+    which describes how compilers exploit observability to optimize code
+    and how that can break your device code.
 
   - [2-trusting-trust](2-trusting-trust): Ken Thompson is arguably our patron
     saint of operating systems --- brilliant, with a gift for simple code that
