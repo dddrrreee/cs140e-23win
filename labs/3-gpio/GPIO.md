@@ -95,10 +95,10 @@ Great. Lets do an example.
 
 #### GPIO on our r/pi
 
-GPIO is an acrynym for [General Purpose Input Output](https://en.wikipedia.org/wiki/General-purpose_input/output).
+GPIO is an acronym for [General Purpose Input Output](https://en.wikipedia.org/wiki/General-purpose_input/output).
 
-On the r/pi: physically GPIO pins are the double row of 26 metal pins
-sticking on the side of the PCB. (Add a photo.) You'll use these to
+On the r/pi: physically GPIO pins are the double row of 40 metal pins
+sticking on the side of the PCB. ![https://learn.microsoft.com/en-us/windows/iot-core/media/pinmappingsrpi/rp2_pinout.png](r/pi pins) You'll use these to
 connect your r/pi different devices. Some of these have have a dedicated
 purpose such as providing 5v or 3v power or ground. The rest can be
 configured for output (producing 0 or 3.3v), input (where they convert
