@@ -123,9 +123,12 @@ What you will do below:
   <img src="images/part2-succ-off.jpg" width="450" />
 </p>
 
+Look at the [checkoff list](./CHECKOFF.md) for information on what you need to
+do for checkoff!
+
 ---
 
-### Extension: Forward one pi signal to another.
+### Minor Extension: Forward one pi signal to another.
 
 We now do a cool trick: transparently forward signals from one pi to
 another. While mechanically trivial, this is a "hello world" version of
@@ -181,7 +184,7 @@ tricks:
 
 ---
 
-### Extension: Implement `gpio_set_pullup` and `gpio_set_pulldown`
+### Minor Extension: Implement `gpio_set_pullup` and `gpio_set_pulldown`
 
 These are described, with much ambiguity, in the Broadcom document on
 page 101 (using my pdf reader page numbering). Some issues:
@@ -237,7 +240,7 @@ gives an easier-to-follow example than the broadcom.
 
 ---
 
-### Minor Extensions: Break and tweak stuff.
+### More Minor Extensions: Break and tweak stuff.
 
 If you finish, the are a bunch of ways you can "kick the tires" on your
 system to understand better what is going on.
