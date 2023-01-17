@@ -23,9 +23,9 @@ re-reading some number of labs later after the concepts have sat for a
 bit so you get a deeper view.  Note summary (so far):
 
   - [COMPILATION](1-compile/volatile/README.md)
-  - [MAKE](1-compile/makefiles/README.md)
+  - [MAKE](1-compile/makefiles/README.md)    ***NEW***
   - [GPIO](3-gpio/GPIO.md)
-  - [DEVICES](3-gpio/DEVICES.md)
+  - [DEVICES](3-gpio/DEVICES.md)  ***NEW***
 
 ---------------------------------------------------------------------
 ### Part 0: non-pi hacking
@@ -43,9 +43,12 @@ a hardware investment.
     compiler can do this translation.  What we cover will apply to every
     lab this quarter.
 
-    ***READING***: our note on [COMPILATION](1-compile/volatile/README.md)
-    which describes how compilers exploit observability to optimize code
-    and how that can break your device code.
+    ***READING***: 
+      - [COMPILATION](1-compile/volatile/README.md)
+        which describes how compilers exploit observability to optimize
+        code and how that can break your device code.  
+      - [MAKE](1-compile/makefiles/README.md) which gives some useful
+        Makefile examples.
 
   - [2-trusting-trust](2-trusting-trust): Ken Thompson is arguably our patron
     saint of operating systems --- brilliant, with a gift for simple code that
