@@ -12,19 +12,19 @@ and check all of the examples.  `make clean` should delete them.
 Examples:
   - [0-example](0-example): simple, hard-coded Makefile that compiles
     entire program if anything changes.
-  - `1-example`: Slightly more fancy Makefile --- rewritten so that we
+  - [1-example](1-example): Slightly more fancy Makefile --- rewritten so that we
     only compile those `.c` that have changed or include a header that
     has changed.
-  - `2-example`: add a pattern-matching rule to make our code slightly
+  - [2-example](2-example): add a pattern-matching rule to make our code slightly
     more automatic and use the `$<` and `$@` variables.
-  - `3-example`:  use wildcards to automatically gather up all source
+  - [3-example](3-example):  use wildcards to automatically gather up all source
      and `make` it.  We avoid the use of dependencies by also using
      wildcards to get all header files and stating that every source
      file depends on all header.
-  - `4-example`: use the `-MMD` flag to automatically generate
+  - [4-example](4-example): use the `-MMD` flag to automatically generate
     dependencies rather than hardcode a bunch of stuff (which can go
     wrong in bad way
-  - `5-example`: now gather source from many directories and 
+  - [5-example](5-example): now gather source from many directories and 
      put the generated `.o` and `.d` files in a private build 
      directory.
 
