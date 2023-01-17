@@ -297,13 +297,14 @@ of view of the CPU, which has started running the instructions after:
 in the UART lab, where the Broadcom document states you have to enable the
 AUX device before turning on UART.  
 
-Note: even when two devices have no ordering, a strict reading of the
-Broadcom document implies that any set of reads and writes to different
-devices must be separated by memory barriers.  It appears (not sure) that
-this is partly due to the operations not being tagged by the address,
-and so if they take different times, the values can get reordered but
-the CPU cannot tell.  Thus, for this class: we require you use a memory
-barrier (`dev_barrier()`) before and possibly after accessing a device.
+Note: even when two devices do not have this type of sequencing rule the
+Broadcom document states that any set of reads and writes to different
+devices must be separated by memory barriers.  It appears (not sure)
+that this is partly due to the memory values not being tagged by their
+associated address, and so if they take different times, the values
+can get reordered but the CPU cannot tell.  Thus, for this class: we
+require you use a memory barrier (`dev_barrier()`) before and possibly
+after accessing a device.
 
 Note:
 
@@ -312,14 +313,14 @@ Note:
     But, note: one is not a superset of the other.  It's worth thinking
     about why!
 
-
 ----------------------------------------------------------------
 #### Device configuration is not instantaneous
 
 Device enable can be extremely expensive.  Complex devices (such as
-gyroscope, accelerometer, network transceiver) is not going to be
+gyroscope, accelerometer, network transceiver) are not going to be
 instantaneously active.  It's not uncommon for such devices to need 10
-or more milliseconds (on the pi: million of cycles).
+or more milliseconds after "enable" to be in a legal state (million of
+cycles on the pi).
 
 Identically to memory ordering, just because your final store instruction
 to set the device's enable field was "completed" from the point of view
@@ -333,11 +334,11 @@ be instantaneously active: you'll want to do a close read looking for
 any table in the datasheet that says how long to wait.  Like device
 examples I'd say this should be collected on the first few pages.
 
-Similarly, if you're looking at device code and you don't some kind of
-delay after initialization, the code is likely broken.  If you do see a
-delay, but it doesn't have a specific comment or datasheet page number,
-I'd say it's also likely broken.  E.g., people flying blind may just
-stick in a 30ms delay or so "just in case."
+Similarly, if you're looking at device code and you don't see some kind
+of delay after initialization, the code is likely broken.  If you do
+see a delay, but it doesn't have a specific comment or datasheet page
+number, I'd say it's also likely broken.  E.g., people flying blind may
+just stick in a 30ms delay or so "just in case."
 
 ----------------------------------------------------------------
 #### Interrupts versus polling for device events
