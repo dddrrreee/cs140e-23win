@@ -28,6 +28,7 @@ CFLAGS = -O -Wall -MMD $(inc)
 # make the build_dir before anything.
 mk =  $(firstword $(MAKEFILE_LIST))
 env = $(mk) $(build_dir)
+env = $(build_dir)
 
 # tell make where to search for prereqs.
 VPATH := $(dirs)
@@ -43,14 +44,19 @@ print:
 	echo "inc=<$(inc)>"
 	echo "mk=<$(mk)>"
 
-$(build_dir): ; mkdir -p $(build_dir)
+# add an order-only prereq to obj
+# https://www.gnu.org/software/make/manual/make.html#Prerequisite-Types
+$(obj): | $(build_dir)
 
-$(NAME): $(obj) $(env)
+$(build_dir): ; mkdir -p $(build_dir)
+ 
+
+$(NAME): $(obj)
 	$(CC) $(CFLAGS) $(obj) -o $(NAME)
 
 -include $(dep)
 
-$(build_dir)/%.o: %.c $(env)
+$(build_dir)/%.o: %.c
 	$(CC) $(CFLAGS) -c $<  -o $@
 
 .PHONY: clean
