@@ -9,9 +9,10 @@ than nothing.
 
 Table of Contents
 - [Crash course: Devices](#crash-course)
-  - [The first rule](#errata-everything-is-broken)
   - [What is a device driver](#device-driver-whats-that)
+  - [The first rule of devices: errata](#errata-everything-is-broken)
   - [Expectations and heuristics for datasheets](#expectations-and-heuristics-for-datasheets)
+  - [Device access = remote procedure calls](#device-accesses-remote-procedure-calls)
 
 ------------------------------------------------------------
 ### Device driver: What's that.
@@ -247,8 +248,56 @@ complex remote procedure calls where:
     for a result, this store-load pair can take an arbitrary long
     time to complete.
 
---------------------------------------------------------------------
-### Device initialization patterns
+----------------------------------------------------------------
+#### Device memory ordering problems.
+
+One consequence of the fact that device memory accesses are fake is
+that when you are doing loads and stores to multiple devices, you can
+get weird ordering bugs.
+
+Again, as discussed above, both loads and stores to device memory can
+take much longer than true memory accesses, since they are closer to
+arbitrarily complex procedure calls rather than memory accesses.
+
+In addition, while your CPU has machinery to enforce an order on true
+memory accesses (this order is called a "memory consistency model"),
+device accesses may happen partially or entirely outside of its control.
+
+A result of this:
+
+How this manifests on our r/pi system:
+
+  1. Reading or writing  to a single device works as you would naively
+     expect it to --- the broadcom chip (which controls all devices)
+     forces loads and stores to the device to complete in the order they
+     were issued ("sequential consistency") irrespective of their cost.
+
+  2. However, the broadcom chip does not enforce an order for
+     memory operations *between multiple devices*.
+
+     For example: If you do a bunch of loads from device A and then
+     do loads from device B, the loads can get interleaved (it doesn't
+     appear they are tagged with an address).
+
+     The official broadcom datasheet rule: after accessing one device
+     (via a load or store), you must manually insert a *hardware memory
+     barrier instruction* (either DMB or DSB --- we will discuss) before
+     you can access a different device.   But, to repeat: a sequence
+     of accesses to the same device do not need memory barriers.
+
+     The hardware implements a memory barrier as follows: all memory
+     operations before the barrier  must complete before the barrier
+     finishes execution, and no memory operations below it can propogate
+     above it (e.g., from out-of-order execution).
+
+     This hardware barrier should remind you of `gcc`'s compiler barrier,
+     which has the same semantics for language level memory accesses.
+     But, note: one is not a superset of the other.  It's worth thinking
+     about why!
+
+
+----------------------------------------------------------------
+#### Slow writes and Device configuration
 
 Some common device configuration details for complex devices:
 
@@ -277,10 +326,20 @@ Some common device configuration details for complex devices:
      page number, I'd say it's also likely broken.  E.g., people flying
      blind may just stick in a 30ms delay or so "just in case."
 
-   - For devices that have multi-step configurations, usually you will
-     set the device to an "on" but disabled state when you (re-)configure
-     it.  Otherwise, it may start sending garbage out the world when you
-     are halfway done with configuration.
+
+Perhaps an easier example of the above: if you have to enable 
+one device before using another, you  (we will see this in the UART
+lab, where you have to enable the AUX device before you can use the UART0)
+
+A related consequence of the above.
+
+Related: if you have to enable one device before using
+     another (such as AUX before UART): just because you issued a store
+
+just because ran doesn't mean your code is correct.
+
+If you don't know, or can't guarantee, 
+If you don't know, have to insert a barrier
 
 ----------------------------------------------------------------
 #### Interrupts versus polling for device events
@@ -450,6 +509,11 @@ To do a new device:
     fried, or jumps are too loose.
  
     Note easy mistakes: use pins where you don't have to count a bunch.
+
+  - For devices that have multi-step configurations, usually you will
+    set the device to an "on" but disabled state when you (re-)configure
+    it.  Otherwise, it may start sending garbage out the world when you
+    are halfway done with configuration.
 
 For multiple devices:
 
