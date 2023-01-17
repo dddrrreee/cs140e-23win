@@ -15,7 +15,7 @@ Table of Contents
   - [Device access = remote procedure calls](#device-accesses-remote-procedure-calls)
   - [Device configuration is not instantaneous](#device-configuration-is-not-instantaneous)
   - [Interrupts versus polling for device events](#interrupts-versus-polling-for-device-events).
-  - [Device memory + compiler optimization = bugs](#device-memory-compiler-optimization-bugs)
+  - [Device memory + compiler optimization = bugs](#device-accesses--remote-procedure-calls)
   - [Some concrete rules for writing device code](#some-concrete-rules-for-writing-device-code)
 
 ------------------------------------------------------------
