@@ -451,8 +451,7 @@ access have no guarantees).
 ----------------------------------------------------------------
 #### Some concrete rules for writing device code
 
-Some suggestions for writing device code, in no particular
-order:
+Heuristics for writing device code, not necessarily in order:
 
   - For external devices: ***Before you connect anything figure
     out the device input and output voltage***.  This generally is in
@@ -470,15 +469,12 @@ order:
     not putting out around 3v.  Higher and the r/pi pins will shut down
     (or the pi will fry); lower, the pi will not register it.
 
-  - Do a quick internet search for the device name and "application note"
+  - Do a quick internet search for the device name and "Application Note"
     (for examples and suggestions) and "errata" (for bugs).
 
     I'd also suggest redoing it by adding "forum" or "bare metal" to pull
     up more obscure issues --- especially for hardware restrictions not
     mentioned in any official document.
-
-  - Start by using polling to get device results rather than jumping
-    right into interrupts.
 
   - When you set values, you have to determine if you must preserve
     old values (so must read-modify-write) or can ignore them and just
@@ -518,7 +514,7 @@ order:
     it.  Otherwise, it may start sending garbage out the world when you
     are halfway done with configuration.
 
-  - Before you write to a new Broadcom device (GPIO, UART, SPI, I2C
+  - Before access a built-in Broadcom device (GPIO, UART, SPI, I2C
     etc), make sure you issue a hardware memory barrier (for us: call
     `dev_barrier()`).
 
@@ -529,6 +525,36 @@ order:
     A big example of this: interrupt handlers, where likely have to do
     a device barrier before and after.
 
+
+  - If you are doing networking: in our experience, sending is pretty
+    robust, but receiving --- where an antennae has to cleanly decode
+    signals --- can be very sensitive to dirty power (e.g., from your
+    laptop USB) and cause receive to fail.  This can be hard to figure
+    out since the fact send "works" means you will assume there is no
+    hardware problem.
+
+  - If there are FIFO queues you almost certainly want to clear them so
+    that after a re-config you don't send or receive garbage.  An easy
+    race condition: enable the device and then clear the FIFOs ---
+    a message from a previous session could arrive.  You want to clear
+    with the device disabled.
+
+  - A minor point but I have made this mistake: a follow-on device
+    that adds functionality to its predecessor may only be denoted with
+    with a "+" rather than a big red "version 2" or a different device
+    number.  If you're careless it's easy to buy the older version (e.g.,
+    because its getting liquidated at good prices) but pick up the later
+    datasheet and spend a ton of time writing code to use functionality
+    that simply does not exist on the device you have.
+
+
+Code suggestions:
+
+  - When you write the code, add the datasheet page numbers for
+    why you did things.  You won't remember.  Plus, it let's someone
+    (like a TA) look at your code and see why you did something and if
+    it makes sense.
+
   - If you have two devices that communicate, set up your pi in a
     "loop back" configuration where it can send and receive to itself.
     This has a larger initial cost to setup, but having a single pi that
@@ -538,35 +564,22 @@ order:
     correctness checking gets simpler: one pi talking to itself always
     knows ground truth and can compare that to what is being communicated.
 
-  - If you are doing networking: in our experience, sending is pretty
-    robust, but receiving --- where an antennae has to cleanly decode
-    signals --- can be very sensitive to dirty power and cause receive
-    to fail.  This can be hard to figure out since the fact send "works"
-    means you will assume there is no hardware problem.
-
-  - Arguable, but keep in mind: While devices have values
-    they should be reset to on restart, it's usually better not to assume
-    them --- either check that's the actual value, or set it explicitly
-    (so, for example, configure can be done twice with different values).
-
-  - If there are FIFO queues you almost certainly want to clear them so
-    that after a re-config you don't send or receive garbage.  An easy
-    race condition: enable the device and then clear the FIFOs --- a
-    message from a previous session could arrive.  You want to clear
-    with the device disabled.
-
-  - When you write the code, add the datasheet page numbers for
-    why you did things.  You won't remember.  Plus, it let's
-    someone (like a TA) look at your code and see why you did 
-    something and if it makes sense.
-
   - Use `put32` and `get32` to read or write the device locations
     so that the compiler optimization does not blow up your code.
 
+  - Start by using polling to get device results rather than jumping
+    right into interrupts.
+
+  - Arguable, but keep in mind: While devices have values they should
+    be reset to on restart, it's usually better not to assume them ---
+    either check that's the actual value, or set it explicitly (so,
+    for example, configure can be done twice with different values).
+
+
   - Just because your code ran doesn't mean your code is correct.
-    Many device errors are subtle timing issues or not-handling
-    corner cases that happen under high load.  Or simply produce
-    results (`1724`) that you won't know how to check. 
+    Many device errors are subtle timing issues or not-handling corner
+    cases that happen under high load.  Or simply produce results that
+    you won't know how to check (is `1724` correct?  I don't know.)
 
     A piece of code that ran and didn't crash doesn't at all imply
     the device code is correct.  You'll have to read the datasheet
@@ -574,15 +587,12 @@ order:
     as many known examples as possible.  (This algorithm also doesn't
     guarantee correctness, but at least it is less stupid.)
 
-  - A minor point but I have made this mistake: a follow-on device
-    that improves on its predecessor may only be denoted with with a
-    "+" rather than a big red "version 2" or a different device number.
-    If you're careless it's easy to buy the older version (e.g., because
-    its getting liquidated at good prices) but pick up the later datasheet
-    and spend a ton of time writing code to use functionality that simply
-    does not exist on the device you have.
-
 ---------------------------------------------------------------------
+
+#### Ignore below.
+#### Ignore below.
+#### Ignore below.
+
 ---------------------------------------------------------------------
 #### Missing:
 
