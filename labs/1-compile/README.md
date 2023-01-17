@@ -20,6 +20,9 @@ What to do:
   1. Read through [volatile writeup](volatile/README.md)
       and work through the `examples-volatile` and `examples-pointer`.
 
+  2. Read through [makefile writeup](makefiles/README.md) and go
+     through the examples.  (Ignore `1-make`: this is stale content
+     that we didn't delete b/c we were worried about conflicts.)
 
 Checkoff:
 
