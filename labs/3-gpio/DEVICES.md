@@ -8,14 +8,15 @@ both itself and the [GPIO](./GPIO.md) writeup.  But hopefully better
 than nothing.
 
 Table of Contents:
- - [What is a device driver](#device-driver-whats-that)
- - [The first rule of devices: errata](#errata-everything-is-broken)
- - [Expectations and heuristics for datasheets](#expectations-and-heuristics-for-datasheets)
- - [Device access = remote procedure calls](#device-accesses-remote-procedure-calls)
- - [Device configuration is not instantaneous](#device-configuration-is-not-instantaneous)
- - [Interrupts versus polling for device events](#interrupts-versus-polling-for-device-events).
- - [Device memory + compiler optimization = bugs](#device-memory--compiler-optimization--bugs)
- - [Some concrete rules for writing device code](#some-concrete-rules-for-writing-device-code)
+- [Crash course: Devices](#crash-course)
+  - [What is a device driver](#device-driver-whats-that)
+  - [The first rule of devices: errata](#errata-everything-is-broken)
+  - [Expectations and heuristics for datasheets](#expectations-and-heuristics-for-datasheets)
+  - [Device access = remote procedure calls](##device-accesses--remote-procedure-calls)
+  - [Device configuration is not instantaneous](#device-configuration-is-not-instantaneous)
+  - [Interrupts versus polling for device events](#interrupts-versus-polling-for-device-events).
+  - [Device memory + compiler optimization = bugs](#device-memory--compiler-optimization--bugs)
+  - [Some concrete rules for writing device code](#some-concrete-rules-for-writing-device-code)
 
 ------------------------------------------------------------
 ### Device driver: What's that.
