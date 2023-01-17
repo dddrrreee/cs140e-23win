@@ -18,7 +18,7 @@ $(NAME): $(obj)
 # why this works!
 -include $(dep)
 
-%.o: %.c $(hdr)
+%.o: %.c 
 	$(CC) $(CFLAGS) -c $<  -o $@
 
 .PHONY: clean
