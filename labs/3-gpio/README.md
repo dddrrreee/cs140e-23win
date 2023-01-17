@@ -18,16 +18,18 @@ notes.
 If you've never used a pi before, to get credit for the lab
 show the following:
 
-   1. That `code/2-blink.c` correctly blinks two LEDs on pin 20 and 21 in
-      opposite orders (i.e., if 20 is on, 21 should be off and vice
-      versa).  (This will point out a subtle mistake people make reading
-      the docs).
+   1. Modify `code/2-blink.c` to correctly blinks two LEDs on pins
+      in two different banks in opposite orders (i.e., if one pin is on,
+      the other should be off and vice versa).  (This will point out a
+      subtle mistake people make reading the docs).
 
    2. That `code/3-input.c` turns on an LED connected to pin 20 when
       pin 21 is connected to a touch sensor.
 
+
 If you have used a pi before, implement `gpio_pullup` and `gpio_pulldown`.
-Ideally you also do some extensions.
+Ideally you also do some extensions --- there are a bunch listed below.
+One nice, quick one:
 
    - Extension: That you can forward the signal from one pi to another.
      This requires the ability to run two pi's at once (as described
@@ -102,28 +104,35 @@ Hints:
 --------------------------------------------------------------------------
 ### Part 2.  Make input work.
 
-Part 1 used GPIO for output, you'll extend your code to handle input and
-use this to read input.  At this point you have the tools to control
-a surprising number of digital devices you can buy on eBay, adafruit,
-sparkfun, alibaba, etc.
+Part 1 you used GPIO for output, you'll extend your code to
+handle input and use this to read input.  At this point you have the
+tools to control a surprising number of digital devices you can buy on
+eBay, adafruit, sparkfun, alibaba, etc.
 
-What you will do below:
+For this part you'll:
 
-   1. Implement `gpio_set_input` --- it should just be a few lines of
-      code, which will look very similar to `gpio_set_output`. 
+  - Implement `gpio.c:gpio_set_input` and `gpio.c:gpio_read()`
+  - Use it with the TTP223B touch sensor we gave out in class.
+    The datasheet is in `docs/TTP223B-data-sheet.pdf`.
 
-      Make sure you do not overwrite a previous configuration in `fsel`
-      for other pins!   You code will likely still work today, but later
-      if you have multiple devices it will not.
 
-   2. Implement `gpio_read` --- make sure you do not return bits that
-      are spurious!  This can lead to garbage results.
+More detail:
 
-   3. Connect the positive leg of an LED to one of the pi's 3v outputs: 
-      DO NOT CONNECT TO 5V!  Test it by touching the other LED leg to ground: 
-      it should turn on.
+ 1. Implement `gpio_set_input` --- it should just be a few lines of
+    code, which will look very similar to `gpio_set_output`. 
+
+    Make sure you do not overwrite a previous configuration in `fsel`
+    for other pins!   You code will likely still work today, but later
+    if you have multiple devices it will not.
+
+ 2. Implement `gpio_read` --- make sure you do not return bits that
+    are spurious!  This can lead to garbage results.
+
+ 3. Connect the positive leg of an LED to one of the pi's 3v outputs: 
+    DO NOT CONNECT TO 5V!  Test it by touching the other LED leg to ground: 
+    it should turn on.
  
-   4. Run the code:
+ 4. Run the code:
 
 
             % make
@@ -131,13 +140,16 @@ What you will do below:
             # touch the LED leg to pin 21: the second LED (connected to pin 20) goes on.
             # remove the LEG touching pin 21: LED (connected to pin 20) goes off.
 
-   5. Success looks like the following (note: we used a bare jumper, but that is
+  5. Success looks like the following (note: we used a bare jumper, but that is
       likely asking for trouble):
 
 <p float="left">
   <img src="images/part2-succ-on.jpg" width="450" />
   <img src="images/part2-succ-off.jpg" width="450" />
 </p>
+
+  6. Finally: Hook up the touch sensor.  It should work with `3-input.bin`
+     as well.
 
 --------------------------------------------------------------------------
 ### Extension: Forward one pi signal to another.
@@ -146,15 +158,18 @@ We now do a cool trick: transparently forward signals from one pi to
 another. While mechanically trivial, this is a "hello world" version of
 some deep topics.
 
+***BEFORE YOU DO ANYTHING***:
+   -  ***MAKE SURE YOU SHARE GROUND BETWEEN YOUR AND PARTNER'S TWO PI's***
+   - If you do not have a jump between them connecting ground pins, 
+     you can fry a pi or worse.
+   - Note:  if you are using two pi's on a single laptop, you can
+     get away without sharing ground since they both do so implicitly
+     though the laptop.
+
 What to do:
 
    1. Hook up pin 20 from one pi (call this pi-1) to pin 21 of the other
       (pi-2).  
-
-
-      Note: strictly speaking, when connecting two devices we must
-      connect (share) ground as well.  However, since these are both
-      powered from your laptop they already do.
 
    2. Plug pi-2 in and run `3-input.bin` input program.
 
@@ -163,7 +178,6 @@ What to do:
    2. Plug pi-1 in and run `1-blink.bin` program.
 
         % pi-install /dev/ttyUSB1 code/1-blink.bin
-
 
    3. Success looks like:
 <p float="left">
@@ -195,6 +209,51 @@ tricks:
       Unix servers.  (One of many examples where we will be able to write
       custom, clean, simple code that is far faster or more powerful
       than a full-fledged "real" system.)
+
+--------------------------------------------------------------------------
+### Extension: write the smallest blink or input in assembly code
+
+This is a fun puzzle: write versions of `1-blink.c` and/or `3-input.c`
+as a single assembly file (`.S`) with as few instructions as possible.
+
+You can either write the code from scratch (hard mode) or compile
+everything to assembly (`gcc -S`), look at the result and start
+tweaking it.
+
+This will give you a much stronger view of assembly.
+
+--------------------------------------------------------------------------
+### Medium Extension: Implement the  HC-SR04 sonar device.
+
+We have about 10 HC-SR04 devices, which use  sonar to measure distance.
+At a high level it sends a For this extension you'll going to implement
+and a distance measuring device that uses sonar using the HC-SR04 device.
+At a high level it sends a high frequency pulse (if you have a cat, it may
+get annoyed) and tells you when/if it receives it back.  You use the time
+between pulse and receive to compute distance using the speed of sound.
+
+You can use the lab writeup from a previous class:
+  - [sonar](https://github.com/dddrrreee/cs49n-21aut/tree/main/labs/3-sonar)
+
+Note:
+  - You will need a `libpi` and a few other things so you have `printk`.
+    We can get you this.
+
+--------------------------------------------------------------------------
+### Major Extension: reverse engineer machine code
+
+Generating machine code is fun, kind of sleazy, and most people have
+no idea how to do it.  It really gives you a feel for how the machine
+actually operates.
+
+For this extension:
+  - Read the [240lx lab](https://github.com/dddrrreee/cs240lx-22spr/tree/main/labs/1-dynamic-code-gen)
+  where we reverse engineered machine encodings by feeding assembly to
+  the assembler, getting the resultant machine code, and doing linear
+  equation solving.
+
+This is a fun lab, but it will likely take an afternoon.
+
 --------------------------------------------------------------------------
 ### Extension: Implement `gpio_set_pullup` and `gpio_set_pulldown`
 
