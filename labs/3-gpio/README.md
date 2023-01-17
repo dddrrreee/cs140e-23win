@@ -226,9 +226,7 @@ Two places you can often look for the pi:
   (and has burned me in the past).
 
 For delays:
-[Linux]
-(https://elixir.bootlin.com/linux/v4.8/source/drivers/pinctrl/bcm/pinctrl-bcm2835.c#L898) uses 150 usec.  [dwelch76]
-(https://github.com/dwelch67/raspberrypi/blob/master/uart01/uart01.c)
+[Linux](https://elixir.bootlin.com/linux/v4.8/source/drivers/pinctrl/bcm/pinctrl-bcm2835.c#L898) uses 150 usec.  [dwelch76](https://github.com/dwelch67/raspberrypi/blob/master/uart01/uart01.c)
 uses something that is 2-3x 150 pi system clock cycles.  The
 the general view is that we are simply giving the hardware "enough" time to settling
 into a new state rather than meeting some kind of deadline and, as a result,
