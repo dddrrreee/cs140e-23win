@@ -23,6 +23,7 @@ re-reading some number of labs later after the concepts have sat for a
 bit so you get a deeper view.  Note summary (so far):
 
   - [COMPILATION](1-compile/volatile/README.md)
+  - [MAKE](1-compile/makefiles/README.md)
   - [GPIO](3-gpio/GPIO.md)
   - [DEVICES](3-gpio/DEVICES.md)
 
