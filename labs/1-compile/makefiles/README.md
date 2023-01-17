@@ -10,7 +10,7 @@ describing how it works.  Typing `make` in this directory should compile
 and check all of the examples.  `make clean` should delete them.
 
 Examples:
-  - [0-example](0-example/README.md): simple, hard-coded Makefile that compiles
+  - [0-example](0-example): simple, hard-coded Makefile that compiles
     entire program if anything changes.
   - `1-example`: Slightly more fancy Makefile --- rewritten so that we
     only compile those `.c` that have changed or include a header that
