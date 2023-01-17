@@ -13,6 +13,10 @@ Table of Contents
   - [The first rule of devices: errata](#errata-everything-is-broken)
   - [Expectations and heuristics for datasheets](#expectations-and-heuristics-for-datasheets)
   - [Device access = remote procedure calls](#device-accesses-remote-procedure-calls)
+  - [Device configuration is not instantaneous](#device-configuration-is-not-instantaneous)
+  - [Interrupts versus polling for device events](#interrupts-versus-polling-for-device-events).
+  - [Device memory + compiler optimization = bugs](#device-memory-compiler-optimization-bugs)
+  - [Some concrete rules for writing device code](#some-concrete-rules-for-writing-device-code)
 
 ------------------------------------------------------------
 ### Device driver: What's that.
@@ -82,11 +86,11 @@ their devices.
 With that said, if the device doesn't work, the problem is almost
 certainly in your code or your understanding.  Did you hook up to the
 right power?  Did you off-by-one miscount a pin or use a loose jumper?
-Did you mistype an address?  A register name?  Not wait for initialation
+Did you mistype an address?  A register name?  Not wait for initialization
 to complete?  Write a bunch of code all-at-once and expect it to work?
 For some reason, many people immediately blame hardware.  Hardware does
 go bad.  But it's a good chance the bug is in your code, just like all
-the preceeding yesterdays,
+the preceding yesterdays,
 
 
 --------------------------------------------------------------------
@@ -248,98 +252,92 @@ complex remote procedure calls where:
     for a result, this store-load pair can take an arbitrary long
     time to complete.
 
-----------------------------------------------------------------
-#### Device memory ordering problems.
+##### Device memory ordering problems.
 
 One consequence of the fact that device memory accesses are fake is
-that when you are doing loads and stores to multiple devices, you can
-get weird ordering bugs.
+that when you are doing loads and stores to multiple Broadcom devices,
+you can get weird ordering bugs.
 
-Again, as discussed above, both loads and stores to device memory can
-take much longer than true memory accesses, since they are closer to
-arbitrarily complex procedure calls rather than memory accesses.
+   - Again, as discussed above, both loads and stores to device memory
+     can take much longer than true memory accesses, since they are closer
+     to arbitrarily complex procedure calls rather than memory accesses.
 
-In addition, while your CPU has machinery to enforce an order on true
-memory accesses (this order is called a "memory consistency model"),
-device accesses may happen partially or entirely outside of its control.
+   - In addition, while your CPU has machinery to enforce an order on true
+     memory accesses (this order is called a "memory consistency model"),
+     device accesses may happen partially or entirely outside of its
+     control.
 
-A result of this:
-
-How this manifests on our r/pi system:
+For the Broadcom devices on our r/pi system:
 
   1. Reading or writing  to a single device works as you would naively
-     expect it to --- the broadcom chip (which controls all devices)
+     expect it to --- the Broadcom chip (which controls all devices)
      forces loads and stores to the device to complete in the order they
      were issued ("sequential consistency") irrespective of their cost.
 
-  2. However, the broadcom chip does not enforce an order for
+  2. However, the Broadcom chip does not enforce an order for
      memory operations *between multiple devices*.
 
-     For example: If you do a bunch of loads from device A and then
-     do loads from device B, the loads can get interleaved (it doesn't
-     appear they are tagged with an address).
-
-     The official broadcom datasheet rule: after accessing one device
+  3. The official Broadcom datasheet rule: after accessing one device
      (via a load or store), you must manually insert a *hardware memory
-     barrier instruction* (either DMB or DSB --- we will discuss) before
-     you can access a different device.   But, to repeat: a sequence
-     of accesses to the same device do not need memory barriers.
+     barrier instruction* before you can access a different device.
 
-     The hardware implements a memory barrier as follows: all memory
-     operations before the barrier  must complete before the barrier
-     finishes execution, and no memory operations below it can propogate
+     A hardware memory barrier (over-simplifying) guarantees all previous
+     loads and stores have completed before execution goes beyond the
+     barrier and no memory operations below the barrier can propagate
      above it (e.g., from out-of-order execution).
 
-     This hardware barrier should remind you of `gcc`'s compiler barrier,
-     which has the same semantics for language level memory accesses.
-     But, note: one is not a superset of the other.  It's worth thinking
-     about why!
+     But, to repeat: a sequence of accesses to the same device do not
+     need memory barriers.
+
+One easy one to understand ordering bug: if you have to enable device
+A before you can turn on device B, then just because your final store
+instruction to set A's "enable" field was "completed" from the point
+of view of the CPU, which has started running the instructions after:
+***this does not mean device A is up and running!***  This issue comes up
+in the UART lab, where the Broadcom document states you have to enable the
+AUX device before turning on UART.  
+
+Note: even when two devices have no ordering, a strict reading of the
+Broadcom document implies that any set of reads and writes to different
+devices must be separated by memory barriers.  It appears (not sure) that
+this is partly due to the operations not being tagged by the address,
+and so if they take different times, the values can get reordered but
+the CPU cannot tell.  Thus, for this class: we require you use a memory
+barrier (`dev_barrier()`) before and possibly after accessing a device.
+
+Note:
+
+  - the hardware barrier should remind you of `gcc`'s compiler barrier,
+    which has the same semantics for language level memory accesses.
+    But, note: one is not a superset of the other.  It's worth thinking
+    about why!
 
 
 ----------------------------------------------------------------
-#### Slow writes and Device configuration
+#### Device configuration is not instantaneous
 
-Some common device configuration details for complex devices:
+Device enable can be extremely expensive.  Complex devices (such as
+gyroscope, accelerometer, network transceiver) is not going to be
+instantaneously active.  It's not uncommon for such devices to need 10
+or more milliseconds (on the pi: million of cycles).
 
-   - As stated above, device enable can be extremely expensive.  Just
-     because your final store instruction to set the device's
-     enable field was "completed" from the point of view of the CPU,
-     which has started running the instructions after: ***this does not
-     mean the device is up and running!***
+Identically to memory ordering, just because your final store instruction
+to set the device's enable field was "completed" from the point of view
+of the CPU, that doesn't mean the device is good to go.  A too-soon
+subsequent read or write may get (or even cause) undefined results.
 
-     Complex devices (such as gyroscope, accelerometer, network
-     transceiver) is not going to be instantaneously active.  It's not
-     uncommon for such devices to need 10 or more milliseconds (on the
-     pi: million of cycles).  
+While datasheets generally state how long initialization takes this
+information may be buried deep in the center of the PDF or the wording
+kind of weird.  In any case, for any complex device, it's not going to
+be instantaneously active: you'll want to do a close read looking for
+any table in the datasheet that says how long to wait.  Like device
+examples I'd say this should be collected on the first few pages.
 
-     While datasheets generally state how long initialization takes
-     this information may be buried deep in the center of the PDF or the
-     wording kind of weird.  In any case, for any complex device, it's not
-     going to be instantaneously active: you'll want to do a close read
-     looking for any table in the datasheet that says how long to wait.
-     Like device examples I'd say this should be collected on the first
-     few pages.
-
-     Similarly, if you're looking at device code and you don't some kind
-     of delay after initialization, the code is likely broken.  If you
-     do see a delay, but it doesn't have a specific comment or datasheet
-     page number, I'd say it's also likely broken.  E.g., people flying
-     blind may just stick in a 30ms delay or so "just in case."
-
-
-Perhaps an easier example of the above: if you have to enable 
-one device before using another, you  (we will see this in the UART
-lab, where you have to enable the AUX device before you can use the UART0)
-
-A related consequence of the above.
-
-Related: if you have to enable one device before using
-     another (such as AUX before UART): just because you issued a store
-
-just because ran doesn't mean your code is correct.
-
-If you don't know, or can't guarantee, 
-If you don't know, have to insert a barrier
+Similarly, if you're looking at device code and you don't some kind of
+delay after initialization, the code is likely broken.  If you do see a
+delay, but it doesn't have a specific comment or datasheet page number,
+I'd say it's also likely broken.  E.g., people flying blind may just
+stick in a 30ms delay or so "just in case."
 
 ----------------------------------------------------------------
 #### Interrupts versus polling for device events
@@ -415,7 +413,7 @@ play, but operating systems people almost never know about them; we will
 do a few in cs240LX but that doesn't help us now.)
 
 ----------------------------------------------------------------
-#### How: device memory + compiler optimization = bugs
+#### Device memory + compiler optimization = bugs
 
 As discussed in the [COMPILE](../1-compile/volatile/README.md) note:
 The C compiler does not know about hardware devices nor does it know
@@ -453,14 +451,8 @@ access have no guarantees).
 ----------------------------------------------------------------
 #### Some concrete rules for writing device code
 
-To do a new device:
-
-  - Do a quick internet search for the device name and "application note"
-    (for examples and suggestions) and "errata" (for bugs).
-
-    I'd also suggest redoing it by adding "forum" or "bare metal" to pull
-    up more obscure issues --- especially for hardware restrictions not
-    mentioned in any official document.
+Some suggestions for writing device code, in no particular
+order:
 
   - For external devices: ***Before you connect anything figure
     out the device input and output voltage***.  This generally is in
@@ -477,6 +469,13 @@ To do a new device:
     Similarly: Never connect a device directly to a pi input pin if it's
     not putting out around 3v.  Higher and the r/pi pins will shut down
     (or the pi will fry); lower, the pi will not register it.
+
+  - Do a quick internet search for the device name and "application note"
+    (for examples and suggestions) and "errata" (for bugs).
+
+    I'd also suggest redoing it by adding "forum" or "bare metal" to pull
+    up more obscure issues --- especially for hardware restrictions not
+    mentioned in any official document.
 
   - Start by using polling to get device results rather than jumping
     right into interrupts.
@@ -498,29 +497,46 @@ To do a new device:
   - Find the values that must be true on reset.  Read the device after
     reboot and see that these are what you get.  If you don't the
     device could be broken (it happens, especially these days with
-    so many counterfeits).  Or you code could be broken --- e.g.,
-    the addresses you use.
- 
-    If things don't work: it's likely to be your code.  However,
-    hardware does go bad.
- 
-    Buy at least two devices: if the first doesn't work, try swapping
-    in the second.  Also try switching pi's --- sometimes pins get
-    fried, or jumps are too loose.
- 
-    Note easy mistakes: use pins where you don't have to count a bunch.
+    so many counterfeits).  Or you code could be broken --- e.g., the
+    addresses you use.
+
+  - If things don't work: it's likely to be your code.  However, hardware
+    does go bad.
+
+    Buy at least two devices: if the first doesn't work, try swapping in
+    the second.  Also try switching pi's --- sometimes pins get fried,
+    or jumps are too loose.
+
+  - Avoid dumb counting mistakes by picking GPIO pins to use
+    where you simply cannot miscount.  E.g., use the lowest ground pin on
+    the left side (all the way on the bottom) or for GPIO pin 21 (all the
+    way on the bottom right) since you can't miscount either.  Every year
+    a non-trivial number of people get burned by mis-connecting.
 
   - For devices that have multi-step configurations, usually you will
     set the device to an "on" but disabled state when you (re-)configure
     it.  Otherwise, it may start sending garbage out the world when you
     are halfway done with configuration.
 
-For multiple devices:
+  - Before you write to a new Broadcom device (GPIO, UART, SPI, I2C
+    etc), make sure you issue a hardware memory barrier (for us: call
+    `dev_barrier()`).
+
+    Similarly, you have to use a memory barrier when you write a routine
+    that accesses a device, but cannot *guarantee* all callers of the
+    routine either were using the same device or issued a memory barrier.
+
+    A big example of this: interrupt handlers, where likely have to do
+    a device barrier before and after.
 
   - If you have two devices that communicate, set up your pi in a
     "loop back" configuration where it can send and receive to itself.
-    This will be at least 2x (maybe more) faster to develop since the
-    single pi knows exactly what it intends to do and what occurred.
+    This has a larger initial cost to setup, but having a single pi that
+    can send and receive to itself makes development vastly simpler and
+    faster.   Obviously, you don't have to fuss with multiple pi's and the
+    doubling of problems that comes from 2x the hardware.  More subtly,
+    correctness checking gets simpler: one pi talking to itself always
+    knows ground truth and can compare that to what is being communicated.
 
   - If you are doing networking: in our experience, sending is pretty
     robust, but receiving --- where an antennae has to cleanly decode
@@ -528,36 +544,45 @@ For multiple devices:
     to fail.  This can be hard to figure out since the fact send "works"
     means you will assume there is no hardware problem.
 
+  - Arguable, but keep in mind: While devices have values
+    they should be reset to on restart, it's usually better not to assume
+    them --- either check that's the actual value, or set it explicitly
+    (so, for example, configure can be done twice with different values).
+
+  - If there are FIFO queues you almost certainly want to clear them so
+    that after a re-config you don't send or receive garbage.  An easy
+    race condition: enable the device and then clear the FIFOs --- a
+    message from a previous session could arrive.  You want to clear
+    with the device disabled.
 
   - When you write the code, add the datasheet page numbers for
     why you did things.  You won't remember.  Plus, it let's
     someone (like a TA) look at your code and see why you did 
     something and if it makes sense.
 
-  - Arguable, but keep in mind: While devices have values
-    they should be reset to on restart, it's usually better not to
-    assume them --- either check that's the actual value, or set it
-    explicitly (so, for example, configure can be done twice with
-    different values).  
-
-    If there are FIFO queues you almost certainly want to clear them so
-    that after a re-config you don't send or receive garbage.  An easy
-    race condition: enable the device and then clear the FIFOs --- a
-    message from a previous session could arrive.  You want to clear
-    with the device disabled.
-
   - Use `put32` and `get32` to read or write the device locations
     so that the compiler optimization does not blow up your code.
- 
- - A very minor point but I have made this mistake: a revision 2.0
-   might just be indicated with a "+" rather than a big red "version 2"
-   or a different device number.   If you're careless it's easy to buy the
-   older version (e.g., because its getting liquidated at good prices)
-   but pick up the later datasheet and spend a ton of time writing code
-   to use functionality that simply does not exist on the device you have.
-   I've done this.
 
+  - Just because your code ran doesn't mean your code is correct.
+    Many device errors are subtle timing issues or not-handling
+    corner cases that happen under high load.  Or simply produce
+    results (`1724`) that you won't know how to check. 
 
+    A piece of code that ran and didn't crash doesn't at all imply
+    the device code is correct.  You'll have to read the datasheet
+    carefully, read your code carefully, put in assertions, and check
+    as many known examples as possible.  (This algorithm also doesn't
+    guarantee correctness, but at least it is less stupid.)
+
+  - A minor point but I have made this mistake: a follow-on device
+    that improves on its predecessor may only be denoted with with a
+    "+" rather than a big red "version 2" or a different device number.
+    If you're careless it's easy to buy the older version (e.g., because
+    its getting liquidated at good prices) but pick up the later datasheet
+    and spend a ton of time writing code to use functionality that simply
+    does not exist on the device you have.
+
+---------------------------------------------------------------------
 ---------------------------------------------------------------------
 #### Missing:
 
@@ -571,12 +596,6 @@ Some stuff that is missing:
 
 ----------------------------------------------------------------
 #### Intermixing memory and device memory operations.
-
-When these operations are intermixed with normal loads and stores,
-their cost can lead to the following hard-to-debug
-problem when 
-
-(I had one that literally took two days a few years back.)
 
 On many machines, including the pi, when you perform a store to a device,
 the store can return before the device operation completes. This hack
@@ -599,30 +618,20 @@ can use these to impose ordering. We will discuss them at length
 later. There are some very subtle issues, especially when dealing with
 virtual memory hardware. We don't worry about this for the current lab.
 
-
 ----------------------------------------------------------------
 #### Correctness: Read reset values to sanity check.
-
-Of 
 
 ----------------------------------------------------------------
 #### Correctness: I get 12517 from the device, is that right?
 
 Who knows?
 
-Often have no idea if the value of the device is right.
-So find special cases where you can detect.
-For an analogue to digital converter, attach an attenuator that
-you can cycle between off and on (and multiple that have different
-resistance)
-
-part of this:  datasheets will give value
-
+Often have no idea if the value of the device is right.  So find special
+cases where you can detect.  For an analogue to digital converter, attach
+an attenuator that you can cycle between off and on (and multiple that
+have different resistance)
 
 E.g, play an 80hz signal and see what you get from your microphone.
-
-Often there is 
-
 
 config
 how to get data
@@ -633,7 +642,6 @@ how to clear
 how to set speeds
 how to config interrupts if you need (often do not)
 what do you do if you rebooted and there are old sessions?
-
 
 ----------------------------------------------------------------
 #### Bigger picture: controlling devices
@@ -672,4 +680,3 @@ Fairly common patterns:
 
 4. When you set values, you have to determine if you must preserve
    old values or can ignore them.
-
