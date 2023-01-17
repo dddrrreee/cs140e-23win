@@ -10,14 +10,13 @@ as well as reading them to get values produced by a digital device.
 You'll use this code to blink an LED and to detect when a capacitive
 touch sensor is touched.
 
-Make sure you read the [GPIO and device memory crash
-course](../../guides/GPIO.md) in the guides directory.
+Make sure you read the [GPIO](GPIO.md) and [DEVICE](DEVICES.md)
+notes.
 
 ##### Sign off
 
 If you've never used a pi before, to get credit for the lab
 show the following:
-
 
    1. That `code/2-blink.c` correctly blinks two LEDs on pin 20 and 21 in
       opposite orders (i.e., if 20 is on, 21 should be off and vice
@@ -25,8 +24,7 @@ show the following:
       the docs).
 
    2. That `code/3-input.c` turns on an LED connected to pin 20 when
-      pin 21 is connected to 3v (either directly, via an LED, or via a
-      touch sensor or whatever other device you might want to try).
+      pin 21 is connected to a touch sensor.
 
 If you have used a pi before, implement `gpio_pullup` and `gpio_pulldown`.
 Ideally you also do some extensions.
