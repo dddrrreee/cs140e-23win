@@ -105,6 +105,11 @@ More detail:
 5.  Success looks like the following (note: we used a bare jumper, but that is
     likely asking for trouble):
 
+    If this doesn't work with the LED (but you see the LED you're using dimly
+    light up), try connecting a bare jumper to 3V and lightly touching the other
+    end to pin 21. Sometimes the voltage drop across the LED is too high to
+    trigger the Pi's input pin.
+
 <p float="left">
   <img src="images/part2-succ-on.jpg" width="450" />
   <img src="images/part2-succ-off.jpg" width="450" />
