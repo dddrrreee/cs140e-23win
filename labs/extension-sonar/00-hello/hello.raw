@@ -1,0 +1,14 @@
+find-ttyusb.c:find_ttyusb:55:FOUND: </dev/ttyUSB0>
+opened tty port </dev/ttyUSB0>.
+pi-install: tty-usb=</dev/ttyUSB0> program=<./hello.bin> about to boot
+HASH: simple_boot: sending 3764 bytes, crc32=d0dcd8df
+waiting for a start
+putting code
+bootloader: Done.
+listening on ttyusb=</dev/ttyUSB0>
+TRACE:hello world from the pi
+DONE!!!
+
+Saw done
+
+bootloader: pi exited.  cleaning up
