@@ -111,7 +111,10 @@ More detail:
 6. Finally: Hook up the touch sensor. It should work with `3-input.bin`
    as well.
 
-## Part 3 (OPTIONAL if you don't have prior experience): Implement `gpio_set_pullup` and `gpio_set_pulldown`
+### Part 3: Implement `gpio_set_pullup` and `gpio_set_pulldown`
+
+**Note: if you don't have any prior experience with Raspberry Pis, this part is
+optional**
 
 By default, an input pin will be "floating" if it's disconnected. This means
 it'll return 0 or 1 at random. When we want a known, fixed default value, we
