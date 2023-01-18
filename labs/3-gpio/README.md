@@ -16,6 +16,10 @@ notes.
 See the [checkoff doc](CHECKOFF.md) for info on what you need to show to get
 credit for the lab.
 
+If this is your first time doing this stuff (i.e., you didn't take 107e), you
+only need to do parts 1 and 2 of the lab (although you're welcome to do 3 if
+you want to, of course).
+
 ## Setup (45 minutes)
 
 See [the setup folder](setup/README.md) for more info on how to set up your
