@@ -171,5 +171,13 @@ void clean_reboot(void) __attribute__((noreturn));
 
 
 #include "assert.h"
+// set <pin> as a pullup
+void gpio_set_pullup(unsigned pin);
+// set <pin> as a pulldown.
+void gpio_set_pulldown(unsigned pin);
+// set <pin> back to the default state: no pull up, no pulldown.
+void gpio_pud_off(unsigned pin);
+
+
 
 #endif
