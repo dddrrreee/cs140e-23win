@@ -60,10 +60,9 @@ You'll implement the following routines in `code/gpio.c`:
   <img src="images/part1-succ-blue.jpg" width="450" />
 </p>
 
-6.  Make a copy of `2-input.c` (make sure it works with the makefile)
-    and change it so that it uses pins on two different banks.
-    Make sure it works as expected! You could also do more than
-    2 LEDs.
+6.  Make a copy of `1-blink.c` (make sure it works with the makefile) and
+    change it so that it uses pins on two different banks. Make sure it works
+    as expected! You could also do more than 2 LEDs.
 
 Hints: [hints doc](HINTS.md)
 
