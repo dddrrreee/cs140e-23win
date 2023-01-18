@@ -1,0 +1,16 @@
+/*
+ * this is a "linker script" and is used to control how 
+ * the program is linked together.  in our case, we want
+ * it to start at 0x8000.
+ */
+MEMORY
+{
+    ram : ORIGIN = 0x8000, LENGTH = 0x1000000
+}
+
+SECTIONS
+{
+    .text : { *(.text*) } > ram
+    .bss : { *(.bss*) } > ram
+}
+

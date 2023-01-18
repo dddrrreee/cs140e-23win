@@ -1,5 +1,5 @@
 # example of how to run make in subdirectories and get results
-SUBDIRS= 0-example 1-example 2-example 3-example 4-example 5-example
+SUBDIRS= 0-example 1-example 2-example 3-example 4-example 5-example 7-example
  
 .PHONY: all check clean
 all check clean: $(SUBDIRS)
