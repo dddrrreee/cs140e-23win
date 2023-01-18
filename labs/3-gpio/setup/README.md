@@ -62,9 +62,9 @@ benefit from your insight!
 
 You should have:
 
-1. two or more R/PI A+ (or Zero);
-2. two or more microSD card and adapter;
-3. two or more CP2102 USB-TTL adapter;
+1. a R/PI A+ (or Zero);
+2. a microSD card and adapter;
+3. a CP2102 USB-TTL adapter;
 4. a bunch of LEDs
 5. a bunch of female-female jumpers;
 6. printout of the pi's pins (digital is okay, but a printout will be
@@ -105,12 +105,13 @@ hardware and that you know how to wire.
 Mechanically:
 
 1. Connect the USB-to-TTL Serial cable's power (red) and ground (black)
-   wires to a 5v pin (not the 3v pin) and ground pins on the pi that
-   are next to each other (see your printout; upper right corner).
+   wires to a 5v pin (not the 3v pin) and ground pins on the pi that are next
+   to each other (see your printout; upper right corner). You may need to pull
+   back or remove the plastic wrapper around the USB-to-TTL.
 2. Plug the USB-TTY into your laptop's USB port.
-3. Connect your LED to power and ground through the touch sensor. If you
-   connect it directly, your LED may explode! (it may also work anyway, the LED
-   production quality is very low)
+3. Connect your LED to 3V and ground through the touch sensor. If you connect
+   it directly to power and ground, your LED may explode! (it may also work
+   anyway, the LED production quality is very low)
 
    If the LED doesn't go on, reverse its connections. You'll note that
    one leg of the LED is longer than the other. This is used to
