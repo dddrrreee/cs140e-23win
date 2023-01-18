@@ -19,7 +19,7 @@ MEMMAP := ./memmap  # linker script
 # tool chain names and flags.
 include defs.mk
 
-all:  $(PROGS)
+all: $(PROGS)
 
 # dumb: recompile everything, all the time.
 %.bin:  FORCE
