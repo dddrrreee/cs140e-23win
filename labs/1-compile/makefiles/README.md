@@ -28,6 +28,11 @@ Examples:
      put the generated `.o` and `.d` files in a private build 
      directory.
 
+  - [7-example](7-example): we go entirely the opposite direction and 
+    make the simplest possible cross-compiling makefile that just always
+    remakes everything.  you should definitely understand everything 
+    in it.
+
 ### Intro
 
 As projects get large, manually compiling code is a pain.   The Unix
