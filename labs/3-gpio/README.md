@@ -111,6 +111,11 @@ More detail:
 6. Finally: Hook up the touch sensor. It should work with `3-input.bin`
    as well.
 
+If this is your first time working with Raspberry Pis, you're almost done!
+Check the [checkoff guide](./CHECKOFF.md) for what to show us.
+
+If you took cs107e or you've done this kind of thing before, continue to Part 3.
+
 ### Part 3: Implement `gpio_set_pullup` and `gpio_set_pulldown`
 
 **Note: if you don't have any prior experience with Raspberry Pis, this part is

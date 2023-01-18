@@ -37,8 +37,8 @@ the following:
 6. You've reasonably validated that your code is correct. We'll ask you to
    explain how; "it passed the test cases" is insufficient.
 
-7. If you've used a Pi before, also implement `gpio_pullup` and `gpio_pulldown`.
-   Ideally you also do some extensions.
+7. If you've used a Pi before (e.g., in 107e), also implement `gpio_pullup` and
+   `gpio_pulldown`. Ideally you also do some extensions.
 
 ## Extensions
 
