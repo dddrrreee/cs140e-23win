@@ -3,12 +3,11 @@
 **Important: as always, read and complete the [PRELAB](PRELAB.md)
 before lab!**
 
-The first lab was just setup. Now we get to the fun part: you'll use
-the Broadcom document (`../../docs/BCM2835-ARM-Peripherals.annot.PDF`)
-to figure out how to write the code to turn the GPIO pins on/off yourself
-as well as reading them to get values produced by a digital device.
-You'll use this code to blink an LED and to detect when a capacitive
-touch sensor is touched.
+In this lab, you'll use the Broadcom document
+(`../../docs/BCM2835-ARM-Peripherals.annot.PDF`) to figure out how to write the
+code to turn the GPIO pins on/off yourself, as well as reading the pins to get
+values produced by a digital device. You'll use this code to blink an LED and
+to detect when a capacitive touch sensor is touched.
 
 Make sure you read the [GPIO](GPIO.md) and [DEVICE](DEVICES.md)
 notes.
