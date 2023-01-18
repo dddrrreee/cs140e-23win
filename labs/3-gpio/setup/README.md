@@ -108,10 +108,9 @@ Mechanically:
    wires to a 5v pin (not the 3v pin) and ground pins on the pi that
    are next to each other (see your printout; upper right corner).
 2. Plug the USB-TTY into your laptop's USB port.
-3. Using a red (power) and black(ground) female jumper wires, connect
-   your LED to an unused ground pin and the 3v power pin (there are
-   several) to make sure the hardware components work, and you know how
-   get them to.
+3. Connect your LED to power and ground through the touch sensor. If you
+   connect it directly, your LED may explode! (it may also work anyway, the LED
+   production quality is very low)
 
    If the LED doesn't go on, reverse its connections. You'll note that
    one leg of the LED is longer than the other. This is used to
