@@ -94,6 +94,7 @@ You can use the lab writeup from a previous class:
 
 Note:
 
+- If you need access to the writeup, we can add you to the repo.
 - You will need a `libpi` and a few other things so you have `printk`.
   We can get you this.
 
