@@ -42,6 +42,7 @@ One nice, quick one:
 --------------------------------------------------------------------------
 ### Part 1.  Make blink work. (30 minutes)
 
+
 You'll implement the following routines in `code/gpio.c`:
    1. `gpio_set_output(pin)` which will set `pin` to an output pin.  This should 
        take only a few lines of code.
@@ -73,7 +74,10 @@ You'll implement the following routines in `code/gpio.c`:
   <img src="images/part1-succ-blue.jpg" width="450" />
 </p>
 
-
+   6. Make a copy of `2-input.c` (make sure it works with the makefile)
+      and change it so that it uses pins on two different banks.
+      Make sure it works as expected!  You could also do more than 
+      2 LEDs.
 
 Hints:
    1. You write `GPFSELn` register (pages 91 and 92) to set up a pin as an
