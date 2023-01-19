@@ -1,0 +1,31 @@
+# if you want to hardcode everything and not use our examples.
+# roughly 7-example from the makefile writeup.
+
+PROG_SRC = trace-foo.c      # driver programs (have notmain)
+LIB_SRC = foo.c             # any shared source. 
+
+LD_FLAGS = -Wl,--wrap=foo   # we add this flag for the linker.
+
+# tool chain names and flags.
+include $(CS140E_2023_PATH)/libpi/defs.mk
+
+all: $(PROG_SRC:.c=.bin)
+
+libpi:
+	make -C $(LPP)
+
+# dumb: recompile everything, all the time.
+%.bin:  FORCE libpi
+	$(CC) $(LD_FLAGS) $(CFLAGS) $(START) $*.c $(LIB_SRC) -T $(MEMMAP) -o  $*.elf  $(LPI)
+	$(OD) -D  $*.elf > $*.list
+	$(OCP) $*.elf -O binary $*.bin
+
+# this idiom forces the rule to always run.  can be called something
+# else:
+#   https://www.gnu.org/software/make/manual/html_node/Force-Targets.html
+FORCE:
+
+clean:
+	rm -rf *.o *.bin *~ tags *.elf *.list *.d Makefile.bak 
+
+.PHONY: all clean  libpi
