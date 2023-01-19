@@ -20,10 +20,10 @@ ifdef TEST_SRC
 $(error TEST_SRC set: old var -- use PROGS)
 endif
 
-ifndef PROGS
-$(error PROGS is not set in the calling Makefile)
-endif
-export LIB
+#ifndef PROGS
+#$(error PROGS is not set in the calling Makefile)
+#endif
+#export LIB
 
 
 # export any makefile var that is defined.  [if we blindly export 
@@ -99,6 +99,7 @@ all:: libs $(TEST_PROGS) $(TEST_RUN) $(CHECK_RUN)
 libs::
 ifneq ($(LIB),libpi.a)
 ifneq ($(LIB),libpi-fp.a)
+	echo "PROGS=$(PROGS)"
 	@make -C $(LPP)
 endif
 endif
