@@ -9,6 +9,15 @@ $(error LIB is not set in the calling Makefile)
 endif
 export LIB
 
+ifndef SRC
+$(error SRC is not set in the calling Makefile)
+endif
+
+ifdef TEST_SRC
+$(error TEST_SRC set: old var -- use PROGS)
+endif
+
+
 BUILD_DIR ?= ./objs
 OBJS := $(SRC:.c=.o)
 OBJS := $(OBJS:.S=.o)
@@ -22,12 +31,12 @@ export GREP_STR
 
 MAKEFLAGS += --no-print-directory
 
-TEST_PROGS := $(patsubst %.c, %.bin, $(TEST_SRC))
+TEST_PROGS := $(patsubst %.c, %.bin, $(PROGS))
 
-TEST_OBJS   := $(patsubst %.c, %.o, $(TEST_SRC))
-TEST_LIST   := $(patsubst %.c, %.list, $(TEST_SRC))
-TEST_ELF   := $(patsubst %.c, %.elf, $(TEST_SRC))
-TEST_DEP   := $(patsubst %.c, %.d, $(TEST_SRC))
+TEST_OBJS   := $(patsubst %.c, %.o, $(PROGS))
+TEST_LIST   := $(patsubst %.c, %.list, $(PROGS))
+TEST_ELF   := $(patsubst %.c, %.elf, $(PROGS))
+TEST_DEP   := $(patsubst %.c, %.d, $(PROGS))
 
 
 
@@ -36,9 +45,9 @@ TEST_DEP   := $(patsubst %.c, %.d, $(TEST_SRC))
 ifeq ($(CHECK),1)
 CHECK_RUN := check
 else ifeq ($(RUN),1)
-TEST_RUN   := $(patsubst %.c, %.run, $(TEST_SRC))
+TEST_RUN   := $(patsubst %.c, %.run, $(PROGS))
 endif
-TEST_OBJS   := $(patsubst %.c, %.o, $(TEST_SRC))
+TEST_OBJS   := $(patsubst %.c, %.o, $(PROGS))
 
 ifeq ($(BUILD_DIR),.)
 $(error "BUILD_DIR cannot be '.' or clean will remove everything.")
@@ -54,7 +63,7 @@ endif
 
 dep := $(TEST_DEP) $(OBJS:.o=.d) 
 
-ALL_SRC = $(TEST_SRC) $(SRC)
+ALL_SRC = $(PROGS) $(SRC)
 VPATH := $(sort $(dir $(ALL_SRC)))
 
 .SUFFIXES: .run

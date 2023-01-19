@@ -13,11 +13,25 @@
 #   all:
 # (note the double ::)
 
+ifdef SUPPORT_OBJS
+$(error SUPPORT_OBJS set: old var -- use COMMON_OBJS)
+endif
+ifdef TEST_SRC
+$(error TEST_SRC set: old var -- use PROGS)
+endif
+
+ifndef PROGS
+$(error PROGS is not set in the calling Makefile)
+endif
+export LIB
+
+
 # export any makefile var that is defined.  [if we blindly export 
 # cannot check what is defined in sub-make]
 ifdef TTYUSB
 export TTYUSB 
 endif
+
 
 ifdef BOOTLOADER
 export BOOTLOADER
@@ -31,22 +45,23 @@ ifdef START
 export START
 endif
 
+
 BOOTLOADER ?= pi-install
 
 MAKEFLAGS += --no-print-directory
-TEST_PROGS := $(patsubst %.c, %.bin, $(TEST_SRC))
+TEST_PROGS := $(patsubst %.c, %.bin, $(PROGS))
 
 # if CHECK is defined, do that, otherwise if RUN is defined do that.
 ifeq ($(CHECK),1)
 CHECK_RUN := check
 else ifeq ($(RUN),1)
-TEST_RUN   := $(patsubst %.c, %.run, $(TEST_SRC))
+TEST_RUN   := $(patsubst %.c, %.run, $(PROGS))
 endif
 
-TEST_OBJS   := $(patsubst %.c, %.o, $(TEST_SRC))
-TEST_LIST   := $(patsubst %.c, %.list, $(TEST_SRC))
-TEST_ELF   := $(patsubst %.c, %.elf, $(TEST_SRC))
-TEST_DEP   := $(patsubst %.c, %.d, $(TEST_SRC))
+TEST_OBJS   := $(patsubst %.c, %.o, $(PROGS))
+TEST_LIST   := $(patsubst %.c, %.list, $(PROGS))
+TEST_ELF   := $(patsubst %.c, %.elf, $(PROGS))
+TEST_DEP   := $(patsubst %.c, %.d, $(PROGS))
 
 # enable "make emit"
 ifdef STAFF
@@ -54,9 +69,9 @@ ENABLE_EMIT :=1
 endif
 
 # wait: you need src too?
-dep := $(patsubst %.c, %.d, $(TEST_SRC)) $(SUPPORT_OBJS:.o=.d) 
+dep := $(patsubst %.c, %.d, $(PROGS)) $(COMMON_OBJS:.o=.d) 
 
-# XXX: shouldn't this be TEST_SRC as well?
+# XXX: shouldn't this be PROGS as well?
 VPATH := $(sort $(dir $(SRC)))
 
 .SUFFIXES: .run
@@ -76,7 +91,7 @@ LIBS += $(LPI)
 # libpi serves as a sentinal covering everything in libpi
 DEPS += $(MEMMAP) ./Makefile $(LPI) $(LPP)/mk/Makefile.template
 
-ALL_OBJS := $(SUPPORT_OBJS) $(STAFF_OBJS) 
+ALL_OBJS := $(COMMON_OBJS) $(STAFF_OBJS) 
 
 all:: libs $(TEST_PROGS) $(TEST_RUN) $(CHECK_RUN) 
 
@@ -95,7 +110,7 @@ $(LPI):
 endif
 endif
 
-$(SUPPORT_OBJS): $(DEPS)
+$(COMMON_OBJS): $(DEPS)
 
 %.o: %.c $(DEPS)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -103,7 +118,7 @@ $(SUPPORT_OBJS): $(DEPS)
 	$(CC) -c $(CPP_ASFLAGS) $< -o $@
 
 %.elf: %.o $(ALL_OBJS) $(DEPS) $(START) $(LIBS)
-	$(LD) $(START)  $< $(ALL_OBJS) -T $(MEMMAP) -o $@  $(LIBS)
+	$(LD) $(LDFLAGS) $(START)  $< $(ALL_OBJS) -T $(MEMMAP) -o $@  $(LIBS)
 
 ifneq ($(MAKECMDGOALS),clean)
 ifneq ($(MAKECMDGOALS),cleanall)
@@ -141,7 +156,7 @@ tags:
 
 # note: double :: is so user can add transparently
 clean::
-	rm -rf $(NAME) *~ tags $(SUPPORT_OBJS) *.bin *.elf *.list *.img Makefile.bak  *.d  $(TEST_OBJS)  $(TEST_LIST) $(TEST_ELF) $(TEST_DEP) $(TEST_PROGS)
+	rm -rf $(NAME) *~ tags $(COMMON_OBJS) *.bin *.elf *.list *.img Makefile.bak  *.d  $(TEST_OBJS)  $(TEST_LIST) $(TEST_ELF) $(TEST_DEP) $(TEST_PROGS)
 
 .PHONY: libs all tags clean run update
 
