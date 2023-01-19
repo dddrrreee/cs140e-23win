@@ -1,6 +1,6 @@
 We're writing out the prelab.  For the momemt, you should look at:
   
-   0. Setting your `CS140E_2022_PATH` variable (see below).
+   0. Setting your `CS140E_2023_PATH` variable (see below).
 
    1. `00-hello`: checks that step 0 above worked.
 
@@ -39,7 +39,7 @@ interesting tricks:
      (often much simpler) low-level sequence of PUTs and GETs.
 
 -----------------------------------------------------------------
-#### Part 0: Setup your  CS140E_2022_PATH variable.
+#### Part 0: Setup your  CS140E_2023_PATH variable.
 
 Similar to how you added your local `~/bin` directory to your shell's path
 on the first lab, today you're going to edit your shell configuration file
@@ -49,11 +49,11 @@ on the first lab, today you're going to edit your shell configuration file
 E.g., for me, since I'm running `tcsh` I edit my `.tcshrc` file and add:
 
 
-    setenv CS140E_2022_PATH /home/engler/class/cs140e-22win/
+    setenv CS140E_2023_PATH /home/engler/class/cs140e-22win/
 
 To the end of it.  If you use `bash` you'll do an:
 
-    export CS140E_2022_PATH=<path to your repo>
+    export CS140E_2023_PATH=<path to your repo>
 
 And, as before, don't forget to source your configuration file.
 
