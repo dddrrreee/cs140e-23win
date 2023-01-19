@@ -8,7 +8,12 @@ if you type `make` it should run all the programs.
 
   - hello.c	
 
-            hello -- about to call foo()
+            hello world
+            DONE!!!
+
+  - test-interfile.c
+
+            about to call foo()
             foo.c:foo:5:in foo
             DONE!!!
 

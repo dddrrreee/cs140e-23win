@@ -3,7 +3,7 @@
 # for the moment, time-pressure.
 
 # the driver programs: these all must have a notmain.
-PROGS := hello.c test-demand.c test-assert.c test-panic.c
+PROGS := hello.c test-interfile.c test-demand.c test-assert.c test-panic.c
 
 # shared code linked with all driver programs.
 COMMON_OBJS := foo.o
