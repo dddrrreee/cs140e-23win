@@ -49,7 +49,7 @@ on the first lab, today you're going to edit your shell configuration file
 E.g., for me, since I'm running `tcsh` I edit my `.tcshrc` file and add:
 
 
-    setenv CS140E_2023_PATH /home/engler/class/cs140e-22win/
+    setenv CS140E_2023_PATH /home/engler/class/cs140e-23win/
 
 To the end of it.  If you use `bash` you'll do an:
 
