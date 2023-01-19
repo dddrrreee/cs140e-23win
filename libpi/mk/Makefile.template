@@ -1,0 +1,149 @@
+######################################################################
+# you should not have to modify below.
+#
+#
+# client defined variables:
+#   - TEST_SRC: test program source code.
+#   - SRC: shared source code.
+#   - STAFF_OBJS: .o's that are not compiled.
+# 
+# you can add to the targets: 
+#   libs: - run to compile any needed libraries.
+#   clean:
+#   all:
+# (note the double ::)
+
+# export any makefile var that is defined.  [if we blindly export 
+# cannot check what is defined in sub-make]
+ifdef TTYUSB
+export TTYUSB 
+endif
+
+ifdef BOOTLOADER
+export BOOTLOADER
+endif
+
+ifdef GREP_STR
+export GREP_STR 
+endif
+
+ifdef START
+export START
+endif
+
+BOOTLOADER ?= pi-install
+
+MAKEFLAGS += --no-print-directory
+TEST_PROGS := $(patsubst %.c, %.bin, $(TEST_SRC))
+
+# if CHECK is defined, do that, otherwise if RUN is defined do that.
+ifeq ($(CHECK),1)
+CHECK_RUN := check
+else ifeq ($(RUN),1)
+TEST_RUN   := $(patsubst %.c, %.run, $(TEST_SRC))
+endif
+
+TEST_OBJS   := $(patsubst %.c, %.o, $(TEST_SRC))
+TEST_LIST   := $(patsubst %.c, %.list, $(TEST_SRC))
+TEST_ELF   := $(patsubst %.c, %.elf, $(TEST_SRC))
+TEST_DEP   := $(patsubst %.c, %.d, $(TEST_SRC))
+
+# enable "make emit"
+ifdef STAFF
+ENABLE_EMIT :=1
+endif
+
+# wait: you need src too?
+dep := $(patsubst %.c, %.d, $(TEST_SRC)) $(SUPPORT_OBJS:.o=.d) 
+
+# XXX: shouldn't this be TEST_SRC as well?
+VPATH := $(sort $(dir $(SRC)))
+
+.SUFFIXES: .run
+
+# ugh: includes defines it
+include $(CS140E_2023_PATH)/libpi/defs.mk
+# CFLAGS += -Wno-unused-function -Wno-unused-variable  $(EXTRA_CFLAGS)
+CFLAGS += $(EXTRA_CFLAGS)
+
+ifndef MK_CHK
+    MK_CHK := $(LPP)/mk/Makefile.check
+endif
+
+LIBS += $(LPI) 
+
+# add the memmap file, libpi and the makefile as dependencies
+# libpi serves as a sentinal covering everything in libpi
+DEPS += $(MEMMAP) ./Makefile $(LPI) $(LPP)/mk/Makefile.template
+
+ALL_OBJS := $(SUPPORT_OBJS) $(STAFF_OBJS) 
+
+all:: libs $(TEST_PROGS) $(TEST_RUN) $(CHECK_RUN) 
+
+# double colon is so user can add transparently.
+libs::
+ifneq ($(LIB),libpi.a)
+ifneq ($(LIB),libpi-fp.a)
+	@make -C $(LPP)
+endif
+endif
+
+ifneq ($(LIB),libpi.a)
+ifneq ($(LIB),libpi-fp.a)
+$(LPI):
+	@make  -C $(LPP)
+endif
+endif
+
+$(SUPPORT_OBJS): $(DEPS)
+
+%.o: %.c $(DEPS)
+	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.S $(DEPS)
+	$(CC) -c $(CPP_ASFLAGS) $< -o $@
+
+%.elf: %.o $(ALL_OBJS) $(DEPS) $(START) $(LIBS)
+	$(LD) $(START)  $< $(ALL_OBJS) -T $(MEMMAP) -o $@  $(LIBS)
+
+ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),cleanall)
+-include $(dep)  # include dep files
+endif
+endif
+
+./%.d: %.c $(DEPS)
+	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
+./%.d: %.S $(DEPS)
+	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
+
+%.list: %.elf
+	$(OD) -D   $*.elf > $*.list
+%.bin: %.list
+	$(OCP) $*.elf -O binary $*.bin
+%.run: %.bin
+	$(BOOTLOADER) $(TTYUSB) ./$<
+
+ifneq ($(CAN_EMIT), 0)
+emit: libs $(DEPS) $(TEST_PROGS)
+	make -e -f $(MK_CHK) emit "TESTS=$(TEST_PROGS)"
+endif
+
+run: libs $(DEPS) $(TEST_PROGS)
+	@make -f $(MK_CHK) run "TESTS=$(TEST_PROGS)"
+check: libs $(DEPS) $(TEST_PROGS)
+	@make -f $(MK_CHK) check "TESTS=$(TEST_PROGS)"
+
+update:
+	cp *.out ../code
+
+tags: 
+	ctags *.[chSs] $(LPP)/*.[Ssch] $(LPP)/*/*.[chSs]
+
+# note: double :: is so user can add transparently
+clean::
+	rm -rf $(NAME) *~ tags $(SUPPORT_OBJS) *.bin *.elf *.list *.img Makefile.bak  *.d  $(TEST_OBJS)  $(TEST_LIST) $(TEST_ELF) $(TEST_DEP) $(TEST_PROGS)
+
+.PHONY: libs all tags clean run update
+
+# stop make from deleting these suffix'd files.
+.PRECIOUS: %.list %.elf %.o %.d

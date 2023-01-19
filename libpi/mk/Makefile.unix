@@ -1,0 +1,51 @@
+# PROG_SRC 
+# SRC :=  $(REAL_SRC) $(wildcard ./*.c)
+# LIBNAME
+
+PROG_OBJS := $(PROG_SRC:.c=.o)
+PROG_OBJS := $(foreach obj, $(PROG_OBJS), ./$(notdir $(obj)))
+PROGS := $(patsubst %.o, ./%, $(PROG_OBJS))
+
+# grab all .c files in the current directory
+
+OBJS := $(patsubst %.c, %.o, $(SRC))
+OBJS := $(foreach obj, $(OBJS), ./$(notdir $(obj)))
+
+dep := $(OBJS:.o=.d)  # one dependency file for each source
+
+# automatically give make the directories to look in.
+VPATH := $(sort $(dir $(SRC)))
+
+CC=gcc
+CFLAGS += -Wall -g -std=gnu99  -Werror -Wno-unused-function -Wno-unused-variable
+# added the include path for libpi-fake
+CFLAGS += -I. # -I$(CS140E_2023_PATH)/libunix
+
+DEPS := ./Makefile
+
+all : $(OBJS) $(PROG_OBJS) $(PROGS) $(LIBNAME) # $(OBJS) 
+
+# fix this rule: can't delete the targets in <all>
+./%.o: %.c $(DEPS)
+	$(CC) $(CFLAGS) -c $< -o $(notdir $@)
+
+$(LIBNAME): $(OBJS) $(DEPS)
+	ar cr $(LIBNAME) $(OBJS) 
+
+./%: ./%.o $(OBJS) $(DEPS) 
+	$(CC) $(CFLAGS) $(OBJS) $< -o $@ 
+
+ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),cleanall)
+-include $(dep)  # include dep files
+endif
+endif
+
+./%.d: %.c
+	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
+
+clean :
+	rm -f *.o *.d *~ Makefile.bak $(NAME) *.pitag  $(PROGS) $(LIBNAME)
+	make -C tests clean
+
+.PHONY: clean tags libs run check 

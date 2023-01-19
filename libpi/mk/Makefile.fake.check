@@ -1,0 +1,87 @@
+# stand-alone makefile for testing: aims to compare subsequent runs ("make checkall")
+# against a previous reference run ("make emitall")
+#
+# if you do:
+#   - "make runall" it will run all programs in TESTS
+#   - "make emitall" it emit .outs for all programs in TESTS
+#   - "make checkall" it will check all programs in TESTS against their .out
+#   - "make cksumall" it will compute checksums for all programs in TESTS
+#
+# Should not have to invoke this directly: ./Makefile does.
+#
+# We seperate this out to hopefully clean up the various makefiles: they worry
+# about making binaries, this one worries about testing.
+
+BOOTLOADER ?= pi-install  
+
+# shut up "ntering/leaving"
+MAKEFLAGS += --no-print-directory
+
+# we only look at this output
+# XXX: why does ?= not work??
+EMIT_STR := 'TRACE:\|ERROR:\|PANIC:'
+# BOOT_CMD := $(BOOTLOADER) $(TTYUSB)
+BOOT_CMD :=
+
+.SUFFIXES: .out .run .check  .emit
+
+# this will be passed in by the caller.
+# TESTS      := $(patsubst %.c, %, $(TESTS_SRC)) 
+ifndef TESTS
+$(error variable TESTS is empty: Makefile invoked incorrectly)
+endif
+
+
+
+TEST_RUN   := $(patsubst %.fake, %.run, $(TESTS))  
+TEST_CHECK := $(patsubst %.fake, %.check, $(TESTS))  
+TEST_CKSUM := $(patsubst %.fake, %.cksum, $(TESTS))  
+TEST_OUT   := $(patsubst %.fake, %.out, $(TESTS))  
+
+# set whatever you want the default action to be.
+all: $(TEST_RUN) # $(TEST_CHECK) 
+
+%.run: %.fake
+	@echo "\n----------------[about to run <./$*]-----------------------";
+	$(BOOT_CMD) ./$< 
+	@echo "-----------------[done running <./$*>]-----------------------";
+
+%.err: %.fake
+	@-./$<  && echo "Fail: did not detect error" || echo "Success: detected error";
+
+
+# note: this will fail if output does not contain a trace.
+# we pull everything into .out so that it's easier to debug.
+%.out: %.fake
+	@echo -n "generating <$*.out> and <$*.raw>: ";
+	@$(BOOT_CMD) ./$< >  $*.raw 2>&1
+	@grep -v simple_boot $*.raw | grep $(EMIT_STR) | uniq > $*.out
+	@echo " success!";
+
+%.check: %.fake
+	@echo -n "checking <$*>: ";
+	@$(BOOT_CMD) ./$< 2>&1 | grep -v simple_boot | grep  $(EMIT_STR) | uniq > $*.test
+	@diff ./$*.out ./$*.test || (echo "mismatch in reference ($*.out) and test ($*.test): compare them (and $*.raw) directly to see why"; exit 1)
+	@echo " Success: <$*.test> matched reference <$*.out>!";
+	@rm ./$*.test
+
+# we could just cksum all the .outs, but this lets us be more targeted.
+%.cksum: %.out
+	cksum ./$*.out
+
+# not sure if there is a better way: use these fake target to run our
+# checks for everything.
+emit: $(TEST_OUT) 
+
+# you have to manually emit the .out's --- otherwise they get updated all
+# the time and you don't get any real checking.
+check: $(TEST_CHECK)  
+run: $(TEST_RUN) 
+cksum:  $(TEST_CKSUM)
+
+cleanall:
+	rm -f *.out *.raw *.test
+
+.PHONY: all clean run emit check cksum
+
+.PRECIOUS: %.raw %.out 

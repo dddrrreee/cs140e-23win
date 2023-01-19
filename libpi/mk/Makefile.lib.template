@@ -1,0 +1,178 @@
+######################################################################
+# you should not have to modify below.
+#
+#
+# can add to libs:: all:: and LIBS
+
+ifndef LIB
+$(error LIB is not set in the calling Makefile)
+endif
+export LIB
+
+BUILD_DIR ?= ./objs
+OBJS := $(SRC:.c=.o)
+OBJS := $(OBJS:.S=.o)
+OBJS := $(foreach o, $(OBJS), $(BUILD_DIR)/$(notdir $o)) 
+ALL_OBJS := $(OBJS) $(STAFF_OBJS) 
+
+# export all of the makefile variables.
+export TTYUSB 
+export BOOTLOADER
+export GREP_STR 
+
+MAKEFLAGS += --no-print-directory
+
+TEST_PROGS := $(patsubst %.c, %.bin, $(TEST_SRC))
+
+TEST_OBJS   := $(patsubst %.c, %.o, $(TEST_SRC))
+TEST_LIST   := $(patsubst %.c, %.list, $(TEST_SRC))
+TEST_ELF   := $(patsubst %.c, %.elf, $(TEST_SRC))
+TEST_DEP   := $(patsubst %.c, %.d, $(TEST_SRC))
+
+
+
+
+# if CHECK is defined, do that, otherwise if RUN is defined do that.
+ifeq ($(CHECK),1)
+CHECK_RUN := check
+else ifeq ($(RUN),1)
+TEST_RUN   := $(patsubst %.c, %.run, $(TEST_SRC))
+endif
+TEST_OBJS   := $(patsubst %.c, %.o, $(TEST_SRC))
+
+ifeq ($(BUILD_DIR),.)
+$(error "BUILD_DIR cannot be '.' or clean will remove everything.")
+endif
+ifeq ($(BUILD_DIR),)
+$(error "BUILD_DIR cannot be empty.")
+endif
+
+# enable "make emit"
+ifdef STAFF
+ENABLE_EMIT :=1
+endif
+
+dep := $(TEST_DEP) $(OBJS:.o=.d) 
+
+ALL_SRC = $(TEST_SRC) $(SRC)
+VPATH := $(sort $(dir $(ALL_SRC)))
+
+.SUFFIXES: .run
+
+DEFS = $(CS140E_2023_PATH)/libpi/defs.mk
+include $(DEFS)
+# CFLAGS += -Wno-unused-function -Wno-unused-variable  $(EXTRA_CFLAGS)
+CFLAGS += $(EXTRA_CFLAGS)
+
+ifndef MK_CHK
+    MK_CHK := $(LPP)/mk/Makefile.check
+endif
+
+# add the memmap file and the Makefiles as dependencies
+#   - libpi serves as a sentinal covering everything in libpi
+#     keep any DEPS that the client defined.
+DEPS += $(MEMMAP) ./Makefile $(LPP)/mk/Makefile.lib.template $(DEFS)
+
+# if we are building libpi.a don't add it as a dependency!
+ifneq ($(LIB),libpi.a)
+ifneq ($(LIB),libpi-fp.a)
+LINK_DEPS += $(LPI)
+# put lib first so we take symbols from there.
+# had a very weird error where a foo.o was appearing in libpi.  wth.
+LIBS += $(LIB) $(LPI) 
+else
+LIBS = $(LPI) 
+endif
+endif
+
+# XXX: BUILD_DIR does not run first: wth?
+all:: $(BUILD_DIR) libs $(LIB) $(TEST_PROGS) $(TEST_RUN) $(CHECK_RUN) 
+
+$(BUILD_DIR): ; mkdir -p $(BUILD_DIR)
+
+$(LPI):
+	@make -s -C $(LPP)
+
+# double colon is so user can add transparently.
+#
+# if we are building libpi.a don't rerun make
+#   @make -s -C $(LPP)
+libs::
+ifneq ($(LIB),libpi.a)
+ifneq ($(LIB),libpi-fp.a)
+	@make -C $(LPP)
+endif
+endif
+
+# $(OBJS): $(DEPS)
+
+$(BUILD_DIR)/%.o: %.c $(DEPS)
+	$(CC) $(CFLAGS) -c $< -o $@
+$(BUILD_DIR)/%.o: %.S $(DEPS)
+	$(CC) -c $(CPP_ASFLAGS) $< -o $@
+
+# does it matter where we put this?
+ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),cleanall)
+-include $(dep)  # include dep files
+endif
+endif
+
+# we delete the archive before creating so that the hack of
+# having duplicate symbols in it resolved in order works.
+# otherwise it *appears* we need to use the 
+# put-your-src-here.mk hack.
+$(LIB): $(ALL_OBJS) $(DEPS) $(LINK_DEPS)
+	@rm -f $@
+	$(AR) crf $@ $(ALL_OBJS)
+	$(OD) -D $@ > $@.list
+
+%.elf: %.o $(LIBS) $(DEPS) $(START)  $(LINK_DEPS)
+	$(LD) $(START)  $< -T $(MEMMAP) -o $@  $(LIBS)
+
+
+%.d: %.c $(DEPS) $(BUILD_DIR)
+	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
+
+# XXX: without this BUILD_DIR dependency, the BUILD_DIR
+# recipe does not run first.  wth?
+$(BUILD_DIR)/%.d: %.c $(DEPS) $(BUILD_DIR)
+	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
+%.list: %.elf
+	$(OD) -D   $*.elf > $*.list
+%.bin: %.list
+	$(OCP) $*.elf -O binary $*.bin
+%.run: %.bin
+	$(BOOTLOADER) $(TTYUSB) ./$<
+
+
+
+ifdef ENABLE_EMIT
+emit: libs $(DEPS) $(TEST_PROGS)
+	@make -e -f $(MK_CHK) emit "TESTS=$(TEST_PROGS)"
+else
+emit: 
+	$( error "do not run emit!" )
+endif
+
+run: libs $(DEPS) $(TEST_PROGS)
+	@make -f $(MK_CHK) run "TESTS=$(TEST_PROGS)"
+check: libs $(DEPS) $(TEST_PROGS)
+	@make -f $(MK_CHK) check "TESTS=$(TEST_PROGS)"
+
+tags: 
+	@ctags *.[chSs] $(LPP)/*.[Ssch] $(LPP)/*/*.[chSs]
+
+# note: double :: is so user can add transparently
+#
+# XXX: fix this so we just remove exactly the built objects?
+# currently should handle BUILD_DIR "." and if its empty,
+# but seems iffy.
+clean::
+	rm -rf $(BUILD_DIR)/ $(LIB) *~ tags *.bin *.elf *.list *.img Makefile.bak  $(TEST_OBJS)  $(dep)  $(TEST_LIST) $(TEST_ELF) $(TEST_DEP) $(TEST_PROGS)
+
+
+.PHONY: libs all tags clean run update check update
+
+# stop make from deleting these suffix'd files.
+.PRECIOUS: %.list %.elf %.o %.d
