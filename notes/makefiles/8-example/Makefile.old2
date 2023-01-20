@@ -1,0 +1,73 @@
+# makefile where we modify labs/3-gpio makefile to make it simpler.
+#  - just get rid of all the .o rules: we are making tiny programs, can
+#    recompile everything.
+#  - we could always do it, but we keep the dep computation (you can
+#    easily nuke this).
+
+# these are the driver programs.
+PROG_SRC = $(wildcard [0-9]-*.c)
+PROGS = $(PROG_SRC:.c=.bin)
+
+# this is the shared source used by all drivers
+LIB_SRC = gpio.c delay.c
+START := ./start.S
+MEMMAP := ./memmap
+
+# compute dependency files for all files --- we have to 
+# do replacements in steps (all the .c then all the .S)
+dep := $(PROG_SRC) $(LIB_SRC) $(START)
+dep := $(dep:.c=.d)
+dep := $(dep:.S=.d)
+
+# recompile everything if Makefiles change
+ENV := ./Makefile 
+
+# the different tools we use.
+ARM = arm-none-eabi
+CC = $(ARM)-gcc
+LD  = $(ARM)-ld
+AS  = $(ARM)-as
+OD  = $(ARM)-objdump
+OCP = $(ARM)-objcopy
+AS  = $(ARM)-as
+
+# The gcc compiler flags
+#    -Wall: warn about a bunch of suss things.
+#    -Werror = must fix errors
+#    -O: optimize (which allows for more -Wall error checking)
+CFLAGS ?= -O -Wall -Wno-unused-variable -Werror \
+         -MMD\
+          -nostdlib -nostartfiles -ffreestanding  -march=armv6 -std=gnu99  
+
+# the assembler flags (for start.S)
+ASFLAGS ?= --warn --fatal-warnings -mcpu=arm1176jzf-s -march=armv6zk
+
+
+all:  $(PROGS)
+
+
+print:
+	# dep = <$(dep)>
+
+# we still need dependencies so that if you modify
+# rpi.h it gets recompiled.
+-include $(dep)
+
+%.d:
+
+# merge all the rules to generate .elf->.list->.bin
+# $* is the basename of the rule.
+# we need the -MT so that the dependency file is put into the %.bin
+# file --- otherwise will be in .elf.
+%.bin: %.c $(START) $(LIB_SRC) $(MEMMAP) $(ENV) 
+	# $$@ = $@
+	# $$^ = $^
+	# $$* = $*
+	$(CC) $(CFLAGS) $(START) $< $(LIB_SRC) -T $(MEMMAP) -o -MT $*.d  $*.elf 
+	$(OD) -D  $*.elf > $*.list
+	$(OCP) $*.elf -O binary $*.bin
+
+clean:
+	rm -rf *.o *.bin *~ tags *.elf *.list *.d Makefile.bak 
+
+.PHONY: all clean 
