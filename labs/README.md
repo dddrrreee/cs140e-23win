@@ -22,10 +22,13 @@ must read these before the lab or you'll be lost.   We also suggest
 re-reading some number of labs later after the concepts have sat for a
 bit so you get a deeper view.  Note summary (so far):
 
-  - [COMPILATION](1-compile/volatile/README.md)
-  - [MAKE](1-compile/makefiles/README.md)    ***NEW***
-  - [GPIO](3-gpio/GPIO.md)
-  - [DEVICES](3-gpio/DEVICES.md)  ***NEW***
+  - [observability and compilation](../notes/observability/README.md)
+  - [makefiles](../notes/makefiles/README.md)   
+  - devices: [how to write device code](../notes/devices/DEVICES.md)  
+    [gpio](../notes/devices/GPIO.md)
+  - interrupts: 
+   [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md)   (***NEW***)
+   [caller/callee registers](../notes/caller-callee/README.md)  (***NEW***)
 
 ---------------------------------------------------------------------
 ### Part 0: non-pi hacking
@@ -59,14 +62,13 @@ a hardware investment.
     ***READING***: `2-trusting-trust/trusting-trust.pdf`.
 
 ---------------------------------------------------------------------
-### Part 1: Going down to metal.
+### Going down to metal (part 1)
 
 The first few labs will writing the low-level code needed to run the
 r/pi and using modern techniques to validate it.  Doing so will remove
 magic from what is going on since all of the interesting code on both
 the pi and Unix side will be written by you:
 
-***We are here*** ===>
 
   - [3-gpio](3-gpio/):  Two parts.  First, we will give out the 
     hardware and make sure it works (this should be fast).
@@ -90,6 +92,55 @@ the pi and Unix side will be written by you:
     approach is that there is no magic.  A bad thing is that a single
     mistake can make a miserable quarter.  Thus, we show you modern
     (or new) tricks for checking code correctness.
+
+---------------------------------------------------------------------
+### Execution: threads, interrupts, exceptions (part 1)
+
+Execution comes in many forms.  It can be a tricky topic both
+because of its thickets of low-level, hardware specific details and
+because of how hard mistakes are to debug.  You will build and use four
+different versions of execution (threads, interrupts, exceptions and
+processes) so that you understand in a depth-perceptive way what is
+essential and what is incidental.  We will also do multiple new tricks
+using these that work well at finding bugs in novel ways.
+
+After four runs at the architecture manual, you will have a new
+comfort with using it.
+
+***We are here*** ===>
+
+  - [5-interupts](5-interrupts/): 
+    you will walk through a simple, self-contained implementation of
+    pi interrupts (for timer-interrupts), kicking each line until you
+    understand what, how, why.  You will use these to then implement
+    a simple system call and a version of `gprof` (Unix statistical
+    profiler) in about 30 lines.
+
+    Perhaps the thing I love most about this course is that because we
+    write all the code ourselves, we aren't constantly fighting some
+    large, lumbering OS that can't get out of its own way.  As a result,
+    simple ideas only require simple code.  This lab is a great example:
+    a simple idea, about twenty minutes of code, an interesting result.
+    If we did on Unix could spend weeks or more fighting various corner
+    cases and have a result that is much much much slower and, worse,
+    in terms of insight.
+
+  - ***threads***: we build a simple, but functional
+    threads package.  You will write the code for non-preemptive context
+    switching:  Most people don't understand such things so, once again,
+    you'll leave lab knowing something many do not.
+
+---------------------------------------------------------------------
+### Going all the way to metal (Part 2)
+
+We break up the execution labs by building the rest of the low
+level code you've been using ---the bootloader and the UART
+driver.
+
+Learning theory: if you come back to a topic rather than do all-at-once
+you learn it better.   Our lab theory: we break up hard, dependent
+series of labs with a less tricky topic so you can finish and get a 
+bit of a rest.
   
   - ***bootloader***: two of the biggest pieces of code
     we've given you have been the Unix-side and pi-side bootloader code
@@ -110,40 +161,9 @@ the pi and Unix side will be written by you:
     on the pi is written by you.  You will use the cross checking code
     from lab 2 to verify your implementation matches everyone else's.
 
+
 ---------------------------------------------------------------------
-### Part 2: execution: threads, interrupts, exceptions, processes
-
-Execution comes in many forms.  It can be a tricky topic both
-because of its thickets of low-level, hardware specific details and
-because of how hard mistakes are to debug.  You will build and use four
-different versions of execution (threads, interrupts, exceptions and
-processes) so that you understand in a depth-perceptive way what is
-essential and what is incidental.  We will also do multiple new tricks
-using these that work well at finding bugs in novel ways.
-
-After four runs at the architecture manual, you will have a new
-comfort with using it.
-
-  - ***threads***: we build a simple, but functional
-    threads package.  You will write the code for non-preemptive context
-    switching:  Most people don't understand such things so, once again,
-    you'll leave lab knowing something many do not.
-
-  - ***interrupts***:
-    you will walk through a simple, self-contained implementation of
-    pi interrupts (for timer-interrupts), kicking each line until you
-    understand what, how, why.  You will use these to then implement
-    a simple system call and a version of `gprof` (Unix statistical
-    profiler) in about 30 lines.
-
-    Perhaps the thing I love most about this course is that because we
-    write all the code ourselves, we aren't constantly fighting some
-    large, lumbering OS that can't get out of its own way.  As a result,
-    simple ideas only require simple code.  This lab is a great example:
-    a simple idea, about twenty minutes of code, an interesting result.
-    If we did on Unix could spend weeks or more fighting various corner
-    cases and have a result that is much much much slower and, worse,
-    in terms of insight.
+### Execution: interrupts, exceptions, processes (part 2)
 
   - ***device-interrupts***:
     if you keep doing this kind of work the single most common fancy
@@ -182,7 +202,7 @@ comfort with using it.
     memory, a topic known for its extremely hard-to-track-down bugs.
 
 ---------------------------------------------------------------------
-### Part 3: virtual memory
+### virtual memory
 
 We now build virtual memory which will let us add (1) general memory
 protection and (2) user processes that can safely run with their own
@@ -224,7 +244,7 @@ relatively easy.
     should be able to delete all our starter code.
 
 ---------------------------------------------------------------------
-### Part 4: file systems
+### file systems
 
 So far, if you do anything useful on your pi, this work evaporates when
 you unplug it.  We will implement files and directories so that you can
@@ -264,7 +284,7 @@ and these labs will get you much of the way there.
     write will corrupt the system, no matter where it crashes.
 
 ---------------------------------------------------------------------
-### Part 5: Networking
+### Networking
 
 Having one pi that can only talk to itself is much less useful even two
 pi's that can talk to each other.   So we'll do some simple networking.
@@ -276,7 +296,7 @@ pi's that can talk to each other.   So we'll do some simple networking.
      a network bootloader.
 
 ---------------------------------------------------------------------
-### Part 6: Putting it all together.
+### Putting it all together.
 
 For the last labs we put everything all together:
 
