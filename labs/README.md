@@ -24,8 +24,7 @@ bit so you get a deeper view.  Note summary (so far):
 
   - [observability and compilation](../notes/observability/README.md)
   - [makefiles](../notes/makefiles/README.md)   
-  - devices: [how to write device code](../notes/devices/DEVICES.md)  
-    [gpio](../notes/devices/GPIO.md)
+  - devices: [crash course in writing device code](../notes/devices/DEVICES.md)  [gpio](../notes/devices/GPIO.md)
   - interrupts: 
    [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md)   (***NEW***)
    [caller/callee registers](../notes/caller-callee/README.md)  (***NEW***)
