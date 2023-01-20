@@ -125,11 +125,11 @@ void BRANCHTO(unsigned addr);
 
 // a no-op routine called to defeat the compiler.
 void dummy(unsigned);
-void nop(unsigned);
+void nop(void);
 
 
-#ifndef RPI_UNIX
 #   include "demand.h"
+#ifndef RPI_UNIX
 #   define asm_align(x)    asm volatile (".align " _XSTRING(x))
 
     // called for testing.

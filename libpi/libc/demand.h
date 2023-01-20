@@ -1,8 +1,10 @@
 #ifndef __DEMAND_H__
 #define __DEMAND_H__
 
+#if 0
 #ifdef RPI_UNIX
 #   error "should not get here"
+#endif
 #endif
 
 // print file:function:line with a message.
