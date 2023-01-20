@@ -59,6 +59,9 @@ There are three parts for sign-off:
    3. When you put in your `gpio.o` into `libpi` you get the same output
       for (2).
 
+   4. After everything works, add gpio pullup and gpio pulldown and check
+      with everyone else.  You'll have to add timing routines!
+
 There's a bunch of extensions.
 
 ------------------------------------------------------------------------
