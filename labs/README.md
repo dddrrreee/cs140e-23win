@@ -129,7 +129,7 @@ comfort with using it.
     cases and have a result that is much much much slower and, worse,
     in terms of insight.
 
-    Partial Readings: 
+    Incomplete reading list: 
       - [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md) 
       - `5-interrupts/docs/BCM2835-ARM-timer-int.annot.pdf` --- excerpt from the Broadcom
         document, discusses how to enable both general and timer interrupts.
