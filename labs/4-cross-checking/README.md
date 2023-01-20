@@ -30,28 +30,34 @@ There are three parts for sign-off:
       Note this includes implementing `gpio_set_function` and check that it 
       gives the same checksum. 
 
-      The quickest way to check equivalance: after doing both part 1 and
-      part 2 (below) open `code/tests/Makefile` in your editor, set 
-      `TEST_SRC := $(wildcard ./*.c)` (at the top of the `Makefile`)
-      and compute a checksum of all your checksums
-      by running:
+      The easiest checkoff method is to 
+      change `1-fake-pi/tests/Makefile` to:
 
-            # make sure everything is compiled.
-            code/tests % make emit
-            # compute the cksum of your cksums.
-            code/tests % make cksum | sort -n | cksum 
+            TEST_SRC := $(wildcard ./[1-5]-*.c) $(wildcard ./prog-*.c)
+
+      and run
+
+            # make sure you have all the .out files
+            % make emit
+            # see all the checksums
+            % make checkoff
 
       This reduces all the output to a single number you can compare
       at a glance with everyone else.  Note: you'll have to work with
       everyone to figure out who is wrong when there is a difference.
+
+      This is equivalant to 
+
+            # compute the cksum of your cksums.
+            code/tests % make cksum | grep -v cksum | sort -n | cksum 
 
    2. `2-trace`: You get the same checksum for all the `.out` files
       produced by the tests in `2-trace/tests` --- note, there can be a
       differences in the intial values for GPIO pins when comparing pi
       zeroes to pi A+s.
 
-   5. When you put in your `gpio.o` into `libpi` you get the same output
-      for (4).
+   3. When you put in your `gpio.o` into `libpi` you get the same output
+      for (2).
 
 There's a bunch of extensions.
 
@@ -253,10 +259,12 @@ how this works, let's run the `1-blink` from last lab using `fake-pi`:
 
 First things first:
 
-  - copy your `gpio.c` from the last lab to `1-fake-pi`
-  - make sure `make` works.
+  - `cd` into `1-fake` and make sure `make` works.
+  - In general: you don't want to break working code.  So
+    before making changes we suggest copy your `gpio.c` from the last
+    lab to `1-fake-pi` and updating the makefile.
 
-To summarize the above description: Given the `GET32` and `PUT32`
+To summarize the above fake-pi description: Given the `GET32` and `PUT32`
 modifications above, a simple, stringent approach is to check that two
 `gpio` implementations are the same:
 
@@ -314,6 +322,7 @@ The `Makefile` in `1-fake-pi/tests` has a set of targets to automate the process
   - `make cksum`: will run all the specified tests and reduce their entire output to a single
      integer using the `cksum` program.  You can quickly determine if you get the
      same result as your partner(s) by just comparing this integer.
+  - `make checkoff` will compute all the checksums.
     
 
 ##### Making  code behave the same on illegal inputs

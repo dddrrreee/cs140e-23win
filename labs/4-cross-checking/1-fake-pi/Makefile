@@ -8,6 +8,7 @@ SRC  += $(LPP)/libc/putchar.c
 SRC  += $(LPP)/staff-src/clean-reboot.c
 SRC  += $(wildcard ./*.c)
 
+# or copy your GPIO here.
 ifndef CS140E_STAFF
 SRC  += ../../3-gpio/code/gpio.c 
 else
