@@ -29,7 +29,7 @@ bit so you get a deeper view.  Note summary (so far):
   - (***NEW***) interrupts: 
     [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md) 
     and
-    [caller/callee registers](../notes/caller-callee/README.md)  (***NEW***)
+    [caller/callee registers](../notes/caller-callee/README.md).
 
 ---------------------------------------------------------------------
 ### Part 0: non-pi hacking
@@ -48,10 +48,10 @@ a hardware investment.
     lab this quarter.
 
     ***READING***: 
-      - [COMPILATION](1-compile/volatile/README.md)
+      - [observability and compilation](../notes/observability/README.md)
         which describes how compilers exploit observability to optimize
         code and how that can break your device code.  
-      - [MAKE](1-compile/makefiles/README.md) which gives some useful
+      - [makefiles](../notes/makefiles/README.md), which gives some useful
         Makefile examples.
 
   - [2-trusting-trust](2-trusting-trust): Ken Thompson is arguably our patron
@@ -79,9 +79,12 @@ the pi and Unix side will be written by you:
     Broadcom document GPIO description.  You will use this to implement
     your own blink and a simple network between your r/pi's.
 
-    ***READING***: the notes on [GPIO](3-gpio/GPIO.md) and 
-    [DEVICES](3-gpio/DEVICES.md) as well as pages 4--7 and 91---96 
-    of the broadcom datasheet (`docs/BCM2835-ARM-Peripherals.annot.PDF`)
+    ***READING***: 
+       - notes on [GPIO](../notes/devices/GPIO.md).
+       - [crash course in writing device code](../notes/devices/DEVICES.md).
+       - pages 4--7 and 91---96 of the broadcom datasheet (`docs/BCM2835-ARM-Peripherals.annot.PDF`)
+
+
 
   - [4-cross-check]: you will use read-write logging
     of all loads and stores to device memory to verify that your GPIO
@@ -125,6 +128,16 @@ comfort with using it.
     If we did on Unix could spend weeks or more fighting various corner
     cases and have a result that is much much much slower and, worse,
     in terms of insight.
+
+    Partial Readings: 
+      - [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md) 
+      - `5-interrupts/docs/BCM2835-ARM-timer-int.annot.pdf` --- excerpt from the Broadcom
+        document, discusses how to enable both general and timer interrupts.
+
+      - `5-interrupts/docs/armv6-interrupts.annot.pdf` ---  excerpt from the ARMv6
+        document in our main `doc` directory.  Discusses where and how
+        interrupts are delivered.
+
 
   - ***threads***: we build a simple, but functional
     threads package.  You will write the code for non-preemptive context
