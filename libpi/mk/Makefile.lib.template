@@ -4,10 +4,10 @@
 #
 # can add to libs:: all:: and LIBS
 
-ifndef LIB
-$(error LIB is not set in the calling Makefile)
-endif
-export LIB
+#ifndef LIB
+#$(error LIB is not set in the calling Makefile)
+#endif
+#export LIB
 
 ifndef SRC
 $(error SRC is not set in the calling Makefile)
