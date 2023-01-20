@@ -1,3 +1,0 @@
-TRACE:0: calling pi code
-TRACE:1: PUT32(0x2020001c) = 0x100000
-TRACE: pi exited cleanly: 7 calls to random
