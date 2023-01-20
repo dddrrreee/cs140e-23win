@@ -20,6 +20,7 @@ ifdef TEST_SRC
 $(error TEST_SRC set: old var -- use PROGS)
 endif
 
+
 #ifndef PROGS
 #$(error PROGS is not set in the calling Makefile)
 #endif
@@ -58,6 +59,11 @@ else ifeq ($(RUN),1)
 TEST_RUN   := $(patsubst %.c, %.run, $(PROGS))
 endif
 
+# handle .S and .c
+COMMON_OBJS := $(COMMON_OBJS) $(COMMON_SRC:.c=.o)
+COMMON_OBJS := $(COMMON_OBJS:.S=.o)
+COMMON_OBJS := $(COMMON_OBJS:.s=.o)
+
 TEST_OBJS   := $(patsubst %.c, %.o, $(PROGS))
 TEST_LIST   := $(patsubst %.c, %.list, $(PROGS))
 TEST_ELF   := $(patsubst %.c, %.elf, $(PROGS))
@@ -70,9 +76,7 @@ endif
 
 # wait: you need src too?
 dep := $(patsubst %.c, %.d, $(PROGS)) $(COMMON_OBJS:.o=.d) 
-
-# XXX: shouldn't this be PROGS as well?
-VPATH := $(sort $(dir $(SRC)))
+VPATH := $(sort $(dir $(dep)))
 
 .SUFFIXES: .run
 
@@ -95,11 +99,13 @@ ALL_OBJS := $(COMMON_OBJS) $(STAFF_OBJS)
 
 all:: libs $(TEST_PROGS) $(TEST_RUN) $(CHECK_RUN) 
 
+print:
+	# COMMON_OBJS = <$(COMMON_OBJS)>
+
 # double colon is so user can add transparently.
 libs::
 ifneq ($(LIB),libpi.a)
 ifneq ($(LIB),libpi-fp.a)
-	echo "PROGS=$(PROGS)"
 	@make -C $(LPP)
 endif
 endif

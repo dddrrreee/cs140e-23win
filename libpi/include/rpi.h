@@ -128,6 +128,8 @@ void dummy(unsigned);
 void nop(void);
 
 
+#include <string.h>
+
 #   include "demand.h"
 #ifndef RPI_UNIX
 #   define asm_align(x)    asm volatile (".align " _XSTRING(x))
