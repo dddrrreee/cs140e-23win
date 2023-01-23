@@ -18,7 +18,7 @@ Non-optional primary sources in `6-interruptsd/docs`:
 
 Non-optional reading on the arm in general:
 
-  - [INTERRUPTS](../../notes/interrupts/INTERRUPTS-CHEAT-SHEET.md): this is a cheat sheet of useful page
+  - [INTERRUPTS](../../notes/interrupts/INTERRUPT-CHEAT-SHEET.md): this is a cheat sheet of useful page
     numbers and some notes on how the ARMv6 does exceptions.
 
   - [caller-callee registers](../../notes/caller-callee/README.md):
