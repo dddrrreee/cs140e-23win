@@ -94,7 +94,7 @@ We show some examples below.
 #### Bug 1: try to switch to Super mode and keep running
 
 ```cpp
-bug1-driver.c
+# bug1-driver.c
 ```
 
 
