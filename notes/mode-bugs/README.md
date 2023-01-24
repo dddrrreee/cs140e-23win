@@ -352,10 +352,11 @@ initial cs240lx offering.
 </details>
 
 --------------------------------------------------------------------
-### Bug 4: try to switch to Super mode and keep running
+### Bug 4: run a routine in Super mode with a new stack
 
 Ok, last case.  Here we are trying to run a procedure at System mode
-and never return.  We pass in the routine and then a stack to use:
+with a new clean stack, and never return.  We pass in the routine 
+(`r0`) and a stack address (`r1`) to use:
 
 ```cpp
 
