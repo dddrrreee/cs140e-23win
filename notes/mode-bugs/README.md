@@ -329,14 +329,14 @@ do what the comments say:
 So what goes wrong?    Well, if you look at the `bug3-driver.list` file
 right after the call to `switch_to_system_w_stack` you can see a hint:
 
-        // machine code in notmain
-        8074:   eb000011    bl  80c0 <switch_to_system_w_stack>
-        8078:   eb00000e    bl  80b8 <sp_get>
-        807c:   e1a01000    mov r1, r0
-        8080:   e59f0020    ldr r0, [pc, #32]   ; 80a8 <notmain+0x70>
-        8084:   eb000013    bl  80d8 <printk>
-   uh oh, problem ==>
-        8088:   e8bd8010    pop {r4, pc}
+            // machine code in notmain
+            8074:   eb000011    bl  80c0 <switch_to_system_w_stack>
+            8078:   eb00000e    bl  80b8 <sp_get>
+            807c:   e1a01000    mov r1, r0
+            8080:   e59f0020    ldr r0, [pc, #32]   ; 80a8 <notmain+0x70>
+            8084:   eb000013    bl  80d8 <printk>
+        uh oh, problem ==>
+            8088:   e8bd8010    pop {r4, pc}
 
 The code will start popping registers off of the stack.  Oops.
 These were stored to the previous stack --- we then switched,
