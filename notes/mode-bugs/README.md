@@ -322,8 +322,8 @@ do what the comments say:
       right location (the original `lr`).
 
    2. We also correctly set the passed in stack address (held
-      in `r0`) to the stack pointer for System mode by setting
-      `sp` to `r0` after the `msr/prefetch flush`.  (Doing before
+      in `r0`) to the stack pointer for System mode by performing `mov
+      sp, r0` after the `msr/prefetch flush`.  (Doing before
        would modify the wrong `sp`.)
 
 So what goes wrong?    Well, if you look at the `bug3-driver.list` file
