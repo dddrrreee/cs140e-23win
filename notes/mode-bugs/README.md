@@ -161,9 +161,8 @@ Some quick review:
 
 What happens if we run this code?
 
->!  This
-! Is 
-! a spoinler
+Spoiler:
+<details>This is a detail  <details>
 
 #### Bug 2: try to switch to Super mode and keep running
 #### Bug 3: try to switch to Super mode and keep running
