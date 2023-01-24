@@ -159,9 +159,10 @@ Some quick review:
   - We can trash any caller-saved register we want without saving it.
 
 
-Spoiler:
+What happens if we run this code?
+
 <details>
-    <summary>What happens if we run this code?  Why?</summery>
+  <summary>What happens if we run this code?  Why?</summary>
 
     On my r/pi I get:
 
