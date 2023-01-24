@@ -20,7 +20,7 @@ The reason we use it is both for the former and the latter:
      in a way that the compiler won't really help us with (*).
 
   2. To guarantee that normally legal instructions do not occur in
-     restrited circumstances.  For example, in the virtual memory
+     restricted circumstances.  For example, in the virtual memory
      labs:  the arm1176 CPU we use forbids the use of branch or return
      instructions during certain virtual memory updates.  If we write C
      code, we can't be absolutely sure that the compiler does not emit
@@ -172,7 +172,7 @@ try taking a few runs at writing C code and seeing how ti gets translated
 or how it runs.    Active exploration can easily beat thinking real hard,
 especially when you have incomplete information.
 
-As a note, if you like figuring this kind of stuff out, retargeting a
+As a sidenote, if you like figuring this kind of stuff out, retargeting a
 compiler is fun --- do all the integer ALU ops, then memory, then calling
 conventions, then float.   Each problem is big enough to be interesting,
 but not so big you get tired.  Pretty soon the sun comes up.
