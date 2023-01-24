@@ -174,7 +174,7 @@ the code hangs with no output after the last line.
 <details>
   <summary>What is going on?</summary>
 
-
+<br>
 Hint: think about the banked registers.  What is the value of `lr` that we
 are jumping back to?  (I assume `lr` holds the value 0 so we are jumping
 to address 0 and running, which is going to cause some random problems.)
