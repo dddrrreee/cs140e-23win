@@ -162,7 +162,11 @@ Some quick review:
 What happens if we run this code?
 
 Spoiler:
-<details>This is a detail  <details>
+<details>
+    <summary>This is a detail </summery>
+   This is some tet
+
+</details>
 
 #### Bug 2: try to switch to Super mode and keep running
 #### Bug 3: try to switch to Super mode and keep running
