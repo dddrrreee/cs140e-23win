@@ -120,6 +120,7 @@ void notmain(void) {
 
 The assembly code:
 
+        @ bug1-asm.S
         #include "rpi-asm.h"
         
         @ use the mrs instruction to get the current program
@@ -180,11 +181,13 @@ to address 0 and running, which is going to cause some random problems.)
 </details>
 
 --------------------------------------------------------------------
-### Bug 2: try to switch to Super mode and keep running
+### Bug 2: try to fix by passing `lr` to System
 
 Ok, so our fix is to try to pull the `lr` from our initial Super mode
 to the new System mode:
 
+        @ bug2-asm.S
+        @
         @ we pull the SUPER mode lr to SYSTEM.
         @ this doesn't fix the problem.
         @ why?  (hint: even more banked registers)
@@ -273,6 +276,7 @@ void notmain(void) {
 
 Where our assembly code is:
 
+        @ bug3-asm.S
         @ switch to stack address passed in r0
         @
         @ bug: why?  hint: where is the previous 
