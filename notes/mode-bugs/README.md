@@ -339,8 +339,9 @@ right after the call to `switch_to_system_w_stack` you can see a hint:
             8088:   e8bd8010    pop {r4, pc}
 
 The code will start popping registers off of the stack.  Oops.
-These were stored to the previous stack --- we then switched,
-so these later pops are loading garbage values.
+These registers were stored to the previous, original stack 
+--- we then switched to a new stack, which means these pops
+are loading garbage values.
 
 It's hard to believe but a bug like this cost us a few hours in the 
 initial cs240lx offering.
@@ -350,9 +351,28 @@ initial cs240lx offering.
 --------------------------------------------------------------------
 ### Bug 4: try to switch to Super mode and keep running
 
-Ok, last case.  Here we are trying to run a routine at a different 
-level and never return:
+Ok, last case.  Here we are trying to run a procedure at System mode
+and never return.  We pass in the routine and then a stack to use:
 
+```cpp
+
+
+    void hello(void) {
+        uint64_t *sp = sp_get();
+        printk("hello: running with stack: sp = %x, &stack[N]=%x\n",
+                sp, &stack[N]);
+    
+        assert(sp < &stack[N]);
+        assert(sp >= &stack[0]);
+    }
+
+    void notmain(void) {
+    ...
+        run_fn_at_system(hello, stack);
+
+```
+
+Where the (AFAIK) correct assembly is:
 
         @ SYSTEM mode + disable interrupts
         msr cpsr, #(0b11111 | (1<<7))
@@ -365,7 +385,8 @@ level and never return:
         bl  clean_reboot
 
 
-AFAIK, this is correct.  But if we compile and run:
+Unfortunately if we compile and run we get a weird assertion failure
+message:
 
     % make BUG=bug4
     listening on ttyusb=</dev/ttyUSB0>
@@ -375,8 +396,9 @@ AFAIK, this is correct.  But if we compile and run:
     hello: running with stack: sp = 0x8ab8, &stack[N]=0x 8ad 
     bug4-driver.c:hello:  :ERROR: Assertion `sp >= &stack[0]` failed.
 
-The assertion fails and its message has garbage  (a common pattern
-with register mistakes).
+Where the `assert` fails but the message has some garbage (no line number).
+This weird output (and corrupted memory in general) is a common pattern
+with register mistakes.
 
 <details>
   <summary>What is the bug?</summary>
