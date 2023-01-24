@@ -247,9 +247,10 @@ Unclear why.  Seems to be the golden ratio of register save/restore.
 --------------------------------------------------------------------
 ### Bug 3: switch to Super with a new stack
 
-In this variant, we pass change the assembly routie to take in a new
-stack: when we switch modes, we switch the `sp` to this new stack and
-return to the caller.
+In this variant, we change the assembly routine to take in a new stack:
+when we switch from Super mode to 
+System mode, we set the System `sp` to this new stack
+and return to the caller.
 
 ```cpp
 // bug3-driver.c
@@ -314,9 +315,9 @@ I get an infinite set of:
 
 
 <br>
-There are actually two bugs, but let's just talk about the 
-assembly.  At a mechanical level we do correctly 
-do what the comments say:
+There are actually two bugs, but let's just talk about the conceptual
+one in the assembly routine specification.  At a mechanical level we do
+correctly do what the comments say:
 
    1. We correctly pass the return address held in `lr` to 
       System mode by moving it to the unbanked `r1`.
