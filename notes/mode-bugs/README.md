@@ -403,9 +403,12 @@ with register mistakes.
 <details>
   <summary>What is the bug?</summary>
 
+<br>
 Here the bug is not in the assembly but in the caller: stacks grow down
-(you should see how to write a piece of C code to test this).  However,
-we have passed the base of the `stack` array in as the stack pointer.
+(you should see how to write a piece of C code to test this).  
+
+However, we have passed the base of the `stack` array in as the stack
+pointer.
 
 As usual, the code compiles, and kinda runs.  We just get a weird result.
 This is common.  You should be able to start pattern matching and seeing
