@@ -11,6 +11,9 @@ than usual) but the readings and concepts all apply***
     as caller (must be saved by the caller if it wants to use them after
     a procedure call) and callee (must be saved by a procedure before
     it can use them and restored when it returns).
+  - [mode bugs](../../notes/mode-bugs/README.md): these are examples
+    of different mistakes to make with modes and banked registers.
+
 
 Big picture for today's lab:
 

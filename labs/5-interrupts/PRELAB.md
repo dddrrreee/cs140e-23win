@@ -27,6 +27,11 @@ Non-optional reading on the arm in general:
     a procedure call) and callee (must be saved by a procedure before
     it can use them and restored when it returns).
 
+  - [mode bugs](../../notes/mode-bugs/README.md): these are examples
+    of different mistakes to make with modes and banked registers.
+    Should make these concepts much clearer since you can just run
+    the code.
+
 Supplemental readings in the class `docs` diretory:
 
   1. `hohl-book-interrupts.annot.pdf`: if you were confused

@@ -131,6 +131,8 @@ comfort with using it.
 
     Incomplete reading list: 
       - [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md) 
+      - [caller/callee](../../notes/caller-callee/README.md)
+      - [example mode mistakes](../../notes/mode-bugs/README.md)
       - `5-interrupts/docs/BCM2835-ARM-timer-int.annot.pdf` --- excerpt from the Broadcom
         document, discusses how to enable both general and timer interrupts.
 
