@@ -17,19 +17,23 @@ cut out!
 
 ##### Notes
 
-Labs usually have some crash-course notes about key concepts --- you
-must read these before the lab or you'll be lost.   We also suggest
-re-reading some number of labs later after the concepts have sat for a
-bit so you get a deeper view.  Note summary (so far):
+Labs usually have some [crash-course notes](../notes/README.md) about
+key concepts --- you must read these before the lab or you'll be lost.
+We also suggest re-reading some number of labs later after the concepts
+have sat for a bit so you get a deeper view.  Note summary (so far):
 
   - [observability and compilation](../notes/observability/README.md)
   - [makefiles](../notes/makefiles/README.md)   
   - [crash course in writing device code](../notes/devices/DEVICES.md) and
     [gpio](../notes/devices/GPIO.md).
-  - (***NEW***) interrupts: 
+  - (***NEW***) 
     [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md) 
-    and
+  - (***NEW***)
     [caller/callee registers](../notes/caller-callee/README.md).
+  - (***NEW***)
+    [caller/callee registers](../notes/caller-callee/README.md).
+  - (***NEW***)[example mode mistakes](../../notes/mode-bugs/README.md)
+  - (***NEW***)[using gcc to figure out assembly](../../notes/using-gcc-for-asm/README.md)
 
 ---------------------------------------------------------------------
 ### Part 0: non-pi hacking
@@ -133,6 +137,7 @@ comfort with using it.
       - [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md) 
       - [caller/callee](../../notes/caller-callee/README.md)
       - [example mode mistakes](../../notes/mode-bugs/README.md)
+      - [using gcc to figure out assembly](../../notes/using-gcc-for-asm/README.md)
       - `5-interrupts/docs/BCM2835-ARM-timer-int.annot.pdf` --- excerpt from the Broadcom
         document, discusses how to enable both general and timer interrupts.
 
