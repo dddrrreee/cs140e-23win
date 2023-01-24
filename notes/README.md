@@ -8,6 +8,7 @@ be needed for a lab:
  - Devices: [how to reason about devices](devices/DEVICES.md); 
    [gpio](devices/GPIO.md)
  - Registers: [caller/callee](caller-callee/README.md)
+ - [How to use the compiler to figure out assembly code](using-gcc-for-asm/README.md)
 
  - Interrupts: [armv6 interrupt cheatsheet](interrupts/INTERRUPT-CHEAT-SHEET.md)
    [armv6 mode bug examples](mode-bugs/README.md)

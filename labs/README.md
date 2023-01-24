@@ -90,7 +90,7 @@ the pi and Unix side will be written by you:
 
 
 
-  - [4-cross-check]: you will use read-write logging
+  - [4-cross-check](4-cross-checking): you will use read-write logging
     of all loads and stores to device memory to verify that your GPIO
     code is equivalent to everyone else's.  If one person got the code
     right, everyone will have it right.
