@@ -159,12 +159,20 @@ Some quick review:
   - We can trash any caller-saved register we want without saving it.
 
 
-What happens if we run this code?
-
 Spoiler:
 <details>
-    <summary>This is a detail </summery>
-   This is some tet
+    <summary>What happens if we run this code?  Why?</summery>
+
+    On my r/pi I get:
+
+            bootloader: Done.
+            listening on ttyusb=</dev/ttyUSB0>
+            cpsr = <1000000000000000000000110010011>
+                mode = <10011>
+                interrupt = <off>
+
+
+    I.e.,: it never returns from the `switch_to_system_bug` call.
 
 </details>
 
