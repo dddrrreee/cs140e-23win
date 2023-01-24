@@ -84,8 +84,8 @@ the pi and Unix side will be written by you:
     your own blink and a simple network between your r/pi's.
 
     ***READING***: 
-       - notes on [GPIO](../notes/devices/GPIO.md).
-       - [crash course in writing device code](../notes/devices/DEVICES.md).
+       - Note: [GPIO](../notes/devices/GPIO.md).
+       - Note: [crash course in writing device code](../notes/devices/DEVICES.md).
        - pages 4--7 and 91---96 of the broadcom datasheet (`docs/BCM2835-ARM-Peripherals.annot.PDF`)
 
 
