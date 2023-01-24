@@ -95,10 +95,8 @@ We show some examples below.
 We use variations on the following simple program:
   1. `bug1-driver.c`: C code that gets the current mode from `cpsr`
      and prints out some information.
-  2. It then calls buggy assembly (bug1-asm.S)
-     to change from the current SUPER
-     mode to Supervisor.
-
+  2. It then calls buggy assembly (`bug1-asm.S`)
+     to change from the current Supervisor mode to System.
 
 The C code:
 ```cpp
