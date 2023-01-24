@@ -218,20 +218,21 @@ When I do:
 
         % make BUG=bug2
 
-It doesn't do what we want.
+I get an infinite amount of garbage (you could get a different result).
+Not really the look we were going for.
 
 <details>
   <summary>What is the bug?</summary>
 
-
+<br>
 Well, `lr` is not the only banked register: `sp` is banked, too.
-We switched modes and didn't set `sp`.  Presumably its initial
-value is 0 (null) so we are reading and writing low memory. 
-The result is hard to say.  It could spew infinite garbage,
-as it did here.  It could also do some other random stuff.  
-For example, it printed an infinite number of `U` characters a
-few minutes ago for me and changed when I modified
-a `printk` format string.
+We switched modes and didn't set `sp`.  Not-brilliant. 
+I'm betting in this case that `sp`'s
+initial value is 0 (null) so we are reading and writing low memory.
+The result is hard to say.  It could spew infinite garbage, as it
+did here.  It could also do some other random stuff.  For example, it
+printed an infinite number of `U` characters a few minutes ago for me
+and changed when I modified a `printk` format string.
 
 Oddly, this infinite string of `UUUUUUUUU.....` seems to show up in many
 situations where we have stack corruption with exceptions and threads.
