@@ -1,5 +1,5 @@
 # change from bug1 to bug2 to bug3 to bug4
-BUG ?= bug1
+BUG ?= bug2
 PROGS := $(BUG)-driver.c
 COMMON_SRC := $(BUG)-asm.S
 

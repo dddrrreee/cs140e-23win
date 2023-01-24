@@ -158,13 +158,8 @@ Some quick review:
     the `lr` register holds the return address.
   - We can trash any caller-saved register we want without saving it.
 
-
-What happens if we run this code?
-
-<details>
-  <summary>What happens if we run this code?  Why?</summary>
-
-    On my r/pi I get:
+Now if we run the code, what happens?
+On my r/pi I get:
 
             bootloader: Done.
             listening on ttyusb=</dev/ttyUSB0>
@@ -172,17 +167,68 @@ What happens if we run this code?
                 mode = <10011>
                 interrupt = <off>
 
+ The driver code never returns from the `switch_to_system_bug` call.
 
-    I.e.,: it never returns from the `switch_to_system_bug` call.
+<details>
+  <summary>What is going on?</summary>
+
+Hint: think about the banked registers.  What is the value of `lr`
+that we are jumping back to?  (I assume it holds the value 0 so we are
+jumping to 0 and running, which is going to cause some random problems.)
 
 </details>
 
 #### Bug 2: try to switch to Super mode and keep running
+
+Ok, so our fix is to try to pull the `lr` from our initial Super mode
+to the new System mode:
+
+        @ we pull the SUPER mode lr to SYSTEM.
+        @ this doesn't fix the problem.
+        @ why?  (hint: even more banked registers)
+        .global switch_to_system_bug
+        switch_to_system_bug:
+            @ save lr to a non-banked register
+            mov r0, lr
+
+            mov r1,  #0b11111
+            orr r1,r1,#(1<<7)    @ disable interrupts.
+            msr cpsr, r1
+            prefetch_flush(r1)
+        
+            @ jump to the saved version.
+            @
+            @ why don't we need to restore lr?
+            blx r0
+
+A few notes:
+  - The non-banked registers are essentially shared memory --- if you want
+    to pass a few values between modes, the easiest method is to just put
+    them in non-banked registers (typically caller saved ones so they don't
+    have to be saved and restored)
+  - So, we can pass the `lr` from Super mode to System mode by sticking 
+    it in `r0`.
+
+However, what happens when we run this code?
+   - On my laptop it just prints an infinite amount of garbage.  
+   - With your setup it might do something else.  
+
+
+<details>
+  <summary>What is the bug?</summary>
+
+Well, `lr` is not the only banked register.  `sp` is banked to.
+We switched modes and didn't set it.  Presumably its initial
+value is 0 (null) so we are reading and writing low memory. It could
+crash like this.  It could also do some other random stuff.  (E.g.,
+it did something else a few minutes ago for me and changed when I modified
+a `printk` format string.)
+
+</details>
+
+
 #### Bug 3: try to switch to Super mode and keep running
 #### Bug 4: try to switch to Super mode and keep running
-
-
-
 
 
 #### Bug 1: ansser
