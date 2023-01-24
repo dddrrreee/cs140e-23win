@@ -128,7 +128,7 @@ void dummy(unsigned);
 void nop(void);
 
 
-#include <string.h>
+/* #include <string.h> */
 
 #   include "demand.h"
 #ifndef RPI_UNIX

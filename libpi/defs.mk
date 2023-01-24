@@ -25,7 +25,10 @@ INC ?= -I$(LPP)/include -I$(LPP)/ -I$(LPP)/src -I. -I$(LPP)/staff-private -I$(LP
 OPT_LEVEL ?= -Og
 
 # various warnings.  any warning = error, so you must fix it.
-CFLAGS += $(OPT_LEVEL) -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=arm1176jzf-s -mtune=arm1176jzf-s  -std=gnu99 $(INC) -ggdb -Wno-pointer-sign  $(CFLAGS_EXTRA) -Werror  -Wno-unused-function -Wno-unused-variable  
+CFLAGS += $(OPT_LEVEL) -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=arm1176jzf-s -mtune=arm1176jzf-s  -std=gnu99 $(INC) -ggdb -Wno-pointer-sign  $(CFLAGS_EXTRA) -Werror  -Wno-unused-function -Wno-unused-variable
+
+# disable the thread-local pointer coprocessor register (for Thumb support)
+CFLAGS += -mtp=soft
 
 # for backtrace
 # CFLAGS += -fno-omit-frame-pointer -mpoke-function-name -DBACKTRACE
