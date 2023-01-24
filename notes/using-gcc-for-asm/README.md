@@ -155,3 +155,24 @@ For example:
                 18:	e7d00001 	ldrb	r0, [r0, r1]
                 1c:	e12fff1e 	bx	lr
 
+
+     So, 32-bit uses `ldr` and 8-bit uses `ldrb` and both a constant
+     and a register can be put in the bracketed index expression.
+    
+
+There's many other questions you'll likely need that you can imagine
+answering --- how are structures passed,  does the stack grow up or down,
+how to load or store multiple operations.  Or how to encode assembly
+instructions as machine code so you can generate them at runtime.
+Emitting and then examining is a pretty strong lens.  You can also
+automate it for automatic reverse engineering.
+
+In any case, if you get stuck or nervous about how to figure something out,
+try taking a few runs at writing C code and seeing how ti gets translated
+or how it runs.    Active exploration can easily beat thinking real hard,
+especially when you have incomplete information.
+
+As a note, if you like figuring this kind of stuff out, retargeting a
+compiler is fun --- do all the integer ALU ops, then memory, then calling
+conventions, then float.   Each problem is big enough to be interesting,
+but not so big you get tired.  Pretty soon the sun comes up.
