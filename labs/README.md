@@ -32,8 +32,8 @@ have sat for a bit so you get a deeper view.  Note summary (so far):
     [caller/callee registers](../notes/caller-callee/README.md).
   - (***NEW***)
     [caller/callee registers](../notes/caller-callee/README.md).
-  - (***NEW***)[example mode mistakes](../../notes/mode-bugs/README.md)
-  - (***NEW***)[using gcc to figure out assembly](../../notes/using-gcc-for-asm/README.md)
+  - (***NEW***)[example mode mistakes](../notes/mode-bugs/README.md)
+  - (***NEW***)[using gcc to figure out assembly](../notes/using-gcc-for-asm/README.md)
 
 ---------------------------------------------------------------------
 ### Part 0: non-pi hacking
@@ -136,8 +136,8 @@ comfort with using it.
     Incomplete reading list: 
       - [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md) 
       - [caller/callee](../../notes/caller-callee/README.md)
-      - [example mode mistakes](../../notes/mode-bugs/README.md)
-      - [using gcc to figure out assembly](../../notes/using-gcc-for-asm/README.md)
+      - [example mode mistakes](../notes/mode-bugs/README.md)
+      - [using gcc to figure out assembly](../notes/using-gcc-for-asm/README.md)
       - `5-interrupts/docs/BCM2835-ARM-timer-int.annot.pdf` --- excerpt from the Broadcom
         document, discusses how to enable both general and timer interrupts.
 
