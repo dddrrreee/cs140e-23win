@@ -1,36 +1,38 @@
 ### Interrupts.
 
-***NOTE: we are updating the lab itself (since it got pulled earlier
-than usual) but the readings and concepts all apply***
+***Make sure you understand the readings in the [PRELAB](PRELAB.md)]***: 
+  - how the hardware level works for arm exceptions, how to work with 
+    modes, how to use the compiler to figure out low level information,
+    how to setup interrupts with the broadcom.
+  - Go through the code in `timer-int-ex` which is a complete working
+    timer interrupt example.
 
-***Make sure you read***: 
-  - [INTERRUPTS](../../guides/INTERRUPT-CHEAT-SHEET.md): this is a cheat sheet of useful page
-    numbers and some notes on how the ARMv6 does exceptions.
-  - [caller-callee registers](../../guides/caller-callee/README.md):
-    this shows a cute trick on how to derive which registers `gcc` treats
-    as caller (must be saved by the caller if it wants to use them after
-    a procedure call) and callee (must be saved by a procedure before
-    it can use them and restored when it returns).
-  - [mode bugs](../../notes/mode-bugs/README.md): these are examples
-    of different mistakes to make with modes and banked registers.
+Today's lab is a few small-ish pieces, hopefully that give you a better
+view of bare-metal execution, assembly code, interrupts and exceptions.
 
-
-Big picture for today's lab:
+Big picture:
 
    0. We'll show how to setup interrupts / exceptions on the r/pi.
-   Interrupts and exceptions are useful for responding quickly to devices,
-   doing pre-emptive threads, handling protection faults, and other things.
+      Interrupts and exceptions are useful for responding quickly to
+      devices, doing pre-emptive threads, handling protection faults,
+      and other things.
 
    1. We strip interrupts down to a fairly small amount of code.  You will
-   go over each line and get a feel for what is going on.  
+      go over each line and get a feel for what is going on.
 
    2. You will use timer interrupts to implement a simple but useful
-   statistical profiler similar to `gprof`.  As is often the case,
-   because the r/pi system is so simple, so too is the code we need to
-   write, especially as compared to on a modern OS.
+      statistical profiler similar to `gprof`.  As is often the case,
+      because the r/pi system is so simple, so too is the code we need
+      to write, especially as compared to on a modern OS.
 
-The good thing about the lab is that interrupts are often made very
-complicated or just discussed so abstractly it's hard to understand them.
+   3. You'll then implement system calls --- these work using exceptions
+      which possibly confusingly use the same interrupt methods.
+
+   4. Finally, you'll replace the crude method of dispatching
+      handling interrupts with a faster, more flexible approach.
+
+Interrupts confuse people.  Often they get implemented in a complicated
+way, or get discussed so abstractly it's hard to understand them.
 Hopefully by the end of today you'll have a reasonable grasp of at
 least one concrete implementation.  If you start kicking its tires and
 replacing different pieces with equivalant methods you should get a
@@ -41,13 +43,29 @@ pretty firm grasp.
 Turn-in:
 
   1. `timer-int`: give the shortest time between timer interrupts you can
-     make, and two ways to make the code crash.
+     make.  Make two small edits to the `timer-int-ex` register save and
+     restore that make the code crash in different locations.  This will
+     help get an intuition for how things can go wrong.
 
+  2. Implement `gprof` (in the `2-gprof` subdirectory).   When you
+     run you should see most of the time being spent in `PUT32`, `GET32`
+     or the `uart` routines.
+
+  3. Replace the interrupt handling code 
+
+ measure the overhead?
+
+  2. Add code so that swi works.
+  3. Add code for breakponts: print out the breakpoint and skip it.
   2. Build a simple system call: show your `1-syscall` works.
+  4. switch all the way to user level.
+  5. switch between two different routines.
 
-  3. Implement `gprof` (in the `2-gprof` subdirectory).   You should
-     run it and show that the results are reasonable.  Explain why it
-     spends all the time in the uart code.
+  3. Use vector-base to setup interrupts.  This is much better.
+  4. Use dynamic code generation to rewrite the vector base table.
+
+   use a queue to push stuff between interrupt and 
+
 
 -----------------------------------------------------------------
 #### Background: Why interrupts
@@ -91,12 +109,51 @@ and so eliminates variable reads b/c it doesn't see anyone changing them
 (partial solution: mark shared variables as `volatile`).  We'll implement
 different ways to mitigate these problems over the next couple of weeks.
 
+Historically interrupts and exceptions are related, but differ
+in how they get initiated:
+  - Exceptions are traps caused by something the code did, such as
+    a divide by zero, a memory protection fault or (maybe confusingly)
+    a system call instruction (today).  
+
+  - Interrupts are traps caused by some exogenous event, such as
+    a network packet arriving, a GPIO pin triggering from high to low,
+    or a timer expiring (today).  They might be related to the currently
+    running code, or they might have nothing to do with it or, indeed,
+    any process.
+
+In both cases, the hardware does roughly the same thing:
+  1. Saves enough of the state of the currently running code that it 
+     can be resumed. For the ARMv6: it records the trapped pc (by moving
+     it to the `lr`) and preserves the stack pointer by switching to a 
+     banked copy.
+  2. Jumping to a pre-determined code location, possibly after changing
+     processor levels.  On the ARMv6: it switches to the exception or
+     interrupt mode and, by default, jumps to a fixed address starting
+     at 0.
+  3. After the exception/interrupt is handled, the code jumps back to
+     the faulting location with the original register values restored.  
+     There usually has to be some kind of hardware support that allows 
+     this jump and restore to be partially combined since you can't do
+     one and then the other.  MIPS reserves two registers that the 
+     code can use; ARMv6 provides a special instruction that will
+     load the previously saved process status register while 
+     simulatenously setting the pc.
+
+As a final point: generally exceptions or interrupts are not recursive
+by default.  (If you look at the timer interrupt code, you can probably
+see what the challenge would be for taking a second interrupt while
+handling the first.)  You can often take steps to make them so (ARMv6
+can), but that's begging for destruction.   It is an interesting puzzle,
+so can be illuminating, but I would try to avoid in reality.
+
+
 ----------------------------------------------------------------------------
 ### Part 0: timer interrupts.
 
-Look through the code in `timer-int`, compile it, run it.  Make sure
+Look through the code in `timer-int-ex`, compile it, run it.  Make sure
 you can answer the questions in the comments.  We'll walk through it
 in class.
+
 
 ----------------------------------------------------------------------------
 ### Part 1: make a simple system call.
@@ -117,6 +174,43 @@ them now will show how trivial they actually are.  In particular, look in
 
 This doesn't take much code, but you will have to think carefully about which
 registers need to be saved, etc.
+
+------------------------------------------------------------------------
+### Part 3: use the vector register: 3-vector-base
+
+For this you'll do some simple tricks to speed up your interrupt
+code and make it more flexble:
+
+You'll write the inline assembly to set the vector base.  See:
+  - 3-121 in `../../docs/arm1176.pdf`
+
+What to do:
+  - You only have to modify `1-vector-base/vector-base.h`
+  - There are two tests (you have to modify the makefile to run each).
+  - When the tests pass, move the `vector-base.h` file to `libpi/src` and make
+    sure they still work.
+
+  - The test `0-test-vector-base.c` should should show a speedup and
+    complete correctly.
+
+  2. Make your own: `libpi/src/int-init-reg.c` that implements the
+     routine:
+
+        void int_init_reg(void *int_vector_addr)
+
+     Which should be a re-implementation of `int_init` using the vector
+     base register file (which you will have to include) instead of
+     copying the table itself.
+
+     As usual: Make sure to add that file to `put-your-src-here.mk`.
+
+  3. Make a copy of your `1-gpio-int` directory and convert it over to
+     use the vector base method.
+
+  4. Use the prelab code to check which registers you can remove
+     from your save-restore in the interrupt handler.   If should be
+     the case that if you "clobber" a callee-saved register you do
+     not want to skip, `gcc` will not save it.
 
 -----------------------------------------------------------------------------
 ### Part 2: Using interrupts to build a profiler.
