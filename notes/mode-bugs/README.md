@@ -93,11 +93,85 @@ We show some examples below.
 
 #### Bug 1: try to switch to Super mode and keep running
 
+We use variations on the following simple program:
+  1. `bug1-driver.c`: C code that gets the current mode from `cpsr`
+     and prints out some information.
+  2. It then calls buggy assembly (bug1-asm.S)
+     to change from the current SUPER
+     mode to Supervisor.
+
+
+The C code:
 ```cpp
-# bug1-driver.c
+// bug1-driver.c
+void notmain(void) {
+    uint32_t cpsr = cpsr_get();
+    printk("cpsr = <%b>\n", cpsr);
+
+    uint32_t mode = cpsr&0b11111;
+    printk("     mode = <%b>\n", mode);
+    assert(mode == SUPER_MODE);
+
+    printk("    interrupt = <%s>\n",
+                ((cpsr >> 7)&1) ? "off" : "on");
+
+    switch_to_system_bug();
+    printk("switched to system\n");
+}
+
 ```
 
+The assembly code:
+
+        #include "rpi-asm.h"
+        
+        @ use the mrs instruction to get the current program
+        @ status register value and return it in r0 
+        .global cpsr_get
+        cpsr_get:
+            mrs  r0, cpsr
+            bx lr
+
+        @ switch to SYSTEM mode (0b11111)
+        @ and return. 
+        @
+        @ the way we do it doesn't work of course.
+        @ hint: banked registers. 
+        .global switch_to_system_bug
+        switch_to_system_bug:
+            mov r1,  #0b11111
+            orr r1,r1,#(1<<7)    @ disable interrupts.
+            @ use msr to set the current mode
+            msr cpsr, r1
+            @ do a prefetch flush to make sure the msr is done
+            @ (similar to a memory barrier)
+            prefetch_flush(r1)
+            @ done: should be in SYSTEM mode, return.
+            bx lr
+
+
+Some quick review:
+  - The first four integer / pointer values are passed in `r0`, `r1`,
+     `r2`, and `r3` registers.
+  - We return an integer / pointer result in `r0`.
+  - When a routine is done we return back to the caller using `bx lr`:
+    the `lr` register holds the return address.
+  - We can trash any caller-saved register we want without saving it.
+
+
+What happens if we run this code?
+
+>!  This
+! Is 
+! a spoinler
 
 #### Bug 2: try to switch to Super mode and keep running
 #### Bug 3: try to switch to Super mode and keep running
 #### Bug 4: try to switch to Super mode and keep running
+
+
+
+
+
+#### Bug 1: ansser
+Now, when we run: what happens?
