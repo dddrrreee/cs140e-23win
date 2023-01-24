@@ -174,6 +174,7 @@ the code hangs with no output after the last line.
 <details>
   <summary>What is going on?</summary>
 
+
 Hint: think about the banked registers.  What is the value of `lr` that we
 are jumping back to?  (I assume `lr` holds the value 0 so we are jumping
 to address 0 and running, which is going to cause some random problems.)
@@ -221,6 +222,7 @@ It doesn't do what we want.
 
 <details>
   <summary>What is the bug?</summary>
+
 
 Well, `lr` is not the only banked register: `sp` is banked, too.
 We switched modes and didn't set `sp`.  Presumably its initial
@@ -304,6 +306,7 @@ I get an infinite set of:
 
 <details>
   <summary>What is the bug in the assembly code?</summary>
+
 
 There are actually two bugs, but let's just talk about the 
 assembly.  At a mechanical level we do what the comments say.
