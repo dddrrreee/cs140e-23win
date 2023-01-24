@@ -23,6 +23,7 @@ void notmain(void) {
     printk("    interrupt = <%s>\n", 
                 ((cpsr >> 7)&1) ? "off" : "on");
 
+    // swap this around if you want to see that it works.
 #if 1
     run_fn_at_system(hello, stack);
 #else

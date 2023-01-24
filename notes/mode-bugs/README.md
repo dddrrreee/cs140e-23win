@@ -89,9 +89,8 @@ many bugs in practice:
 
 We show some examples below.
 
-### Bugs + examples
-
-#### Bug 1: try to switch to Super mode and keep running
+--------------------------------------------------------------------
+### Bug 1: try to switch to Super mode and keep running
 
 We use variations on the following simple program:
   1. `bug1-driver.c`: C code that gets the current mode from `cpsr`
@@ -159,26 +158,30 @@ Some quick review:
   - We can trash any caller-saved register we want without saving it.
 
 Now if we run the code, what happens?
-On my r/pi I get:
+On my r/pi if I compile and run, I get:
 
+            % make BUG=bug1
+            ...
             bootloader: Done.
             listening on ttyusb=</dev/ttyUSB0>
             cpsr = <1000000000000000000000110010011>
                 mode = <10011>
                 interrupt = <off>
 
- The driver code never returns from the `switch_to_system_bug` call.
+The driver code never returns from the `switch_to_system_bug` call and 
+the code hangs with no output after the last line.
 
 <details>
   <summary>What is going on?</summary>
 
-Hint: think about the banked registers.  What is the value of `lr`
-that we are jumping back to?  (I assume it holds the value 0 so we are
-jumping to 0 and running, which is going to cause some random problems.)
+Hint: think about the banked registers.  What is the value of `lr` that we
+are jumping back to?  (I assume `lr` holds the value 0 so we are jumping
+to address 0 and running, which is going to cause some random problems.)
 
 </details>
 
-#### Bug 2: try to switch to Super mode and keep running
+--------------------------------------------------------------------
+### Bug 2: try to switch to Super mode and keep running
 
 Ok, so our fix is to try to pull the `lr` from our initial Super mode
 to the new System mode:
@@ -202,34 +205,197 @@ to the new System mode:
             blx r0
 
 A few notes:
-  - The non-banked registers are essentially shared memory --- if you want
-    to pass a few values between modes, the easiest method is to just put
-    them in non-banked registers (typically caller saved ones so they don't
-    have to be saved and restored)
+  - The non-banked registers are essentially shared memory across
+    all modes --- if you want to pass a few values between modes, the
+    easiest method is to just put them in non-banked registers (typically
+    caller saved ones so they don't have to be saved and restored).
+
   - So, we can pass the `lr` from Super mode to System mode by sticking 
     it in `r0`.
 
-However, what happens when we run this code?
-   - On my laptop it just prints an infinite amount of garbage.  
-   - With your setup it might do something else.  
+When I do:
 
+        % make BUG=bug2
+
+It doesn't do what we want.
 
 <details>
   <summary>What is the bug?</summary>
 
-Well, `lr` is not the only banked register.  `sp` is banked to.
-We switched modes and didn't set it.  Presumably its initial
-value is 0 (null) so we are reading and writing low memory. It could
-crash like this.  It could also do some other random stuff.  (E.g.,
-it did something else a few minutes ago for me and changed when I modified
-a `printk` format string.)
+Well, `lr` is not the only banked register: `sp` is banked, too.
+We switched modes and didn't set `sp`.  Presumably its initial
+value is 0 (null) so we are reading and writing low memory. 
+The result is hard to say.  It could spew infinite garbage,
+as it did here.  It could also do some other random stuff.  
+For example, it printed an infinite number of `U` characters a
+few minutes ago for me and changed when I modified
+a `printk` format string.
+
+Oddly, this infinite string of `UUUUUUUUU.....` seems to show up in many
+situations where we have stack corruption with exceptions and threads.
+Unclear why.  Seems to be the golden ratio of register save/restore.
 
 </details>
 
 
-#### Bug 3: try to switch to Super mode and keep running
-#### Bug 4: try to switch to Super mode and keep running
+--------------------------------------------------------------------
+### Bug 3: switch to Super with a new stack
+
+In this variant, we pass in a pointer to a new stack: when we switch
+modes, we switch the `sp` to this stack and return to the caller.
+
+```cpp
+// bug3-driver.c
+enum { N = 1024 * 64 / 8 };
+// we used unsigned long long so is 8 byte aligned.
+static unsigned long long stack[N];
+
+void notmain(void) {
+    uint32_t cpsr = cpsr_get();
+    printk("cpsr = <%b>\n", cpsr);
+    printk("    mode = <%b>\n", cpsr&0b11111);
+    printk("    interrupt = <%s>\n",
+                ((cpsr >> 7)&1) ? "off" : "on");
 
 
-#### Bug 1: ansser
-Now, when we run: what happens?
+    uint32_t base = (uint32_t)&stack[0];
+    demand(base % 8 == 0, "stack %p is not 8 byte aligned!\n", base);
+
+    // switch to system using the given stack.
+    switch_to_system_w_stack(stack);
+    printk("switched to system: sp = %x\n", sp_get());
+}
+```
+
+
+Where our assembly code is:
+
+        @ switch to stack address passed in r0
+        @
+        @ bug: why?  hint: where is the previous 
+        @ stuff in caller stored?
+        .global switch_to_system_w_stack
+        switch_to_system_w_stack:
+            @ save lr to non banked.
+            mov r1, lr
+            
+            @ set SYSTEM mode + disable interrupts
+            msr cpsr, #(SYS_MODE | (1<<7))
+            prefetch_flush(r2)
+        
+            @ load sp from first argument
+            mov sp, r0
+            @ jump back to original lr
+            blx r1
+
+
+When I compile and run this code:
+
+        % make BUG=bug3
+
+I get an infinite set of:
+
+        cpsr = <1000000000000000000000110010011>
+            mode = <10011>
+            interrupt = <off>
+        switched to system: sp = 0xx xx
+        cpsr = <1000000000000000000000110010011>
+        ...
+
+<details>
+  <summary>What is the bug in the assembly code?</summary>
+
+There are actually two bugs, but let's just talk about the 
+assembly.  At a mechanical level we do what the comments say.
+
+   1. We store pass the return address held in `lr` to 
+      System mode by moving it to the unbanked `r1`.
+      This means the last `blx r1` does jump back to the
+      right location.
+
+   2. We do correctly move the passed in stack address to 
+      the stack pointer for the new mode by doing so after
+      the `msr/prefetch flush`.
+
+So what goes wrong?    Well, if you look at the `bug3-driver.list`
+file right after the call to `switch_to_system_w_stack` you can
+see a hint:
+
+        // machine code in notmain
+        8074:   eb000011    bl  80c0 <switch_to_system_w_stack>
+        8078:   eb00000e    bl  80b8 <sp_get>
+        807c:   e1a01000    mov r1, r0
+        8080:   e59f0020    ldr r0, [pc, #32]   ; 80a8 <notmain+0x70>
+        8084:   eb000013    bl  80d8 <printk>
+        8088:   e8bd8010    pop {r4, pc}
+
+The code will start popping registers off of the stack.  Oops.
+These were stored to the previous stack --- we then switched,
+so these later pops are loading garbage values.
+
+It's hard to believe but a bug like this cost us a few hours in the 
+initial cs240lx offering.
+
+</details>
+
+--------------------------------------------------------------------
+### Bug 4: try to switch to Super mode and keep running
+
+Ok, last case.  Here we are trying to run a routine at a different 
+level and never return:
+
+
+        @ SYSTEM mode + disable interrupts
+        msr cpsr, #(0b11111 | (1<<7))
+        prefetch_flush(r2)
+
+        mov sp, r1
+        blx r0
+
+        @ if we return, reboot
+        bl  clean_reboot
+
+
+AFAIK, this is correct.  But if we compile and run:
+
+    % make BUG=bug4
+    listening on ttyusb=</dev/ttyUSB0>
+    cpsr = <1000000000000000000000110010011>
+        mode = <10011>
+        interrupt = <off>
+    hello: running with stack: sp = 0x8ab8, &stack[N]=0x 8ad 
+    bug4-driver.c:hello:  :ERROR: Assertion `sp >= &stack[0]` failed.
+
+The assertion fails and its message has garbage  (a common pattern
+with register mistakes).
+
+<details>
+  <summary>What is the bug?</summary>
+
+Here the bug is not in the assembly but in the caller: stacks grow down
+(you should see how to write a piece of C code to test this).  However,
+we have passed the base of the `stack` array in as the stack pointer.
+
+As usual, the code compiles, and kinda runs.  We just get a weird result.
+This is common.  You should be able to start pattern matching and seeing
+what a mistake in your register save / restore code looks like.
+
+Of course, the  problem is that this also looks like normal memory 
+corruption.  You'll have to get good at crossing that off by 
+simplifying your code.
+
+</details>
+
+--------------------------------------------------------------------
+### what to do
+
+I'd strongly suggest writing:
+  1. A simple pi program to verify stacks grow down.  It's 
+     good to get in the habit of writing small C or assembly programs
+     to test different hypotheses.  You should try to figure them
+     out from the architecture manual or from first-ish principles.
+     But as the proverb goes: "Trust, but verify."
+
+  2. A simple routine that will run a routine at a different privilege
+     level with the *same* stack, and upon return switch back.  This
+     will be a synthesis of the above examples.
