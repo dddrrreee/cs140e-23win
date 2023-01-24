@@ -226,9 +226,9 @@ Not really the look we were going for.
 
 <br>
 
-What is going on.
+Well it's banked registers again.
 
-Well, `lr` is not the only banked register: `sp` is banked, too.
+`lr` is not the only banked register: `sp` is banked, too.
 We switched modes and didn't set `sp`.  Not-brilliant.  I'm betting in
 this case that `sp`'s initial value is 0 (null) so we are reading and
 writing low memory.  The result is hard to say.  It could spew infinite
@@ -246,8 +246,9 @@ Unclear why.  Seems to be the golden ratio of register save/restore.
 --------------------------------------------------------------------
 ### Bug 3: switch to Super with a new stack
 
-In this variant, we pass in a pointer to a new stack: when we switch
-modes, we switch the `sp` to this stack and return to the caller.
+In this variant, we pass change the assembly routie to take in a new
+stack: when we switch modes, we switch the `sp` to this new stack and
+return to the caller.
 
 ```cpp
 // bug3-driver.c
@@ -266,12 +267,11 @@ void notmain(void) {
     uint32_t base = (uint32_t)&stack[0];
     demand(base % 8 == 0, "stack %p is not 8 byte aligned!\n", base);
 
-    // switch to system using the given stack.
+    // switch to System mode using the given stack.
     switch_to_system_w_stack(stack);
     printk("switched to system: sp = %x\n", sp_get());
 }
 ```
-
 
 Where our assembly code is:
 
@@ -311,21 +311,23 @@ I get an infinite set of:
   <summary>What is the bug in the assembly code?</summary>
 
 
+<br>
 There are actually two bugs, but let's just talk about the 
-assembly.  At a mechanical level we do what the comments say.
+assembly.  At a mechanical level we do correctly 
+do what the comments say:
 
-   1. We store pass the return address held in `lr` to 
+   1. We correctly pass the return address held in `lr` to 
       System mode by moving it to the unbanked `r1`.
       This means the last `blx r1` does jump back to the
-      right location.
+      right location (the original `lr`).
 
-   2. We do correctly move the passed in stack address to 
-      the stack pointer for the new mode by doing so after
-      the `msr/prefetch flush`.
+   2. We also correctly set the passed in stack address (held
+      in `r0`) to the stack pointer for System mode by setting
+      `sp` to `r0` after the `msr/prefetch flush`.  (Doing before
+       would modify the wrong `sp`.)
 
-So what goes wrong?    Well, if you look at the `bug3-driver.list`
-file right after the call to `switch_to_system_w_stack` you can
-see a hint:
+So what goes wrong?    Well, if you look at the `bug3-driver.list` file
+right after the call to `switch_to_system_w_stack` you can see a hint:
 
         // machine code in notmain
         8074:   eb000011    bl  80c0 <switch_to_system_w_stack>
@@ -333,6 +335,7 @@ see a hint:
         807c:   e1a01000    mov r1, r0
         8080:   e59f0020    ldr r0, [pc, #32]   ; 80a8 <notmain+0x70>
         8084:   eb000013    bl  80d8 <printk>
+   uh oh, problem ==>
         8088:   e8bd8010    pop {r4, pc}
 
 The code will start popping registers off of the stack.  Oops.
