@@ -415,12 +415,13 @@ However, we have passed the base of the `stack` array in as the stack
 pointer.
 
 As usual, the code compiles, and kinda runs.  We just get a weird result.
-This is common.  You should be able to start pattern matching and seeing
-what a mistake in your register save / restore code looks like.
+This is common.  You should be able to start pattern matching on weird
+errors like this and recognize what a mistake in your register save /
+restore code looks like.
 
-Of course, the  problem is that this also looks like normal memory 
+(Of course, the  problem is that this also looks like normal memory 
 corruption.  You'll have to get good at crossing that off by 
-simplifying your code.
+simplifying your code.)
 
 </details>
 
