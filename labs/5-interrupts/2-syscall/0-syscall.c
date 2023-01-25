@@ -20,13 +20,14 @@ int syscall_vector(unsigned pc, uint32_t r0) {
 
     // figure out the instruction and the system call number.
     unimplemented();
+    trace("inst=%b, sys_num=%d\n", inst, sys_num);
 
     switch(sys_num) {
     case 1: 
-            printk("syscall: <%s>\n", (const char *)r0); 
+            trace("syscall: <%s>\n", (const char *)r0); 
             return 0;
     default: 
-            printk("illegal system call = %d!\n", sys_num);
+            trace("illegal system call = %d!\n", sys_num);
             return -1;
     }
 }
@@ -37,18 +38,19 @@ void notmain() {
     asm volatile ("mov %0, sp" : "=r"(sp)); 
     printk("current stackptr = %x\n", sp);
 
-    printk("about to install handlers\n");
+    trace("about to install handlers\n");
     int_init();
 
-    printk("about to run syscall hello\n");
+    trace("about to run syscall hello\n");
     int res = syscall_hello("hello world");
-    printk("result of calling system call 1=%d\n", res);
+    trace("result of calling system call 1=%d\n", res);
     if(res != 0)
         panic("expected result=0, have: %d\n", res);
 
-    printk("about to call illegal system call: should die\n");
+    trace("about to call illegal system call: should die\n");
     res = syscall_illegal();
-    printk("result of illegal system call =%d\n", res);
+    trace("result of illegal system call =%d\n", res);
     if(res != -1)
         panic("expected result=-1, have: %d\n", res);
+    trace("SUCCESS!\n");
 }

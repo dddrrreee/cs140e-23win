@@ -1,0 +1,9 @@
+TRACE:about to run syscall hello
+TRACE:inst=11101111000000000000000000000001, sys_num=1
+TRACE:syscall: <hello world>
+TRACE:result of calling system call 1=0
+TRACE:about to call illegal system call: should die
+TRACE:inst=11101111000000000000000000000010, sys_num=2
+TRACE:illegal system call = 2!
+TRACE:result of illegal system call =-1
+TRACE:SUCCESS!

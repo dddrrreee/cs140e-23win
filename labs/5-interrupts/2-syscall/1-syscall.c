@@ -41,15 +41,15 @@ int syscall_vector(unsigned pc, uint32_t r0) {
     if(mode != USER_MODE)
         panic("mode = %b: expected %b\n", mode, USER_MODE);
     else
-        output("success: spsr is at user level\n");
+        trace("success: spsr is at user level\n");
 
     // we do a very trivial hello and exit just to show the difference
     switch(sys_num) {
     case 1: 
-            printk("syscall: hello world\n");
+            trace("syscall: hello world\n");
             return 0;
     case 2: 
-            printk("exiting!\n");
+            trace("exiting!\n");
             clean_reboot();
     default: 
             printk("illegal system call = %d!\n", sys_num);
@@ -65,7 +65,7 @@ uint64_t stack[N];
 void user_fn(void) {
     uint64_t var;
 
-    output("checking that stack got switched\n");
+    trace("checking that stack got switched\n");
     assert(&var >= &stack[0]);
     assert(&var < &stack[N]);
 
@@ -76,12 +76,12 @@ void user_fn(void) {
     if(mode != USER_MODE)
         panic("mode = %b: expected %b\n", mode, USER_MODE);
     else
-        output("cpsr is at user level\n");
+        trace("cpsr is at user level\n");
 
-    output("about to call hello\n");
+    trace("about to call hello\n");
     asm volatile("swi 1" ::: "memory");
 
-    output("about to call exit\n");
+    trace("about to call exit\n");
     asm volatile("swi 2" ::: "memory");
 
     not_reached();

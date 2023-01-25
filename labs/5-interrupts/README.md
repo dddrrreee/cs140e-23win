@@ -153,50 +153,90 @@ The basic intuition:
       highest count will be where your code spends most of its time.
 
 The implementation will take about 30-40 lines of code in total.
-You'll build two things:
 
- 1. A `kmalloc` that will allocate memory.  We will not have a `free`,
-    so `kmalloc` is trivial: have a pointer to where "free memory"
-    starts, and increment a counter based on the requested size.
 
- 2. Use `kmalloc` to allocate an array at least as big as the code.
+The basic algorithm:
 
- 3. In the interrupt handler, use the program counter value to index
+ 1. Use `kmalloc` to allocate an array at least as big as the code.
+    (We give you  a trivial `kmalloc` to use.)  Compute the code
+    size using the labels defined in `libpi/memmap` (we give C
+    definitions in `libpi/include/memmap.h`).
+
+ 2. In the interrupt handler, use the program counter value to index
     into this array and increment the associated count.  NOTE: its very
     easy to mess up sizes.  Each instruction is 4 bytes, so you'll divide
     the `pc` by 4.
 
- 4. Periodically you can print out the non-zero values in this array
+ 3. Periodically you can print out the non-zero values in this array
     along with the `pc` value they correspond to.  You should be able to
     look in the disassembled code (`gprof.list`) to see which instruction
     these correspond to.
 
-    NOTE: we do not want to profile our profiling code, so have a 
-    way to disable counts when doing this printing.
+    NOTE: We do not want to profile our profiling code, so have a way
+    to disable counts when doing this printing.
+
+ 4. Expected results are most counts should be in `PUT32`, `GET32`,
+    and various `uart` routines.  If you see a bunch of your `gprof`
+    program counters its b/c of a mistake in step 3.
 
 Congratulations!  You've built something that not many people in the
 Gates building know how to do.
 
-
 ----------------------------------------------------------------------------
-### Part 1: make a simple system call.
+### Part 2: make a simple system call.
 
 One we can get timer exceptions, we (perhaps surprisingly) have enough
 infrastructure to make trivial system calls.   Since we are already
 running in supervisor mode, these are not that useful as-is, but making
-them now will show how trivial they actually are.  In particular, look in
-`1-syscall` and write the needed code in:
+them now will show how trivial they actually are.  
 
-  1. `interrupts-asm.S`: you should be able to largely rip off the timer interrupt
-     code to forward system call.  NOTE: a huge difference is that we are
-     already running at supervisor level, so all registers are live.  You need
-     to handle this differently.
+You will implement two versions:
+  - `0-syscall.c`: this just calls system calls at our current process
+     level.  If you look in `libpi/staff-start.S` you see we start in
+     `SUPER_MODE`, which is the same level system calls run at.  This
+     means we already have a live stack pointer and you shouldn't use it.
 
-  2. `syscall.c`: finish the system call vector code (should just be a few lines).
-     You want to act on system call 1 and reject all other calls with a `-1`.
+  - `1-syscall.c`: this is a real system call.  You will implement the
+     code to switch to user level, and then handle two trivial system
+     calls.
+
+
+##### `0-syscall.c`
+
+Look in `2-syscall` and write the needed code in:
+
+  1. `interrupts-asm.S`: you should be able to largely rip off the
+     timer interrupt code to forward system call.  NOTE: a huge difference
+     is that we are already running at supervisor level, so all registers
+     are live.  You need to handle this differently.
+
+
+  2. `0-syscall.c`: finish the system call vector code (should just be
+     a few lines).  You want to act on system call 1 and reject all
+     other calls with a `-1`.
 
 This doesn't take much code, but you will have to think carefully about which
 registers need to be saved, etc.
+
+##### `1-syscall.c`
+
+This is a real system call.  You'll need to:
+  1. Make a new interrupt table that uses a different `swi` handler.
+     You should copy and paste the existing one and update any labels.
+     Admittedly this is mechanical work, but you need to think 
+     slightly.
+  2. Implement `run_user_code_asm`: this will switch to user mode,
+     set the stack pointer register to a given stack value, and
+     jump to a give code address.  
+
+     For hints: look at `notes/mode-bugs/bug4-asm.S` for how to roughly
+     do what you want at a different level.
+
+  3. Finish implementing `1-syscall.c:syscall_vector`.  This is
+     mainly just checking that you are at the right level.
+
+If this works, congratulations!  You have a working user-level
+system call.  This small amount of code is really all there is to it.
 
 ------------------------------------------------------------------------
 ### Part 3: use the vector register: 3-vector-base

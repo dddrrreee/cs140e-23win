@@ -1,0 +1,8 @@
+TRACE:checking that stack got switched
+TRACE:cpsr is at user level
+TRACE:about to call hello
+TRACE:success: spsr is at user level
+TRACE:syscall: hello world
+TRACE:about to call exit
+TRACE:success: spsr is at user level
+TRACE:exiting!
