@@ -267,7 +267,7 @@ What to do:
      base register file (which you will have to include) instead of
      copying the table itself.
 
-     As usual: Make sure to add that file to `put-your-src-here.mk`.
+     As usual: Make sure to add that file to `libpi/Makefile`.
 
   3. Make a copy of your `1-gpio-int` directory and convert it over to
      use the vector base method.
