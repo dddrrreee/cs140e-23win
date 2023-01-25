@@ -103,12 +103,14 @@ print:
 	# COMMON_OBJS = <$(COMMON_OBJS)>
 
 # double colon is so user can add transparently.
-libs::
+libs:: FORCE
 ifneq ($(LIB),libpi.a)
 ifneq ($(LIB),libpi-fp.a)
 	@make -C $(LPP)
 endif
 endif
+
+FORCE:
 
 ifneq ($(LIB),libpi.a)
 ifneq ($(LIB),libpi-fp.a)

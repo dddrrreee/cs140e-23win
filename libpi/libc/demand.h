@@ -58,6 +58,8 @@
 // used to catch if reached code that is "impossible"
 #define not_reached()   panic("NOTREACHED!\n");
 
+#define todo(msg) panic("TODO: %s\n", msg)
+
 /************************************************************
  * tracing macros used for testing.
  */

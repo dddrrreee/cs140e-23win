@@ -26,12 +26,12 @@ name:                                       \
 // we load a new stack pointer: keep an eye on this in future.
 #define asm_not_reached()           \
     mov sp, #INT_STACK_ADDR;    \
-    mov r0, pc;                 \
+    sub r0, pc, #4;                 \
     b asm_not_reached_helper
 
 #define asm_not_implemented()       \
     mov sp, #INT_STACK_ADDR;    \
-    mov r0, pc;                 \
+    sub r0, pc, #4;                 \
     b asm_not_implemented_helper
 
 #endif

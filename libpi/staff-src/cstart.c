@@ -1,13 +1,14 @@
 #include "rpi.h"
 #include "cycle-count.h"
+#include "memmap.h"
 
 void _cstart() {
-    extern int __bss_start__, __bss_end__;
+    // extern int __bss_start__, __bss_end__;
 	void notmain();
 
     // zero out the bss
-    int* bss = &__bss_start__;
-    int* bss_end = &__bss_end__;
+    uint32_t * bss = __bss_start__;
+    uint32_t * bss_end = __bss_end__;
  
     while( bss < bss_end )
         *bss++ = 0;
