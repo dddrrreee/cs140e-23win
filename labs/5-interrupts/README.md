@@ -26,10 +26,7 @@ Big picture:
       to write, especially as compared to on a modern OS.
 
    3. You'll then implement system calls --- these work using exceptions
-      which possibly confusingly use the same interrupt methods.
-
-   4. Finally, you'll replace the crude method of dispatching
-      handling interrupts with a faster, more flexible approach.
+      which possibly confusingly use the same interrupt methods. 
 
 Interrupts confuse people.  Often they get implemented in a complicated
 way, or get discussed so abstractly it's hard to understand them.
@@ -51,21 +48,7 @@ Turn-in:
      run you should see most of the time being spent in `PUT32`, `GET32`
      or the `uart` routines.
 
-  3. Replace the interrupt handling code 
-
- measure the overhead?
-
-  2. Add code so that swi works.
-  3. Add code for breakponts: print out the breakpoint and skip it.
-  2. Build a simple system call: show your `1-syscall` works.
-  4. switch all the way to user level.
-  5. switch between two different routines.
-
-  3. Use vector-base to setup interrupts.  This is much better.
-  4. Use dynamic code generation to rewrite the vector base table.
-
-   use a queue to push stuff between interrupt and 
-
+  3. You can switch to User level, run a system call, and resume.
 
 -----------------------------------------------------------------
 #### Background: Why interrupts
@@ -154,6 +137,46 @@ Look through the code in `timer-int-ex`, compile it, run it.  Make sure
 you can answer the questions in the comments.  We'll walk through it
 in class.
 
+-----------------------------------------------------------------------------
+### Part 1: Using interrupts to build a profiler.
+
+The nice thing about doing everything from scratch is that simple things
+are simple to do.  We don't have to fight a big OS that can't get out
+of its own way.
+
+Today's lab is a good example: implementing a statistical profiler.
+The basic intuition:
+   1. Setup timer interrupts so that you get them fairly often.
+   2. At each interrupt, get the address of the interrupted program
+      counter and increment a counter associated with it.  
+   3. Over time, these counts will build up: the locations with the
+      highest count will be where your code spends most of its time.
+
+The implementation will take about 30-40 lines of code in total.
+You'll build two things:
+
+ 1. A `kmalloc` that will allocate memory.  We will not have a `free`,
+    so `kmalloc` is trivial: have a pointer to where "free memory"
+    starts, and increment a counter based on the requested size.
+
+ 2. Use `kmalloc` to allocate an array at least as big as the code.
+
+ 3. In the interrupt handler, use the program counter value to index
+    into this array and increment the associated count.  NOTE: its very
+    easy to mess up sizes.  Each instruction is 4 bytes, so you'll divide
+    the `pc` by 4.
+
+ 4. Periodically you can print out the non-zero values in this array
+    along with the `pc` value they correspond to.  You should be able to
+    look in the disassembled code (`gprof.list`) to see which instruction
+    these correspond to.
+
+    NOTE: we do not want to profile our profiling code, so have a 
+    way to disable counts when doing this printing.
+
+Congratulations!  You've built something that not many people in the
+Gates building know how to do.
+
 
 ----------------------------------------------------------------------------
 ### Part 1: make a simple system call.
@@ -211,33 +234,6 @@ What to do:
      from your save-restore in the interrupt handler.   If should be
      the case that if you "clobber" a callee-saved register you do
      not want to skip, `gcc` will not save it.
-
------------------------------------------------------------------------------
-### Part 2: Using interrupts to build a profiler.
-
-The nice thing about doing everything from scratch is that simple things are simple
-to do.  We don't have to fight a big OS that can't get out of its own way.   
-
-Today's lab is a good example: implementing a statistical profiler.  The basic intuition:
-   1. Setup timer interrupts so that we get them fairly often.
-   2. At each interrupt, record which location in the code we interrupted.  (I.e., where
-      the program counter is.)
-   3. Over time, we will interrupt where your code spends most of its time more often.
-
-The implementation will take about 30-40 lines of code in total.  You'll build two things:
- 1. A `kmalloc` that will allocate memory.  We will not have a `free`, so `kmalloc` is
-   trivial: have a pointer to where "free memory" starts, and increment a counter based
-   on the requested size.
- 2. Use `kmalloc` to allocate an array at least as big as the code.
- 3. In the interrupt handler, use the program counter value to index into this array
-    and increment the associated count.  NOTE: its very easy to mess up sizes.  Each
-    instruction is 4 bytes, so you'll divide the `pc` by 4.  
- 4. Periodically you can print out the non-zero values in this array along with the 
-   `pc` value they correspond to.  You should be able to look in the disassembled code
-   (`gprof.list`) to see which instruction these correspond to.
-
-Congratulations!  You've built something that not many people in the Gates building
-know how to do.
 
 -----------------------------------------------------------------------------
 ### lab extensions:
