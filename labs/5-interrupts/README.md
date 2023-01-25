@@ -240,43 +240,6 @@ This is a real system call.  You'll need to:
 If this works, congratulations!  You have a working user-level
 system call.  This small amount of code is really all there is to it.
 
-------------------------------------------------------------------------
-### Part 3: use the vector register: 3-vector-base
-
-For this you'll do some simple tricks to speed up your interrupt
-code and make it more flexble:
-
-You'll write the inline assembly to set the vector base.  See:
-  - 3-121 in `../../docs/arm1176.pdf`
-
-What to do:
-  - You only have to modify `1-vector-base/vector-base.h`
-  - There are two tests (you have to modify the makefile to run each).
-  - When the tests pass, move the `vector-base.h` file to `libpi/src` and make
-    sure they still work.
-
-  - The test `0-test-vector-base.c` should should show a speedup and
-    complete correctly.
-
-  2. Make your own: `libpi/src/int-init-reg.c` that implements the
-     routine:
-
-        void int_init_reg(void *int_vector_addr)
-
-     Which should be a re-implementation of `int_init` using the vector
-     base register file (which you will have to include) instead of
-     copying the table itself.
-
-     As usual: Make sure to add that file to `put-your-src-here.mk`.
-
-  3. Make a copy of your `1-gpio-int` directory and convert it over to
-     use the vector base method.
-
-  4. Use the prelab code to check which registers you can remove
-     from your save-restore in the interrupt handler.   If should be
-     the case that if you "clobber" a callee-saved register you do
-     not want to skip, `gcc` will not save it.
-
 -----------------------------------------------------------------------------
 ### lab extensions:
 
