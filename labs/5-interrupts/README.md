@@ -39,16 +39,18 @@ pretty firm grasp.
 
 Turn-in:
 
-  1. `timer-int`: give the shortest time between timer interrupts you can
-     make.  Make two small edits to the `timer-int-ex` register save and
-     restore that make the code crash in different locations.  This will
-     help get an intuition for how things can go wrong.
+  1. `0-timer-int`: give the shortest time between timer interrupts
+     you can make.  Make two small edits to the `0-timer-int` register
+     save and restore code (in `interrupts-asm.S`) that make the code
+     crash in different locations.  This will help get an intuition for
+     how things can go wrong.
 
-  2. Implement `gprof` (in the `2-gprof` subdirectory).   When you
+  2. `1-gprof`: Implement `gprof.c`.   When you
      run you should see most of the time being spent in `PUT32`, `GET32`
      or the `uart` routines.
 
-  3. You can switch to User level, run a system call, and resume.
+  3. `2-syscall`: `make check` passes.   In particular, for `1-syscall.c`
+      You can switch to User level, run a system call, and resume.
 
 -----------------------------------------------------------------
 #### Background: Why interrupts
