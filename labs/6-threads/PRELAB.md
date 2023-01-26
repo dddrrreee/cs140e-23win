@@ -1,5 +1,7 @@
 ## Prelab for threads
 
+Gradescope: [Prelab 6](https://www.gradescope.com/courses/488143/assignments/2609703/)
+
 ***[This will be added to over the w/e]***
 
 In this lab, you'll write a simple non-preemptive thread package.
