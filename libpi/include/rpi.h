@@ -165,6 +165,10 @@ void nop(void);
 // entry point definition
 void notmain(void);
 
+// provide your own implementation if you want to 
+// do something during a busy wait.
+void rpi_wait(void);
+
 /*********************************************************
  * some gcc helpers.
  */
