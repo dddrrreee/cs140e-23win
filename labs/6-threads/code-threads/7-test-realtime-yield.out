@@ -1,0 +1,6 @@
+TRACE:rpi_fork:rpi_fork: tid=1, code=
+TRACE:rpi_fork:rpi_fork: tid=2, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:DONE

@@ -1,0 +1,44 @@
+TRACE:rpi_fork:rpi_fork: tid=1, code=
+TRACE:rpi_fork:rpi_fork: tid=2, code=
+TRACE:rpi_fork:rpi_fork: tid=3, code=
+TRACE:rpi_fork:rpi_fork: tid=4, code=
+TRACE:rpi_fork:rpi_fork: tid=5, code=
+TRACE:rpi_fork:rpi_fork: tid=6, code=
+TRACE:rpi_fork:rpi_fork: tid=7, code=
+TRACE:rpi_fork:rpi_fork: tid=8, code=
+TRACE:rpi_fork:rpi_fork: tid=9, code=
+TRACE:rpi_fork:rpi_fork: tid=10, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:trivial:thread 1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:trivial:thread 2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=3
+TRACE:trivial:thread 3 yielding
+TRACE:rpi_yield:switching from tid=3 to tid=4
+TRACE:trivial:thread 4 yielding
+TRACE:rpi_yield:switching from tid=4 to tid=5
+TRACE:trivial:thread 5 yielding
+TRACE:rpi_yield:switching from tid=5 to tid=6
+TRACE:trivial:thread 6 yielding
+TRACE:rpi_yield:switching from tid=6 to tid=7
+TRACE:trivial:thread 7 yielding
+TRACE:rpi_yield:switching from tid=7 to tid=8
+TRACE:trivial:thread 8 yielding
+TRACE:rpi_yield:switching from tid=8 to tid=9
+TRACE:trivial:thread 9 yielding
+TRACE:rpi_yield:switching from tid=9 to tid=10
+TRACE:trivial:thread 10 yielding
+TRACE:rpi_yield:switching from tid=10 to tid=1
+TRACE:trivial:thread 1 exiting
+TRACE:trivial:thread 2 exiting
+TRACE:trivial:thread 3 exiting
+TRACE:trivial:thread 4 exiting
+TRACE:trivial:thread 5 exiting
+TRACE:trivial:thread 6 exiting
+TRACE:trivial:thread 7 exiting
+TRACE:trivial:thread 8 exiting
+TRACE:trivial:thread 9 exiting
+TRACE:trivial:thread 10 exiting
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:SUCCESS

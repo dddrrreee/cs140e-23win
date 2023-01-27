@@ -1,0 +1,99 @@
+TRACE:rpi_fork:rpi_fork: tid=1, code=
+TRACE:rpi_fork:rpi_fork: tid=2, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:pingpong:tid=1, arg=
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2, arg=
+TRACE:pingpong:tid=2: got=1, sending=2
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=2, sending=3
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=3, sending=4
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=4, sending=5
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=5, sending=6
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=6, sending=7
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=7, sending=8
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=8, sending=9
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=9, sending=10
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=10, sending=11
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=11, sending=12
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=12, sending=13
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=13, sending=14
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=14, sending=15
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=15, sending=16
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=16, sending=17
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=17, sending=18
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=18, sending=19
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=19, sending=20
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=20, sending=21
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=21, sending=22
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=22, sending=23
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=23, sending=24
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=24, sending=25
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=25, sending=26
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=26, sending=27
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=27, sending=28
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=28, sending=29
+TRACE:pingpong:tid=1 yielding
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:pingpong:tid=2: got=29, sending=30
+TRACE:pingpong:tid=2 yielding
+TRACE:rpi_yield:switching from tid=2 to tid=1
+TRACE:pingpong:tid=1: got=30, sending=31
+TRACE:pingpong:tid=2: got=31, sending=32
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:iter = 31, n=30

@@ -1,0 +1,24 @@
+TRACE:rpi_fork:rpi_fork: tid=1, code=
+TRACE:rpi_fork:rpi_fork: tid=2, code=
+TRACE:rpi_fork:rpi_fork: tid=3, code=
+TRACE:rpi_fork:rpi_fork: tid=4, code=
+TRACE:rpi_fork:rpi_fork: tid=5, code=
+TRACE:rpi_fork:rpi_fork: tid=6, code=
+TRACE:rpi_fork:rpi_fork: tid=7, code=
+TRACE:rpi_fork:rpi_fork: tid=8, code=
+TRACE:rpi_fork:rpi_fork: tid=9, code=
+TRACE:rpi_fork:rpi_fork: tid=10, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:trivial:trivial thread: arg=0
+TRACE:trivial:trivial thread: arg=1
+TRACE:trivial:trivial thread: arg=2
+TRACE:trivial:trivial thread: arg=3
+TRACE:trivial:trivial thread: arg=4
+TRACE:trivial:trivial thread: arg=5
+TRACE:trivial:trivial thread: arg=6
+TRACE:trivial:trivial thread: arg=7
+TRACE:trivial:trivial thread: arg=8
+TRACE:trivial:trivial thread: arg=9
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:SUCCESS

@@ -1,0 +1,16 @@
+TRACE: expected: reg r0 is caller
+TRACE: expected: reg r1 is caller
+TRACE: expected: reg r2 is caller
+TRACE: expected: reg r3 is caller
+TRACE: expected: reg r12 is caller
+TRACE:check_cswitch_ignore_regs:ignore regs passed
+TRACE: expected: reg r4 is callee
+TRACE: expected: reg r4 is callee
+TRACE: expected: reg r5 is callee
+TRACE: expected: reg r6 is callee
+TRACE: expected: reg r7 is callee
+TRACE: expected: reg r8 is callee
+TRACE: expected: reg r9 is callee
+TRACE: expected: reg r10 is callee
+TRACE:check_cswitch_save_regs:saved regs passed
+TRACE:notmain:SUCCESS

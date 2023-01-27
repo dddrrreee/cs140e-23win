@@ -1,0 +1,3 @@
+TRACE:after_push:sp_after=
+TRACE:after_push:stack grows down
+TRACE:after_push:wrote to stack after modifying sp

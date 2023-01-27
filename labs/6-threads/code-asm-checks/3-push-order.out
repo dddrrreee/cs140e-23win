@@ -1,0 +1,11 @@
+TRACE:notmain:about to check push order
+TRACE:check_push_order:pass: r4 = 4 (stored in ret)
+TRACE:check_push_order:pass: r5 = 5 (stored in ret)
+TRACE:check_push_order:pass: r6 = 6 (stored in ret)
+TRACE:check_push_order:pass: r7 = 7 (stored in ret)
+TRACE:check_push_order:pass: r8 = 8 (stored in ret)
+TRACE:check_push_order:pass: r9 = 9 (stored in ret)
+TRACE:check_push_order:pass: r10 = 10 (stored in ret)
+TRACE:check_push_order:pass: r11 = 11 (stored in ret)
+TRACE:check_push_order:pass: r12 = 12 (stored in ret)
+TRACE:notmain:SUCCESS
