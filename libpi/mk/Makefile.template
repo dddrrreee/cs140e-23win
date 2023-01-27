@@ -26,7 +26,6 @@ endif
 #endif
 #export LIB
 
-
 # export any makefile var that is defined.  [if we blindly export 
 # cannot check what is defined in sub-make]
 ifdef TTYUSB
@@ -64,10 +63,11 @@ COMMON_OBJS := $(COMMON_OBJS) $(COMMON_SRC:.c=.o)
 COMMON_OBJS := $(COMMON_OBJS:.S=.o)
 COMMON_OBJS := $(COMMON_OBJS:.s=.o)
 
-TEST_OBJS   := $(patsubst %.c, %.o, $(PROGS))
-TEST_LIST   := $(patsubst %.c, %.list, $(PROGS))
-TEST_ELF   := $(patsubst %.c, %.elf, $(PROGS))
-TEST_DEP   := $(patsubst %.c, %.d, $(PROGS))
+TEST_OBJS   := $(PROGS:.c=.o)
+TEST_LIST   := $(PROGS:.c=.list)
+TEST_ELF   := $(PROGS:.c=.elf)
+TEST_DEP   := $(PROGS:.c=.d)
+TEST_TMP   := $(PROGS:.c=.test) $(PROGS:.c=.raw)
 
 # enable "make emit"
 ifdef STAFF
@@ -149,7 +149,7 @@ endif
 
 ifneq ($(CAN_EMIT), 0)
 emit: libs $(DEPS) $(TEST_PROGS)
-	make -e -f $(MK_CHK) emit "TESTS=$(TEST_PROGS)"
+	@make -e -f $(MK_CHK) emit "TESTS=$(TEST_PROGS)"
 endif
 
 run: libs $(DEPS) $(TEST_PROGS)
@@ -165,9 +165,12 @@ tags:
 
 # note: double :: is so user can add transparently
 clean::
-	rm -rf $(NAME) *~ tags $(COMMON_OBJS) *.bin *.elf *.list *.img Makefile.bak  *.d  $(TEST_OBJS)  $(TEST_LIST) $(TEST_ELF) $(TEST_DEP) $(TEST_PROGS)
+	rm -rf $(NAME) *~ tags $(COMMON_OBJS) *.bin *.elf *.list *.img Makefile.bak  *.d  $(TEST_OBJS) *.raw *.test
+
+#@rm -f $(TEST_TMP)
 
 .PHONY: libs all tags clean run update
+
 
 # stop make from deleting these suffix'd files.
 .PRECIOUS: %.list %.elf %.o %.d

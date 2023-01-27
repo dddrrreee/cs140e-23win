@@ -69,7 +69,7 @@
 
 // used for tracing: just emit a TRACE: prefix so can grep
 #define trace(args...) \
-    do { printk("TRACE:"); printk(args); } while(0)
+    do { printk("TRACE:%s:", __FUNCTION__); printk(args); } while(0)
 
 #define trace_notreached() \
     trace_panic("should not reach\n")

@@ -1,15 +1,23 @@
 #include "rpi.h"
 
-void asm_not_reached_helper(uint32_t pc) {
-    output("ERROR: pc=%x: reached supposedly unreachable assembly code\n", pc);
-    output("\tExamine the .list file to see what happened!\n");
+void asm_not_reached_helper(uint32_t pc, const char *msg) {
+    output("ERROR:%s: reached supposedly unreachable ASM code\n");
+    output("\tUse pc=%x and .list file to see what happened!\n", pc);
     // should do an error.
     clean_reboot();
 }
 
-void asm_not_implemented_helper(uint32_t pc) {
-    output("ERROR: pc=%x: reached unimplemented assembly code\n", pc);
-    output("\tExamine the .list file to see what happened!\n");
+void asm_not_implemented_helper(uint32_t pc, const char *msg) {
+    output("ERROR:%s: you must implement this ASM code\n");
+    output("\tUse pc=%x and .list file to see what happened!\n", pc);
+    // should do an error.
+    clean_reboot();
+}
+
+// the asm code does some hacks to pass in the file and lineno
+void asm_todo_helper(uint32_t pc, const char *todo_msg) {
+    output("ERROR:TODO:%s: must implement this ASM code for lab\n", todo_msg);
+    output("\tUse pc=%x and .list file to see what happened!\n", pc);
     // should do an error.
     clean_reboot();
 }

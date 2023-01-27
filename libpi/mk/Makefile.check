@@ -21,7 +21,10 @@ MAKEFLAGS += --no-print-directory
 GREP_STR ?= 'TRACE:\|ERROR:\|PANIC:' 
 BOOT_CMD := $(BOOTLOADER) $(TTYUSB)
 
-.SUFFIXES: .out .run .check 
+# strip all bracketed tags in output messages
+STRIP_BRACKETS := 's/\[.*\]//'
+
+.SUFFIXES: .out .run .check .raw
 
 # this will be passed in by the caller.
 # TESTS      := $(patsubst %.c, %, $(TESTS_SRC)) 
@@ -52,15 +55,23 @@ all: $(TEST_RUN) # $(TEST_CHECK)
 # we pull everything into .out so that it's easier to debug.
 %.out: %.bin
 	@echo -n "generating <$*.out> and <$*.raw>: ";
-	$(BOOT_CMD) ./$< >  $*.raw 2>&1
-	@grep -v simple_boot $*.raw | grep $(GREP_STR) > $*.out
+	@$(BOOT_CMD) ./$< >  $*.raw 2>&1
+	@grep -v simple_boot $*.raw | sed $(STRIP_BRACKETS) | grep $(GREP_STR) > $*.out
 	@echo " success!";
 
 %.check: %.bin
-	@echo -n "checking <$*>: ";
-	@$(BOOT_CMD) ./$< 2>&1 > /dev/null | grep -v simple_boot | grep  $(GREP_STR) > $*.test
-	@diff ./$*.out ./$*.test || (echo "mismatch in reference ($*.out) and test ($*.test): compare them (and $*.raw) directly to see why"; exit 1)
-	@echo " Success: <$*.test> matched reference <$*.out>!";
+	@echo    "-------------------------------------------------";
+	@echo    "checking <$*>: ";
+	@echo    "  about to emit new <$*.test>:"
+	@echo    "     $(BOOT_CMD) ./$< > $*.test"
+	@$(BOOT_CMD) ./$< 2>&1 > /dev/null | grep -v simple_boot | sed $(STRIP_BRACKETS) | grep  $(GREP_STR) > $*.test
+	@echo -n "     new <$*.test> lines = "
+	@cat $*.test | wc -l 
+	@echo -n "     old ref <$*.out>: lines=";
+	@cat $*.out | wc -l 
+	@echo    "  about to compare new <$*.test> to old <$*.out>: ";
+	@diff ./$*.out ./$*.test || (echo "mismatch in reference ($*.out) and test ($*.test): compare them directly to see why"; exit 1)
+	@echo    "  Success!  Matched!";
 	@rm ./$*.test
 
 # we could just cksum all the .outs, but this lets us be more targeted.

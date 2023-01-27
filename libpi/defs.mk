@@ -5,6 +5,7 @@ ifndef CS140E_2023_PATH
 $(error CS140E_2023_PATH is not set: this should contain the absolute path to where this directory is.  Define it in your shell's initialiation.  For example, .tcshrc for tcsh or .bashrc for bash)
 endif
 
+# OPT_LEVEL = -O3
 ARM = arm-none-eabi
 CC = $(ARM)-gcc
 LD  = $(ARM)-ld

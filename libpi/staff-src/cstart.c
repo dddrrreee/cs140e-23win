@@ -22,5 +22,3 @@ void _cstart() {
     notmain(); 
 	clean_reboot();
 }
-
-
