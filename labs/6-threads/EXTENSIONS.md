@@ -21,3 +21,5 @@ in the class:
   time = short.  Next year!)
 
    - See how many PWM threads you can run in `4-yield-test`.
+
+   - One cute simple trick is we can emulate preemptive threading by yielding on every function exit. Do this. See 0-tracing-fn for an example for how to run a specific function on every code entry.
