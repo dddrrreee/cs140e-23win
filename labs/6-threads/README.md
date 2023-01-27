@@ -240,8 +240,10 @@ Given your have done state saving both in the interrupt labs and in Part 1
 above you should be able to implement `rpi_cswitch` without too much fuss:
 
   - Put your `cswitch` code into `rpi_cswitch` in `thread-asm.S`
-    This will be based on your code from `2-write-regs-asm.S` except
-    that you will add the code to restore the registers as well.
+    This will be based on your code 
+    `code-asm-checks/asm-checks.S:write_regs_to_stack` 
+    (from part 1),
+    except that you will add the code to restore the registers as well.
     For today: only save the callee saved registers.  Since we are doing
     non-pre-emptive threads, the compiler will have saved any live caller
     registers when calling `rpi_yield`.
