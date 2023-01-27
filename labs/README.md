@@ -1,19 +1,14 @@
 ## The labs
 
-***We are doing a big re-organization compared to last years, so the
-labs below are tentative.  There will likely be some fussing about.
-Take them as a suggested roadmap***
-
 Below describes where we're going and why.   The labs themselves have a
 lot more prose on each topic.  There is a pointer to where we currently
 are: the labs after this point can still see significant revisions.
 
 I would strongly recommend reading the labs carefully before starting.
 And then, once you finish, going back and reading them for things you
-missed the first time, and also looking closely at your code --- for
-every line, you should understand why we needed it or what it does.
-And on second reading, you'll likely find some lines that we could have
-cut out!
+missed the first time, and also looking closely at your code --- for every
+line, you should understand why we needed it or what it does.  And on
+second reading, you'll likely find some lines that we could have cut out!
 
 ##### Notes
 
@@ -24,19 +19,16 @@ have sat for a bit so you get a deeper view.  Note summary (so far):
 
   - [observability and compilation](../notes/observability/README.md)
   - [makefiles](../notes/makefiles/README.md)   
-  - [crash course in writing device code](../notes/devices/DEVICES.md) and
-    [gpio](../notes/devices/GPIO.md).
-  - (***NEW***) 
-    [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md) 
-  - (***NEW***)
-    [caller/callee registers](../notes/caller-callee/README.md).
-  - (***NEW***)
-    [caller/callee registers](../notes/caller-callee/README.md).
-  - (***NEW***)[example mode mistakes](../notes/mode-bugs/README.md)
-  - (***NEW***)[using gcc to figure out assembly](../notes/using-gcc-for-asm/README.md)
+  - [crash course in writing device code](../notes/devices/DEVICES.md) 
+    and [gpio](../notes/devices/GPIO.md).
+  - [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md) 
+  - [caller/callee registers](../notes/caller-callee/README.md).
+  - [caller/callee registers](../notes/caller-callee/README.md).
+  - [example mode mistakes](../notes/mode-bugs/README.md)
+  - [using gcc to figure out assembly](../notes/using-gcc-for-asm/README.md)
 
 ---------------------------------------------------------------------
-### Part 0: non-pi hacking
+### 0: non-pi hacking
 
 Unlike all subsequent labs, our first two don't use hardware.  They should
 give a good feel for whether the class works for you without requiring
@@ -67,7 +59,7 @@ a hardware investment.
     ***READING***: `2-trusting-trust/trusting-trust.pdf`.
 
 ---------------------------------------------------------------------
-### Going down to metal (part 1)
+### 1: Going down to metal (part I)
 
 The first few labs will writing the low-level code needed to run the
 r/pi and using modern techniques to validate it.  Doing so will remove
@@ -86,9 +78,8 @@ the pi and Unix side will be written by you:
     ***READING***: 
        - Note: [GPIO](../notes/devices/GPIO.md).
        - Note: [crash course in writing device code](../notes/devices/DEVICES.md).
-       - pages 4--7 and 91---96 of the broadcom datasheet (`docs/BCM2835-ARM-Peripherals.annot.PDF`)
-
-
+       - pages 4--7 and 91---96 of the broadcom 
+         datasheet (`docs/BCM2835-ARM-Peripherals.annot.PDF`)
 
   - [4-cross-check](4-cross-checking): you will use read-write logging
     of all loads and stores to device memory to verify that your GPIO
@@ -102,7 +93,7 @@ the pi and Unix side will be written by you:
     (or new) tricks for checking code correctness.
 
 ---------------------------------------------------------------------
-### Execution: threads, interrupts, exceptions (part 1)
+### 2. Execution: threads, interrupts, exceptions (part I)
 
 Execution comes in many forms.  It can be a tricky topic both
 because of its thickets of low-level, hardware specific details and
@@ -115,23 +106,23 @@ using these that work well at finding bugs in novel ways.
 After four runs at the architecture manual, you will have a new
 comfort with using it.
 
-***We are here*** ===>
-
   - [5-interupts](5-interrupts/): 
     you will walk through a simple, self-contained implementation of
     pi interrupts (for timer-interrupts), kicking each line until you
     understand what, how, why.  You will use these to then implement
     a simple system call and a version of `gprof` (Unix statistical
-    profiler) in about 30 lines.
+    profiler) in about 30 lines.  Finally, you'll write a user-level 
+    system call implementation (both the code two switch from privileged
+    to user mode and the code to handle system calls).
 
     Perhaps the thing I love most about this course is that because we
     write all the code ourselves, we aren't constantly fighting some
     large, lumbering OS that can't get out of its own way.  As a result,
     simple ideas only require simple code.  This lab is a great example:
-    a simple idea, about twenty minutes of code, an interesting result.
-    If we did on Unix could spend weeks or more fighting various corner
-    cases and have a result that is much much much slower and, worse,
-    in terms of insight.
+    a simple idea, 30 lines of code, an interesting result.  If we did
+    on Unix could spend weeks or more fighting various corner cases and
+    have a result that is much much much slower and, worse, in terms
+    of insight.
 
     Incomplete reading list: 
       - [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md) 
@@ -145,14 +136,15 @@ comfort with using it.
         document in our main `doc` directory.  Discusses where and how
         interrupts are delivered.
 
-
-  - ***threads***: we build a simple, but functional
+  - [6-threads](6-threads):  we build a simple, but functional
     threads package.  You will write the code for non-preemptive context
     switching:  Most people don't understand such things so, once again,
-    you'll leave lab knowing something many do not.
+    you'll leave lab knowing something many do not.   This will give you
+    a second view of execution (and some depth perception of the topic)
+    as well as a more fluent handle on assembly code.
 
 ---------------------------------------------------------------------
-### Going all the way to metal (Part 2)
+### 3. Going down to metal (Part II)
 
 We break up the execution labs by building the rest of the low
 level code you've been using ---the bootloader and the UART
@@ -163,6 +155,8 @@ you learn it better.   Our lab theory: we break up hard, dependent
 series of labs with a less tricky topic so you can finish and get a 
 bit of a rest.
   
+***We are here*** ===>
+
   - ***bootloader***: two of the biggest pieces of code
     we've given you have been the Unix-side and pi-side bootloader code
     (`pi-install` and `bootloader.bin` respectively).  So this lab has
@@ -182,9 +176,8 @@ bit of a rest.
     on the pi is written by you.  You will use the cross checking code
     from lab 2 to verify your implementation matches everyone else's.
 
-
 ---------------------------------------------------------------------
-### Execution: interrupts, exceptions, processes (part 2)
+### 4. Execution: interrupts, exceptions, processes (part 2)
 
   - ***device-interrupts***:
     if you keep doing this kind of work the single most common fancy
