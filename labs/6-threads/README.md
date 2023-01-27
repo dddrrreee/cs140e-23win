@@ -49,17 +49,17 @@ lab, such bugs are hard to debug.  So before you write a bunch of code:
 
 #### Before you start: make sure everything works.
 
-Run `make checkoff` in the `code/` directory: it should pass.
+Run `make checkoff` in the `code-threads/` directory: it should pass.
 
-  - By default the `code/Makefile` will use our staff code in libpi.
-  - If you run `make checkoff` in `code` all the tests should pass.
+  - By default the `code-threads/Makefile` will use our staff code in libpi.
+  - If you run `make checkoff` in `code-threads` all the tests should pass.
   - Before you start implementing, comment out `USE_STAFF=1` in
-    `code/Makefile` so that the Makefile will use your code.
+    `code-threads/Makefile` so that the Makefile will use your code.
     You can flip back and forth to test.
 
 #### Checkoff:
 
-   - You pass `make checkoff` in the `code/` directory.
+   - You pass `make checkoff` in the `code-threads/` directory.
    - Various extensions are in: [EXTENSIONS](./EXTENSIONS.md)
 
 ----------------------------------------------------------------------
