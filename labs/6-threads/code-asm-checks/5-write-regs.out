@@ -1,0 +1,10 @@
+TRACE:notmain:about to write known register values to the stack
+TRACE:after_writing_regs:sp=4, expect=4
+TRACE:after_writing_regs:sp=5, expect=5
+TRACE:after_writing_regs:sp=6, expect=6
+TRACE:after_writing_regs:sp=7, expect=7
+TRACE:after_writing_regs:sp=8, expect=8
+TRACE:after_writing_regs:sp=9, expect=9
+TRACE:after_writing_regs:sp=10, expect=10
+TRACE:after_writing_regs:sp=11, expect=11
+TRACE:after_writing_regs:sp=14, expect=14
