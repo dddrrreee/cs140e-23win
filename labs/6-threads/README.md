@@ -59,7 +59,7 @@ Run `make checkoff` in the `code-threads/` directory: it should pass.
 
 #### Checkoff:
 
-   - You pass `make checkoff` in the `code/` directory.
+   - You pass `make checkoff` in the `code-threads/` directory.
    - Various extensions are in: [EXTENSIONS](./EXTENSIONS.md)
 
 ----------------------------------------------------------------------
