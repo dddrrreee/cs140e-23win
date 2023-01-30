@@ -173,7 +173,7 @@ driver.
     more-likely-to-be-correct protocol.  It has the advantage that it
     will later make it easier to boot over the network.
 
-  - ***uart***: the last key bit of code we've given you is for
+  - [8-uart](8-uart): the last key bit of code we've given you is for
     controlling the UART (`uart.o`); so this lab has you write your own
     and remove ours.
 
@@ -181,6 +181,14 @@ driver.
     --- using only the Broadcom document.  At this point, all key code
     on the pi is written by you.  You will use the cross checking code
     from lab 2 to verify your implementation matches everyone else's.
+
+    ***READINGS***: 
+      - [miniUART](../../notes/miniUART.md) cheat sheet.
+      - Broadcom document:  Sections 1, 2, 2.1, 2.2, 6.2 (p 102).  Main
+        reading is pages 8---19.
+      - [errata](https://elinux.org/BCM2835_datasheet_errata) has the
+        usual errata.
+      - [UART](https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter)
 
 ---------------------------------------------------------------------
 ### 4. Execution: interrupts, exceptions, processes (part 2)
