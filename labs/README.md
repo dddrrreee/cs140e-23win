@@ -4,11 +4,21 @@ Below describes where we're going and why.   The labs themselves have a
 lot more prose on each topic.  There is a pointer to where we currently
 are: the labs after this point can still see significant revisions.
 
-I would strongly recommend reading the labs carefully before starting.
-And then, once you finish, going back and reading them for things you
-missed the first time, and also looking closely at your code --- for every
-line, you should understand why we needed it or what it does.  And on
-second reading, you'll likely find some lines that we could have cut out!
+A note on lab structure:
+
+  - The labs are deliberately *not* organized as a
+    self-contained set of blocks --- we don't do all the labs for topic A,
+    then all the labs for topic B, etc.  Instead, we break up each topic
+    into pieces and do some of A, then some of B, then circle back to A,
+    then circle back to B, etc.
+
+  - This approach is based on newer methods from learning
+    theory ("spaced repetition") that (hopefully) make the topics sink
+    in deeper.  They are also used to break up hard topics with easier
+    (but not easy) "breather" labs to give more time to get stuff under
+    control and consolidate.
+
+  - More details: [why are labs all over the place](OUR-LEARNING-THEORY.md)
 
 ##### Notes
 
@@ -150,14 +160,10 @@ We break up the execution labs by building the rest of the low
 level code you've been using ---the bootloader and the UART
 driver.
 
-Learning theory: if you come back to a topic rather than do all-at-once
-you learn it better.   Our lab theory: we break up hard, dependent
-series of labs with a less tricky topic so you can finish and get a 
-bit of a rest.
   
 ***We are here*** ===>
 
-  - ***bootloader***: two of the biggest pieces of code
+  - [7-bootloader](7-bootloader): two of the biggest pieces of code
     we've given you have been the Unix-side and pi-side bootloader code
     (`pi-install` and `bootloader.bin` respectively).  So this lab has
     you implement your own and get rid of ours.

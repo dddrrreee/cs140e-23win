@@ -1,5 +1,10 @@
 # Makefile to build or clean all labs.
-SUBDIRS= 1-compile 2-trusting-trust
+# ugh.  we didn't make it so this works.
+SUBDIRS = 1-compile 
+#SUBDIRS += 3-gpio
+#SUBDIRS += 4-cross-checking
+SUBDIRS += 5-interrupts
+SUBDIRS += 6-threads
 
 # 0-trusting-trust 0-blink 1-gpio 2-cross-check 3-bootloader 4-uart 5-replay 6-interrupts 7-device-interrupts 8-threads 9-debug-hardware
 
