@@ -33,12 +33,15 @@ define a `PI_PATH`  variable with a colon-seperated list of all the
 different locations to look in for a binary.
 
 Put your code in `libunix/resolve-pi-path.c:find_pi_binary`.
+  - `extension-find-pi/` has a simple test driver.
+
 The code:
-  - use `getenv` to get any value for it.
-  - scan these locations for the given binary.
+  - use `getenv(PI_PATH)` to get any value associated with `PI_PATH`.
+  - scan these `:` seperated locations for the given binary.
   - return the full path if you find it.
  
-This is useful for the rest of the quarter.
+This routie is useful for the rest of the quarter.  Will save you a
+bunch of time `cd`-ing around.
 
 You can of course do your own hacks.  One potentially useful one is to 
 go up one level, and search all subdirectories for a binary.  
