@@ -29,7 +29,7 @@ The lab has two parts:
   2. [Write the pi side bootloader](#step-2-write-the-pi-side-bootloader),
      install it on your r/pi's microSD and make sure both work together.
 
-#### Checkoff
+#### Standard checkoff
 
 The standard checkoff for this lab is pretty simple: bootload some
 programs and check they work the same using your bootloader as they do
@@ -47,7 +47,7 @@ More specifically:
 
   - [EXTENSIONS](./EXTENSIONS.md) gives a list of extensions.
 
-#### Hard Checkoff
+#### Hard checkoff
 
 Because this lab is organized around a network protocol, it's pretty
 simple to completely ignore our code, and build the parts for each side
