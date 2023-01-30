@@ -9,7 +9,8 @@ hopefully know why it is there and what it is doing.  Importantly you have
 reached that magic point of understanding where: there is nothing else.
 
 *NOTE*:
-  - Make sure you read through the [mini-UART cheatsheet](miniUART.md)
+  - Make sure you read through the [mini-UART cheatsheet](../../notes/miniUART.md)
+    in the Notes directory.
 
 In addition, you'll implement your own *software* UART implementation
 that can entirely bypass the pi hardware and talk directly to the
