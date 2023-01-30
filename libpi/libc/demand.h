@@ -31,6 +31,11 @@
 // stringify argument
 #define _XSTRING(x) #x
 
+
+// turn __LINE__ into a strig
+#define LINE_STR_HELPER(x)  _XSTRING(x)
+#define LINE_STR()  LINE_STR_HELPER(__LINE__)
+
 // usage: 
 //      demand(expr, msg)
 // note, if it doesn't take special characters does not need quotes:
