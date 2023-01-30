@@ -31,9 +31,9 @@ The lab has two parts:
 
 #### Checkoff
 
-The checkoff for this lab is pretty simple: bootload some programs and
-check they work the same using your bootloader as they do with the 
-staff.  If they don't, at least one of we or you are wrong.  
+The standard checkoff for this lab is pretty simple: bootload some
+programs and check they work the same using your bootloader as they do
+with the staff.  If they don't, at least one of we or you are wrong.
 
 More specifically:
 
@@ -44,6 +44,23 @@ More specifically:
     grained check that traces the `PUT` and `GET` calls between the r/pi
     and your laptop. [checkoff-tests/README](checkoff-tests/README.md)
     gives more detail.
+
+#### Hard Checkoff
+
+Because this lab is organized around a network protocol, it's pretty
+simple to completely ignore our code, and build the parts for each side
+entirely on your own.  You'll learn a lot!  (We did when we first build
+all of this :).  
+
+To be interoperable you will need:
+  1. The opcodes defined in `pi-side:boot-defs.h`.
+  2. The CRC code given in `pi-side:boot-crc32.h`.
+
+You might want to take the `my-install.c` driver just so you don't have
+to mess around with matching argument parsing and setting the TTY speed.
+
+Note: if you are going this way, please let us know first so we can 
+cheer you on.
 
 --------------------------------------------------------------------
 ### 0. How to make coding go better.
