@@ -4,6 +4,11 @@ Below describes where we're going and why.   The labs themselves have a
 lot more prose on each topic.  There is a pointer to where we currently
 are: the labs after this point can still see significant revisions.
 
+  - Labs usually have some [crash-course notes](../notes/README.md) about
+    key concepts --- you must read these before the lab or you'll be lost.
+    We also suggest re-reading some number of labs later after the concepts
+    have sat for a bit so you get a deeper view.  Note summary (so far):
+
 A note on lab structure:
 
   - The labs are deliberately *not* organized as a
@@ -18,24 +23,8 @@ A note on lab structure:
     (but not easy) "breather" labs to give more time to get stuff under
     control and consolidate.
 
-  - More details: [why are labs all over the place](OUR-LEARNING-THEORY.md)
+    More details: [why are labs all over the place](OUR-LEARNING-THEORY.md)
 
-##### Notes
-
-Labs usually have some [crash-course notes](../notes/README.md) about
-key concepts --- you must read these before the lab or you'll be lost.
-We also suggest re-reading some number of labs later after the concepts
-have sat for a bit so you get a deeper view.  Note summary (so far):
-
-  - [observability and compilation](../notes/observability/README.md)
-  - [makefiles](../notes/makefiles/README.md)   
-  - [crash course in writing device code](../notes/devices/DEVICES.md) 
-    and [gpio](../notes/devices/GPIO.md).
-  - [armv6 interrupt cheat sheet](../notes/interrupts/INTERRUPT-CHEAT-SHEET.md) 
-  - [caller/callee registers](../notes/caller-callee/README.md).
-  - [caller/callee registers](../notes/caller-callee/README.md).
-  - [example mode mistakes](../notes/mode-bugs/README.md)
-  - [using gcc to figure out assembly](../notes/using-gcc-for-asm/README.md)
 
 ---------------------------------------------------------------------
 ### 0: non-pi hacking
