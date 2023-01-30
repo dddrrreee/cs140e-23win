@@ -172,7 +172,7 @@ driver.
     from lab 2 to verify your implementation matches everyone else's.
 
     ***READINGS***: 
-      - [miniUART](../notes/miniUART.md) cheat sheet.
+      - [miniUART](../notes/devices/miniUART.md) cheat sheet.
       - Broadcom document:  Sections 1, 2, 2.1, 2.2, 6.2 (p 102).  Main
         reading is pages 8---19.
       - [errata](https://elinux.org/BCM2835_datasheet_errata) has the

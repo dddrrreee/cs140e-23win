@@ -9,7 +9,7 @@ hopefully know why it is there and what it is doing.  Importantly you have
 reached that magic point of understanding where: there is nothing else.
 
 *NOTE*:
-  - Make sure you read through the [mini-UART cheatsheet](../../notes/miniUART.md)
+  - Make sure you read through the [mini-UART cheatsheet](../../notes/devices/miniUART.md)
     in the Notes directory.
 
 In addition, you'll implement your own *software* UART implementation

@@ -6,7 +6,7 @@ be needed for a lab:
  - Observability and compiler optimization: 
    [observability](observability/README.md)
  - Devices: [how to reason about devices](devices/DEVICES.md); 
-   [gpio](devices/GPIO.md)
+   [gpio](devices/GPIO.md), [miniUART](devices/miniUART.md).
  - Registers: [caller/callee](caller-callee/README.md)
  - [How to use the compiler to figure out assembly code](using-gcc-for-asm/README.md)
 
