@@ -6,6 +6,11 @@
 #include "boot-crc32.h"
 #include "boot-defs.h"
 
+// used as a tracing hack.
+enum { TRACE_FD = 21 };
+
+#define boot_output(msg...) output("BOOT:" msg)
+
 // helper tracing put/get routines: if you set 
 //  <trace_p> = 1 
 // you can see the stream of put/gets: makes it easy 
@@ -72,7 +77,7 @@ get_op(int fd) {
 
 
     // never trace this code.
-    output("PRINT_STRING:");
+    boot_output("PRINT_STRING:");
     unsigned nbytes = get_uint32(fd);
     demand(nbytes < 512, pi sent a suspiciously long string);
     output("pi sent print: <");

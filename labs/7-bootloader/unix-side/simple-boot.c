@@ -20,7 +20,7 @@ void simple_boot(int fd, const uint8_t *buf, unsigned n) {
     // is busted.
     trace("simple_boot: sending %d bytes, crc32=%x\n", n, crc32(buf,n));
 
-    output("waiting for a start\n");
+    boot_output("waiting for a start\n");
     uint32_t op;
 
     // step 0: drain the initial data.  can have garbage.  
@@ -41,18 +41,18 @@ void simple_boot(int fd, const uint8_t *buf, unsigned n) {
     } 
 
     // 1. reply to the GET_PROG_INFO
-    unimplemented();
+    todo("reply to GET_PROG_INFO");
 
     // 2. drain any extra GET_PROG_INFOS
-    unimplemented();
+    todo("drain any extra GET_PROG_INFOS");
 
     // 3. check that we received a GET_CODE
-    unimplemented();
+    todo("check that we received a GET_CODE");
 
     // 4. handle it: send a PUT_CODE + the code.
-    unimplemented();
+    todo("send PUT_CODE + the code in <buf>");
 
     // 5. Wait for BOOT_SUCCESS
     ck_eq32(fd, "BOOT_SUCCESS mismatch", BOOT_SUCCESS, get_op(fd));
-    output("bootloader: Done.\n");
+    boot_output("bootloader: Done.\n");
 }

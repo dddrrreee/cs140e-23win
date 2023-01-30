@@ -45,6 +45,8 @@ More specifically:
     and your laptop. [checkoff-tests/README](checkoff-tests/README.md)
     gives more detail.
 
+  - [EXTENSIONS](./EXTENSIONS.md) gives a list of extensions.
+
 #### Hard Checkoff
 
 Because this lab is organized around a network protocol, it's pretty
@@ -72,11 +74,11 @@ There's some simple changes you can do to make this lab go much faster.
 You'll be writing two pieces of code that talk to each other through
 messages.  If at all possible we strongly suggest you figure out how to
 have two code windows side-by-side, one holding the pi code, the other
-holding the unix code.  This allows you to easily check that the bytes you
+holding the Unix code.  This allows you to easily check that the bytes you
 send in one have a matching set of receives on the other.  (We recommend
-doing the same thing for any networking send/receive protcol.)
+doing the same thing for any networking send/receive protocol.)
 
-With two coding windows, if you have a good grasp of the [bootloadig
+With two coding windows, if you have a good grasp of the [bootloading
 protocol](./BOOTLOADER.md) and of the helper functions, you may be able to
 type all this out in about 10-20 minutes.  If not, it could take hours.
 Based on past labs, we'd expect this one change to easily halve the
@@ -117,7 +119,7 @@ distal, hardware problem.  (Making it harder, the code can be buggy as
 well of course!)
 
 --------------------------------------------------------------------
-### Step 1: write the unix side `my-install` 
+### Step 1: write the Unix side `my-install` 
 
 Debugging the pi code will be painful, especially since it requires
 copying files to the microSD etc.  So we first start with the much nicer
@@ -159,16 +161,16 @@ What to do:
      Now you can just use yours! 
   5. `make check BOOTLOADER=my-install` should pass.
 
-##### A common unix-side mistake.
+##### A common Unix-side mistake.
 
-A key feature you have that 140e offerigs did not is the ability to use
+A key feature you have that 140e offerings did not is the ability to use
 `putk` from your pi-side bootloader code.  (Described more in part 2.)
 This makes debugging wildly easier.  (Embarrassingly, I only realized
 the trick to allow easy printing last year.)  Without output, all bugs
 lead to: "my pi isn't responding," which is difficult function to invert
 back to root cause.
 
-However, this does lead to a common mistake on the unix side:
+However, this does lead to a common mistake on the Unix side:
   - Make sure you use the `get_op` routine for any word that could
     be a protocol opcode.  Otherwise you won't correctly handle when
     the pi-side sends a `putk` message (see below).
@@ -179,11 +181,11 @@ However, this does lead to a common mistake on the unix side:
 ***MAKE THIS CLEARER***: More detailed:
 
   0. When using your `my-install` and `bootloader` make sure the
-     `TRACE` calls printed from the unix side remain the same when
+     `TRACE` calls printed from the Unix side remain the same when
      using both our pi bootloader and yours.  They should also match
      other people.
 
-     These include the `PUT` and `GET` calls the unix side does to send
+     These include the `PUT` and `GET` calls the Unix side does to send
      to the pi and the `HASH` output it computes (which prints a checksum
      of the sent code).
 
@@ -200,8 +202,8 @@ However, this does lead to a common mistake on the unix side:
 --------------------------------------------------------------------
 ### Step 2: write the pi side bootloader
 
-Now you'll write the pi-side.  It should mirror the unix side code and
-`PUT` values the unix side has done a `GET` on, and vice-versa.
+Now you'll write the pi-side.  It should mirror the Unix side code and
+`PUT` values the Unix side has done a `GET` on, and vice-versa.
 
 Where is the code:
 
@@ -244,35 +246,3 @@ If you forget this limitation, and (for example) print using `putk` when
 a message is arriving, you'll almost certainly lost some arriving bytes,
 and also get confused.  Ask me how I know!
 
---------------------------------------------------------------------
-#### Extension: make the bootloader better
-
-If you recall, the unix side of the bootloader has some pretty useless
-error messages.  Fix these so they are more helpful.
-
-Similarly: if the pi-side runs into trouble, do something more useful
-than just lock up.  For example, if you try to send `GET_PROG_INFO`
-some number of times without a response, blink the internal LED (pin 47)
-multiple times to show things are in a bad state and reboot.
-
-Also, you can change `boot_putk` to implement `printk` type functionality
-of taking a format string rather than a fixed string.
-
---------------------------------------------------------------------
-#### Extensions.
-
-Many possible extensions.  Since this low level code is used by everything we 
-want to be absolutely sure it is rock-solid in all situations:
-
-  0. Change the pi-side `get_uint8` calls to timeout if they are stuck for "too long"
-     and then reboot.  This is useful for having a stand-alone pi in the field you
-     can update.  If it gets stuck you don't have to walk (or drive) over and
-     hit a button to restart it.
-
-  1. Set up your tracing (`2-trace`) so you can trace a copy of the bootloader on the pi.
-  2. Setup logging on the unix side so you can record the `PUT/GET` operations from
-     a given run and then replay them later, so you can check that the
-     unix side behaves identically (all output is the same, etc).
-  3. Start mutating the traces in (2) and make sure the unix side behaves sensibly.
-  4. Adapt your `fake-pi` so that it can run the bootloader and use this to do
-     many randomized tests or mutate previous runs.
