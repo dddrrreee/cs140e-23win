@@ -91,8 +91,10 @@ uint8_t get_uint8(int fd);
 uint32_t get_uint32(int fd);
 
 
+#if 0
 // this is used for lab 5 and onward.
 enum { TRACE_FD = 21 };
+#endif
 
 
 int suffix_cmp(const char *s, const char *suffix);
@@ -104,10 +106,6 @@ int run_system_err_ok(int verbose_p, const char *fmt, ...) ;
 
 // lookup <name> in directory <path> and return <path>/<name>
 char *name_lookup(const char *path, const char *name);
-
-// look for a pi binary in ./ or <PI_PATH> (should make this a 
-// colon seperated list).
-const char *find_pi_binary(const char *name);
 
 void pi_echo(int unix_fd, int pi_fd, const char *portname);
 

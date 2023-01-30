@@ -54,6 +54,10 @@ int can_read(int fd);
 int read_timeout(int fd, void *data, unsigned n, unsigned timeout);
 
 
+// print argv style string.
+void argv_print(const char *msg, char *argv[]);
+
+
 // roundup <x> to a multiple of <n>: taken from the lcc compiler.
 #define pi_roundup(x,n) (((x)+((n)-1))&(~((n)-1)))
 
@@ -63,6 +67,8 @@ int read_timeout(int fd, void *data, unsigned n, unsigned timeout);
 //   - 1 if exited cleanly (exitcode in <status>, 
 //   - -1 if exited with a crash (status holds reason)
 int child_clean_exit_noblk(int pid, int *status);
+// blocking version.
+int child_clean_exit(int pid, int *status);
 
 
 // return current number of usec --- probably better to make a larger datatype.
@@ -72,6 +78,12 @@ typedef unsigned time_usec_t;
 time_usec_t time_get_usec(void);
 unsigned time_get_sec(void);
 
+// <fd> is open?  return 1, else 0.
+int is_fd_open(int fd);
+
+// given a fd in the current process <our_fd>,
+// fork/exec <argv> and dup it to <child_fd>
+void handoff_to(int our_fd, int child_fd, char *argv[]);
 
 // close all open file descriptors except 0,1,2 and <fd>
 void close_open_fds_except(int fd);
@@ -79,6 +91,10 @@ void close_open_fds_except(int fd);
 void close_open_fds(void);
 
 #include "fast-hash32.h"
+
+// look for a pi binary in "./" or colon-seperated list in
+// <PI_PATH> 
+const char *find_pi_binary(const char *name);
 
 #endif
 

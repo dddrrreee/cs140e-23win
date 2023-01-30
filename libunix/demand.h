@@ -134,6 +134,8 @@
     die(msg); \
 } while(0)
 
+#define todo(msg) panic("TODO: %s\n", msg)
+
 // same as panic, but no prefixed PANIC
 #define fatal(msg...) do { 						                            \
     output("%s:%s:%d:", __FILE__, __FUNCTION__, __LINE__);   \
