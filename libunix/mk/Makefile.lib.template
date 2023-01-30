@@ -1,0 +1,73 @@
+# PROG_SRC : the names of the driver program files
+# SRC: shared source
+# SRC :=  $(REAL_SRC) $(wildcard ./*.c)
+# LIBNAME
+
+BUILD_DIR ?= ./objs
+
+
+ifdef CS240LX_STAFF_2022_PATH
+LIBUNIX_PATH := $(CS240LX_STAFF_2022_PATH)/libunix
+else
+LIBUNIX_PATH := $(CS240LX_2022_PATH)$(CS240LX_STAFF)/libunix
+endif
+
+PROG_OBJS := $(PROG_SRC:.c=.o)
+PROG_OBJS := $(foreach obj, $(PROG_OBJS), ./$(notdir $(obj)))
+PROGS := $(patsubst %.o, ./%, $(PROG_OBJS))
+
+# grab all .c files in the current directory
+
+OBJS := $(patsubst %.c, %.o, $(SRC))
+OBJS := $(foreach obj, $(OBJS), $(BUILD_DIR)/$(notdir $(obj)))
+
+
+dep := $(OBJS:.o=.d)  $(PROG_OBJS:.o=.d) # one dependency file for each source
+
+# automatically give make the directories to look in.
+VPATH := $(sort $(dir $(SRC)))
+
+
+ifeq ($(BUILD_DIR),.)
+$(error "BUILD_DIR cannot be '.' or clean will remove everything.")
+endif
+ifeq ($(BUILD_DIR),)
+$(error "BUILD_DIR cannot be empty.")
+endif
+
+
+CC=gcc
+CFLAGS += -Wall -g -std=gnu99  -Werror -Wno-unused-function -Wno-unused-variable
+# added the include path for libpi-fake
+LU = $(LIBUNIX_PATH)
+CFLAGS += -I. -I$(LU)
+
+DEPS += ./Makefile
+
+all : $(BUILD_DIR) libs $(OBJS) $(PROG_OBJS) $(PROGS) $(LIBNAME) # $(OBJS) 
+
+$(BUILD_DIR): ; mkdir -p $(BUILD_DIR)
+
+libs::
+	make -C $(LU)
+
+# fix this rule: can't delete the targets in <all>
+$(BUILD_DIR)/%.o: %.c $(DEPS) $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIBNAME): $(OBJS) $(DEPS)
+	ar cr $(LIBNAME) $(OBJS) 
+
+ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),cleanall)
+-include $(dep)  # include dep files
+endif
+endif
+
+$(BUILD_DIR)/%.d: %.c $(BUILD_DIR)
+	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
+
+clean :
+	rm -rf $(BUILD_DIR)/ *.o *.d *~ Makefile.bak $(NAME) *.pitag  $(PROGS) $(LIBNAME)
+
+.PHONY: clean tags libs run check 
