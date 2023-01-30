@@ -73,35 +73,28 @@ will replace the `.o` files with your own implementation.
 
 Make sure you look through:
 
-  1. `pi-side/get-code.h` this holds the starter code that you will extend out
+  1. `pi-side/get-code.[ch]` this holds the starter code that you will extend out
        into a full implementation that receives code from the UNIX side.  
 
-  2. `pi-side/bootloader.c` has the driver that calls `get-code.h`.
+  2. `pi-side/main.c` has the driver that calls `get-code.h`.
 
-  3. `libpi.small/rpi.h` contains the prototypes and descriptions of pi routines
-      you (or our starter code) can call.  Each has a comment describing them:
-      please post to the newsgroup if these (or any other function descriptions)
-      are confusing!   These include routines to read and write memory (do not
-      do it directly!), reboot the pi, and send/receive bytes from the UART
-      (the hardware on the pi that talks to your TTY-serial device).
-
-It's worth looking at the other files to.  In particular, compare the `staff-start.s` 
-here to the `start.s` in your `1-gpio` lab:
+It's worth looking at the other files to.  In particular, compare the `boot-start.s` 
+here to the `staff-start.S` in `libpi`:
    1. What do they even do?
    2. Why are they different?
 
 ##### `unix-side` directory
 
 The unix side code is split into two directories:
-   1. The `3-bootloader/unix-side` directory holds the UNIX side
+   1. The `unix-side` directory holds the UNIX side
       bootloader code.  
-   2. `cs140e-22win/libunix` directory holds useful UNIX helper
+   2. `../../libunix` directory holds useful UNIX helper
       routines that your unix-side bootloader code will use (as
       well as subsequent labs).  These routines are all described in
       `libunix/libunix.h`.
 
 Make sure you look through:
-  1. `simple-boot.c`: this holds the starter code you will extend
+  1. `unix-side/simple-boot.c`: this holds the starter code you will extend
      out into a full implementation that sends code to the pi.
   2. `libunix/read-file.c`: you will implement this (see below).
   3. `libunix/find-ttyusb.c`: you will implement this (see below).
