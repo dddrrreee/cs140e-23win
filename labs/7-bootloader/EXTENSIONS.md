@@ -24,6 +24,20 @@ The [`cmd-watch` README](extension-cmd-watch/README.md) describes
 in more detail.  You should tune the interface however works best
 for your method.
 
+--------------------------------------------------------------------
+### Medium extension: implement a `PI_PATH` extension.
+
+Hunting around and finding different pi binaries is a pain.  You can
+do the same hack your shell does for binaries and have the user (you)
+define a `PI_PATH`  variable with a colon-seperated list of all the
+different locations to look in for a binary.
+
+How:
+  - use `getenv` to get any value for it.
+  - scan these locations for the given binary.
+  - return the full path if you find it.
+
+This is useful for the rest of the quarter.
 
 --------------------------------------------------------------------
 #### Extension: make the bootloader better
