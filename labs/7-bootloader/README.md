@@ -1,7 +1,7 @@
 ## Today: Build a bootloader.
 
 
-<p float="center">
+<p align="center">
   <img src="images/robot-pi.png" width="450" />
 </p>
 
