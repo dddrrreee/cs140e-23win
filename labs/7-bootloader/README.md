@@ -1,5 +1,11 @@
 ## Today: Build a bootloader.
 
+
+<p float="center">
+  <img src="images/robot-pi.png" width="450" />
+</p>
+
+
 Last's weeks labs were intense --- we take a bit of a breather
 lab: no assembly, weird bugs from register corruptions, etc.  
 
