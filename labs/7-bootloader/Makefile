@@ -1,4 +1,4 @@
-SUBDIRS= pi-side unix-side
+SUBDIRS= 2-pi-side 1-unix-side 0-prelab-tests
 
 .PHONY: all check clean
 all check clean: $(SUBDIRS)
