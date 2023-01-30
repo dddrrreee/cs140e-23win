@@ -10,8 +10,8 @@ Last's weeks labs were intense --- we take a bit of a breather
 lab: no assembly, weird bugs from register corruptions, etc.  
 
 Today you'll write the bootloader code.  Both the r/pi side code
-that asks for a binary  (`bootloader.bin`) and the Unix side that
-sends it (`pi-install`).  
+that asks for a binary  (the `bootloader.bin` from lab 0) and the 
+Unix side that sends it (`my-install`).  
 
   - The bootloader protocol is defined in: [BOOTLOADER](./BOOTLOADER.md).
 
@@ -71,6 +71,7 @@ You can often dramatically reduce complexity by not sharing stuff.  One
 process versus many,  one car on an empty highway versus rush hour, etc.
 This lab is no different.  If you have a a second microSD card, it will
 be very easy to tell if you have a hardware bug versus a bootloader issue.
+
 Algorithm:
   1. Set aside the clean, working microSD you are currently using.
   2. Setup a second microSD that you will write all pi-side modifications to.
@@ -105,6 +106,8 @@ Debugging the pi code will be painful, especially since it requires
 copying files to the microSD etc.  So we first start with the much nicer
 task of replacing the Unix-side bootloader.  If you write it correctly,
 it should work seamlessly with the original pi-side.
+
+Make sure you read [the bootloader protocol](./BOOTLOADER.md).
 
 Where is the code:
 
