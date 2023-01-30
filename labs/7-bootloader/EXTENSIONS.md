@@ -32,12 +32,16 @@ do the same hack your shell does for binaries and have the user (you)
 define a `PI_PATH`  variable with a colon-seperated list of all the
 different locations to look in for a binary.
 
-How:
+Put your code in `libunix/resolve-pi-path.c:find_pi_binary`.
+The code:
   - use `getenv` to get any value for it.
   - scan these locations for the given binary.
   - return the full path if you find it.
-
+ 
 This is useful for the rest of the quarter.
+
+You can of course do your own hacks.  One potentially useful one is to 
+go up one level, and search all subdirectories for a binary.  
 
 --------------------------------------------------------------------
 #### Extension: make the bootloader better
