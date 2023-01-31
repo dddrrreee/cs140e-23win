@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     char *pi_prog = 0;
 
     // used to pass the file descriptor to another program.
-    char **exec_argv;
+    char **exec_argv = 0;
 
     // a good extension challenge: tune timeout and baud rate transmission
     //
