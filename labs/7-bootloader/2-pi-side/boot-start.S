@@ -12,7 +12,8 @@ _start:
 .space 0x200000-0x8004,0
 skip:
     mov sp,#0x08000000
-    bl notmain
+@    bl notmain
+    bl _cstart
 hang: b rpi_reboot
 
 @ if we don't pull these in, we get conflicts.
