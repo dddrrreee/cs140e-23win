@@ -191,12 +191,14 @@ I get:
     TRACE:PUT32:d2c [UNKNOWN]
     TRACE:PUT32:cf4943ae [UNKNOWN]
     TRACE:GET32:55556666 [GET_CODE]
+    TRACE:GET32:cf4943ae [UNKNOWN]
     TRACE:PUT32:77778888 [PUT_CODE]
     DEBUG:PRINT_STRING:pi sent print: <<STAFF>: success: Received the program!>
     TRACE:GET32:9999aaaa [BOOT_SUCCESS]
     BOOT:bootloader: Done.
     hello world
     DONE!!!
+
 
 --------------------------------------------------------------------
 ### Step 2: write the pi side bootloader
