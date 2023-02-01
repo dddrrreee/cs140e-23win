@@ -30,7 +30,7 @@ static void usage(const char *msg, ...) {
     vfprintf(stderr, msg, args);
     va_end(args);
 
-    output("\nusage: %s  [--trace] ([device] | [--last] | [--first] [--device <device>]) <pi-program> \n", progname);
+    output("\nusage: %s  [--trace-all] [--trace-control] ([device] | [--last] | [--first] [--device <device>]) <pi-program> \n", progname);
     output("    pi-program = has a '.bin' suffix\n");
     output("    specify a device using any method:\n");
     output("        <device>: has a '/dev' prefix\n");
@@ -38,6 +38,8 @@ static void usage(const char *msg, ...) {
     output("        --first: gets the first serial device mounted\n");
     output("        --device <device>: manually specify <device>\n");
     output("    --baud <baud_rate>: manually specify baud_rate\n");
+    output("    --trace-all: trace all put/get between rpi and unix side\n");
+    output("    --trace-control: trace only control [no data] messages\n");
     exit(1);
 }
 
@@ -65,32 +67,23 @@ int main(int argc, char *argv[]) {
     //      B921600
     unsigned baud_rate = B115200;
 
-
     // we do manual option parsing to make things a bit more obvious.
     // you might rewrite using getopt().
     progname = argv[0];
     for(int i = 1; i < argc; i++) {
-        if(strcmp(argv[i], "--trace") == 0)  {
-            trace_p = 1;
+        if(strcmp(argv[i], "--trace-control") == 0)  {
+            trace_p = TRACE_CONTROL_ONLY;
+        } else if(strcmp(argv[i], "--trace-all") == 0)  {
+            trace_p = TRACE_ALL;
         } else if(strcmp(argv[i], "--last") == 0)  {
-            if(dev_name)
-                usage("used --last but already have device: <%s>\n", dev_name);
             dev_name = find_ttyusb_last();
         } else if(strcmp(argv[i], "--first") == 0)  {
-            if(dev_name)
-                usage("used --first but already have device: <%s>\n", dev_name);
             dev_name = find_ttyusb_first();
         // we assume: anything that begins with /dev/ is a device.
         } else if(prefix_cmp(argv[i], "/dev/")) {
-            if(dev_name)
-                usage("specfied device <%s> but already have device: <%s>\n",
-                    argv[i], dev_name);
             dev_name = argv[i];
         // we assume: anything that ends in .bin is a pi-program.
         } else if(suffix_cmp(argv[i], ".bin")) {
-            if(pi_prog)
-                usage("specified pi prog <%s> but already have=<%s>\n", 
-                    argv[i], pi_prog);
             pi_prog = argv[i];
         } else if(strcmp(argv[i], "--baud") == 0) {
             i++;
@@ -105,11 +98,9 @@ int main(int argc, char *argv[]) {
             break;
         } else if(strcmp(argv[i], "--device") == 0) {
             i++;
-            if(dev_name)
-                usage("used --device %s but already have device: <%s>\n", 
-                    argv[i], dev_name);
+            if(!argv[i])
+                usage("missing argument to --device\n");
             dev_name = argv[i];
-            assert(dev_name);
         } else {
             usage("unexpected argument=<%s>\n", argv[i]);
         }
@@ -117,15 +108,13 @@ int main(int argc, char *argv[]) {
     if(!pi_prog)
         usage("no pi program\n");
 
-
     // 1. get the name of the ttyUSB.
     if(!dev_name) {
         dev_name = find_ttyusb_last();
         if(!dev_name)
             panic("didn't find a device\n");
     }
-
-    boot_output("done with options: dev name=<%s>, pi-prog=<%s>, trace=%d\n", 
+    debug_output("done with options: dev name=<%s>, pi-prog=<%s>, trace=%d\n", 
             dev_name, pi_prog, trace_p);
 
     if(exec_argv)
@@ -143,7 +132,7 @@ int main(int argc, char *argv[]) {
     // threshold.  if your my-install isn't reseting when used 
     // during checkig, it's likely due to this timeout being too
     // small.
-    unsigned timeout_tenths = 2 * 8;
+    double timeout_tenths = 2*5;
     int fd = set_tty_to_8n1(tty, baud_rate, timeout_tenths);
     if(fd < 0)
         panic("could not set tty: <%s>\n", dev_name);
@@ -154,7 +143,7 @@ int main(int argc, char *argv[]) {
     uint8_t *code = read_file(&nbytes, pi_prog);
 
     // 4. let's send it!
-	boot_output("%s: tty-usb=<%s> program=<%s>: about to boot\n", 
+	debug_output("%s: tty-usb=<%s> program=<%s>: about to boot\n", 
                 progname, dev_name, pi_prog);
     simple_boot(fd, code, nbytes);
 

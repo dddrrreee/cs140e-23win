@@ -8,6 +8,7 @@
 
 // used as a tracing hack.
 enum { TRACE_FD = 21 };
+enum { TRACE_CONTROL_ONLY = 1, TRACE_ALL = 2 };
 
 #define boot_output(msg...) output("BOOT:" msg)
 
@@ -18,6 +19,10 @@ enum { TRACE_FD = 21 };
 //
 // there are other ways to do this --- this is
 // clumsy, but simple.
+//
+// NOTE: we can intercept these puts/gets transparently
+// by interposing on a file, a socket or giving the my-install
+// a file descriptor to use.
 extern int trace_p;
 
 static inline uint8_t
@@ -32,20 +37,21 @@ static inline uint32_t
 trace_get32(int fd) {
     uint32_t v = get_uint32(fd);
     if(trace_p)
-        trace("GET32:%x\n", v);
+        trace("GET32:%x [%s]\n", v, boot_op_to_str(v));
     return v;
 }
 
 static inline void
 trace_put8(int fd, uint8_t v) {
-    if(trace_p)
+    // we assume put8 is the only way to write data.
+    if(trace_p == TRACE_ALL)
         trace("PUT8:%x\n", v);
     put_uint8(fd, v);
 }
 static inline void
 trace_put32(int fd, uint32_t v) {
     if(trace_p)
-        trace("PUT32:%x\n", v);
+        trace("PUT32:%x [%s]\n", v, boot_op_to_str(v));
     put_uint32(fd,v);
 }
 
@@ -71,13 +77,12 @@ get_op(int fd) {
     uint32_t op = get_uint32(fd);
     if(op != PRINT_STRING) {
         if(trace_p)
-            trace("GET32:%x\n", op);
+            trace("GET32:%x [%s]\n", op, boot_op_to_str(op));
         return op;
     }
 
-
-    // never trace this code.
-    boot_output("PRINT_STRING:");
+    // NOTE: we do not trace this code.
+    debug_output("PRINT_STRING:");
     unsigned nbytes = get_uint32(fd);
     demand(nbytes < 512, pi sent a suspiciously long string);
     output("pi sent print: <");
@@ -106,7 +111,11 @@ static void ck_eq32(int fd, const char *msg, unsigned exp, unsigned got) {
 
     // XXX: need to check: can there be garbage in the /tty when we
     // first open it?  If so, we should drain it.
-    output("%s: expected %x, got %x\n", msg, exp, got);
+    output("%s: expected %x [%s], got %x [%s]\n", msg, 
+            exp, 
+            boot_op_to_str(exp), 
+            got,
+            boot_op_to_str(got));
 
     // after error: just echo the pi output so we can kind of see what is going
     // on.   <TRACE_FD> is used later.
