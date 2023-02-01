@@ -3,12 +3,11 @@
 # SRC :=  $(REAL_SRC) $(wildcard ./*.c)
 # LIBNAME
 
-#ifdef CS140E_STAFF_2023_PATH
-#LIBUNIX_PATH := $(CS240LX_STAFF_2022_PATH)/libunix
-#else
-#LIBUNIX_PATH := $(CS240LX_2022_PATH)/libunix
-#endif
-LIBUNIX_PATH := $(CS140E_2023_PATH)/libunix
+ifdef CS140E_USE_STAFF
+    LIBUNIX_PATH := $(CS140E_STAFF_2023_PATH)/libunix
+else
+    LIBUNIX_PATH := $(CS140E_2023_PATH)/libunix
+endif
 
 PROG_OBJS := $(PROG_SRC:.c=.o)
 PROG_OBJS := $(foreach obj, $(PROG_OBJS), ./$(notdir $(obj)))
@@ -27,8 +26,9 @@ VPATH := $(sort $(dir $(SRC)))
 
 
 
+OPT_LEVEL ?= -Og
 CC=gcc
-CFLAGS += -Wall -g -std=gnu99  -Werror -Wno-unused-function -Wno-unused-variable -DRPI_UNIX
+CFLAGS += $(OPT_LEVEL) -Wall -g -std=gnu99  -Werror -Wno-unused-function -Wno-unused-variable -DRPI_UNIX
 # added the include path for libpi-fake
 LU = $(LIBUNIX_PATH)
 CFLAGS += -I. -I$(LU)

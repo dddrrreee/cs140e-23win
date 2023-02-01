@@ -80,15 +80,14 @@
       }								                                \
     } while(0)
 
+#   define debug_output(msg...) output("DEBUG:" msg)
+
 // print a debug message; prepend file:function:linenumber.
 #   define debug(msg...) do { 						                    \
         fprintf(stderr, "%s:%s:%d:", __FILE__, __FUNCTION__, __LINE__); \
         fprintf(stderr, ##msg);						                    \
     } while(0)
 #endif
-
-
-
 
 // various fatal error macros.
 
