@@ -1,6 +1,5 @@
 ## Today: Build a bootloader.
 
-
 <p align="center">
   <img src="images/robot-pi.png" width="450" />
 </p>
@@ -37,13 +36,9 @@ with the staff.  If they don't, at least one of we or you are wrong.
 
 More specifically:
 
-  - `make check` in `checkoff/output-tests` passes.  This compares the raw output
-    of your bootloader to the staff bootloader.
-
-  - `make check` in `checkoff/trace-tests` passes: this is a more-fine
-    grained check that traces the `PUT` and `GET` calls between the r/pi
-    and your laptop. [checkoff-tests/README](checkoff-tests/README.md)
-    gives more detail.
+  - `make checkoff` in `checkoff` passes.  This makes sure old regression
+    tests from previous labs pass and that the traced bootloader messages
+    match.
 
   - [EXTENSIONS](./EXTENSIONS.md) gives a list of extensions.
 
@@ -150,16 +145,20 @@ What to do:
 
   0. Start working on getting `my-install unix-side/hello.bin` to 
      boot correctly.
-  1. You should enable tracing (set `trace_p=1`) for everything
-     besides sending the raw code over so you can compare what you do
+  1. You can toggle tracing on and off from the command line.
+     `my-install --trace-control` will emit the bootloader 
+     control messsages.  `my-install --trace-all` will emit all
+     bootloader messages (including the code)
+     so you can compare what you do
      to other people.
-  2. Make sure you check that the `TRACE:HASH` output matches
+  2. Make sure you check that the `TRACE:simple_boot:` hash output matches
      other people: if not, there is a bug in your `read_file`.
-  3. Once this works, run the other tests we provide (we will add
-     these during the lab).
+  3. Once this works, run the tests in the `checkoff` directory.
+     The [checkoff README](checkoff/README.md) describes them in 
+     more detail.
   4. Copy `my-install` to your `~/bin` and resource your shell. 
      Now you can just use yours! 
-  5. `make check BOOTLOADER=my-install` should pass.
+  5. `make check` in the different checkoff directories should pass.
 
 ##### A common Unix-side mistake.
 
@@ -176,28 +175,28 @@ However, this does lead to a common mistake on the Unix side:
     the pi-side sends a `putk` message (see below).
 
 
-##### Checkoff 
+##### Example of `my-install --trace-control`
 
-***MAKE THIS CLEARER***: More detailed:
+As a comparison, when I run:
 
-  0. When using your `my-install` and `bootloader` make sure the
-     `TRACE` calls printed from the Unix side remain the same when
-     using both our pi bootloader and yours.  They should also match
-     other people.
+        % my-install --trace-control hello.bin
 
-     These include the `PUT` and `GET` calls the Unix side does to send
-     to the pi and the `HASH` output it computes (which prints a checksum
-     of the sent code).
+I get:
 
-  1. Also, the output of the program should match, irrespective of the
-     bootloader.  So, for example, you should be able to run all the
-     `2-trace` tests with our bootloader and `my-install` and the old
-     bootloader and `pi-install`.
-
-  2. Start by running `./my-install hello.bin` in the `unix-side` directory.
-     We will add additional tests.
-
-  3. Show us your code so we can check for some common mistakes.
+    TRACE:simple_boot: sending 3372 bytes, crc32=cf4943ae
+    BOOT:waiting for a start
+    TRACE:GET32:11112222 [GET_PROG_INFO]
+    TRACE:PUT32:33334444 [PUT_PROG_INFO]
+    TRACE:PUT32:8000 [UNKNOWN]
+    TRACE:PUT32:d2c [UNKNOWN]
+    TRACE:PUT32:cf4943ae [UNKNOWN]
+    TRACE:GET32:55556666 [GET_CODE]
+    TRACE:PUT32:77778888 [PUT_CODE]
+    DEBUG:PRINT_STRING:pi sent print: <<STAFF>: success: Received the program!>
+    TRACE:GET32:9999aaaa [BOOT_SUCCESS]
+    BOOT:bootloader: Done.
+    hello world
+    DONE!!!
 
 --------------------------------------------------------------------
 ### Step 2: write the pi side bootloader
@@ -232,7 +231,8 @@ What you will do:
      `pi-side`.  I would use `putk` judiciously as you incrementally
      develop the code so you can see what state the pi believes it is in.
 
-  5. `make check BOOTLOADER=my-install` should pass and the bootloader
+  5. `make check` in the `checkoff` directory should pass and the
+     bootloader
      should print your name.
 
 #### A common pi-side mistake
@@ -245,4 +245,3 @@ to receive data, it has to move promptly.
 If you forget this limitation, and (for example) print using `putk` when
 a message is arriving, you'll almost certainly lost some arriving bytes,
 and also get confused.  Ask me how I know!
-
