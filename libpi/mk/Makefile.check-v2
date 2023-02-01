@@ -19,6 +19,9 @@ MAKEFLAGS += --no-print-directory
 
 # we only look at this output
 GREP_STR ?= 'TRACE:\|ERROR:\|PANIC:' 
+# EXCLUDE ?= grep -v simple_boot
+EXCLUDE ?= cat
+
 BOOT_CMD := $(BOOTLOADER) $(TTYUSB)
 
 # strip all bracketed tags in output messages
@@ -56,7 +59,7 @@ all: $(TEST_RUN) # $(TEST_CHECK)
 %.out: %.bin
 	@echo -n "generating <$*.out> and <$*.raw>: ";
 	@$(BOOT_CMD) ./$< >  $*.raw 2>&1
-	@grep -v simple_boot $*.raw | sed $(STRIP_BRACKETS) | grep $(GREP_STR) > $*.out
+	@$(EXCLUDE) $*.raw | sed $(STRIP_BRACKETS) | grep $(GREP_STR) > $*.out
 	@echo " success!";
 
 %.check: %.bin
@@ -64,7 +67,7 @@ all: $(TEST_RUN) # $(TEST_CHECK)
 	@echo    "checking <$*>: ";
 	@echo    "  about to emit new <$*.test>:"
 	@echo    "     $(BOOT_CMD) ./$< > $*.test"
-	@$(BOOT_CMD) ./$< 2>&1 > /dev/null | grep -v simple_boot | sed $(STRIP_BRACKETS) | grep  $(GREP_STR) > $*.test
+	@$(BOOT_CMD) ./$< 2>&1 > /dev/null | $(EXCLUDE) | sed $(STRIP_BRACKETS) | grep  $(GREP_STR) > $*.test
 	@echo -n "     new <$*.test> lines = "
 	@cat $*.test | wc -l 
 	@echo -n "     old ref <$*.out>: lines=";
@@ -85,12 +88,10 @@ check: $(TEST_CHECK)
 run: $(TEST_RUN) 
 cksum:  $(TEST_CKSUM)
 
-
-clean:
-	rm -f *.raw *~
-
 cleanall:
 	rm -f *.out *.raw
+clean:
+	rm -f *.raw *~
 
 .PHONY: all clean run emit check cksum
 

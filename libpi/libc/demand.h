@@ -9,7 +9,7 @@
 
 // print file:function:line with a message.
 #define debug(msg, args...) \
-    (printk)("%s:%s:%d:" msg, __FILE__, __FUNCTION__, __LINE__, ##args)
+    (printk)("%s:%s:%d:DEBUG:" msg, __FILE__, __FUNCTION__, __LINE__, ##args)
 
 #define output printk
 
