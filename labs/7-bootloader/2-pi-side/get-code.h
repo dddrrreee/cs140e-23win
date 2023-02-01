@@ -29,7 +29,7 @@ int get_code(uint32_t *code_addr);
 //
 // After you get the simple version working, you should fix 
 // it by making a timeout version.
-static uint32_t inline boot_get32(void) {
+static inline uint32_t boot_get32(void) {
     uint32_t u = uart_get8();
         u |= uart_get8() << 8;
         u |= uart_get8() << 16;
@@ -38,7 +38,7 @@ static uint32_t inline boot_get32(void) {
 }
 
 // send 32-bits on the uart.
-static void inline boot_put32(uint32_t u) {
+static inline void boot_put32(uint32_t u) {
     uart_put8((u >> 0)  & 0xff);
     uart_put8((u >> 8)  & 0xff);
     uart_put8((u >> 16) & 0xff);
@@ -80,7 +80,7 @@ static inline void boot_putk(const char *msg) {
 // if we don't do the LINE_STR() hack (see assert.h), 
 // what happens?
 #define boot_todo(msg) \
-   boot_err(BOOT_ERROR, __FILE__ ":" LINE_STR() ":TODO:" msg)
+   boot_err(BOOT_ERROR, __FILE__ ":" LINE_STR() ":TODO:" msg "\n")
 
 // send back an error and die.   note: we have to flush the output
 // otherwise rebooting could trash the TX queue (example of a hardware

@@ -34,4 +34,19 @@ enum {
 #endif
 };
 
+// convert boot opcode to a string.
+static inline const char *boot_op_to_str(unsigned op) {
+    switch(op) {
+    case BOOT_START:    return "BOOT_START";
+    case GET_PROG_INFO:  return "GET_PROG_INFO";
+    case PUT_PROG_INFO:  return "PUT_PROG_INFO";
+    case GET_CODE:       return "GET_CODE";
+    case PUT_CODE:       return "PUT_CODE";
+    case BOOT_SUCCESS:   return "BOOT_SUCCESS";
+    case PRINT_STRING:   return "PRINT_STRING";
+    case BOOT_ERROR:     return "BOOT_ERROR";
+    default:             return "UNKNOWN";
+    }
+}
+
 #endif
