@@ -1,0 +1,8 @@
+TRACE:simple_boot: sending 7460 bytes, crc32=c5259e6a
+TRACE:notmain:about to run 1 thread
+TRACE:rpi_fork:rpi_fork: tid=1, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=1 with x=0x1
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:SUCCESS!

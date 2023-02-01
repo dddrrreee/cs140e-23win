@@ -1,0 +1,9 @@
+TRACE:simple_boot: sending 5240 bytes, crc32=4ba3fc17
+TRACE:user_fn:checking that stack got switched
+TRACE:user_fn:cpsr is at user level
+TRACE:user_fn:about to call hello
+TRACE:syscall_vector:success: spsr is at user level
+TRACE:syscall_vector:syscall: hello world
+TRACE:user_fn:about to call exit
+TRACE:syscall_vector:success: spsr is at user level
+TRACE:syscall_vector:exiting!

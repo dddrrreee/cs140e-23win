@@ -1,0 +1,101 @@
+TRACE:simple_boot: sending 7448 bytes, crc32=858dfd98
+TRACE:notmain:i=0: about to start threads package wth nothing
+TRACE:rpi_thread_start:starting threads!
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=1: about to start threads package wth nothing
+TRACE:rpi_thread_start:starting threads!
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=2: about to start threads package wth nothing
+TRACE:rpi_thread_start:starting threads!
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=3: about to start threads package wth nothing
+TRACE:rpi_thread_start:starting threads!
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=4: about to start threads package wth nothing
+TRACE:rpi_thread_start:starting threads!
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=5: about to start threads package wth nothing
+TRACE:rpi_thread_start:starting threads!
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=6: about to start threads package wth nothing
+TRACE:rpi_thread_start:starting threads!
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=7: about to start threads package wth nothing
+TRACE:rpi_thread_start:starting threads!
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=8: about to start threads package wth nothing
+TRACE:rpi_thread_start:starting threads!
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=9: about to start threads package wth nothing
+TRACE:rpi_thread_start:starting threads!
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=0: about to fork and run one thread
+TRACE:rpi_fork:rpi_fork: tid=1, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=1 with x=0xdeadbeef
+TRACE:thread_code:success: got to the first thread
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=1: about to fork and run one thread
+TRACE:rpi_fork:rpi_fork: tid=3, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=3 with x=0xdeadbeef
+TRACE:thread_code:success: got to the first thread
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=2: about to fork and run one thread
+TRACE:rpi_fork:rpi_fork: tid=4, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=4 with x=0xdeadbeef
+TRACE:thread_code:success: got to the first thread
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=3: about to fork and run one thread
+TRACE:rpi_fork:rpi_fork: tid=5, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=5 with x=0xdeadbeef
+TRACE:thread_code:success: got to the first thread
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=4: about to fork and run one thread
+TRACE:rpi_fork:rpi_fork: tid=6, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=6 with x=0xdeadbeef
+TRACE:thread_code:success: got to the first thread
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=5: about to fork and run one thread
+TRACE:rpi_fork:rpi_fork: tid=7, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=7 with x=0xdeadbeef
+TRACE:thread_code:success: got to the first thread
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=6: about to fork and run one thread
+TRACE:rpi_fork:rpi_fork: tid=8, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=8 with x=0xdeadbeef
+TRACE:thread_code:success: got to the first thread
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=7: about to fork and run one thread
+TRACE:rpi_fork:rpi_fork: tid=9, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=9 with x=0xdeadbeef
+TRACE:thread_code:success: got to the first thread
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=8: about to fork and run one thread
+TRACE:rpi_fork:rpi_fork: tid=10, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=10 with x=0xdeadbeef
+TRACE:thread_code:success: got to the first thread
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:i=9: about to fork and run one thread
+TRACE:rpi_fork:rpi_fork: tid=11, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=11 with x=0xdeadbeef
+TRACE:thread_code:success: got to the first thread
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning

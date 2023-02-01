@@ -1,0 +1,6 @@
+TRACE:simple_boot: sending 7400 bytes, crc32=892fee51
+TRACE:notmain:about to fork and run one thread
+TRACE:rpi_fork:rpi_fork: tid=1, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread , tid=1 with x=-559038737
+TRACE:thread_code:SUCCESS: got to the first thread: rebooting

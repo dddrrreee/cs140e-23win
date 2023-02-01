@@ -1,0 +1,2 @@
+TRACE:simple_boot: sending 3597 bytes, crc32=f8a369f5
+TRACE:PUT32(0x2020001c)=0x100000

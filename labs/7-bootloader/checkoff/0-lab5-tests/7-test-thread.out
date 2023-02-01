@@ -1,0 +1,157 @@
+TRACE:simple_boot: sending 7692 bytes, crc32=8cfbf4ca
+TRACE:notmain:about to test summing of n=30 threads
+TRACE:rpi_fork:rpi_fork: tid=1, code=
+TRACE:rpi_fork:rpi_fork: tid=2, code=
+TRACE:rpi_fork:rpi_fork: tid=3, code=
+TRACE:rpi_fork:rpi_fork: tid=4, code=
+TRACE:rpi_fork:rpi_fork: tid=5, code=
+TRACE:rpi_fork:rpi_fork: tid=6, code=
+TRACE:rpi_fork:rpi_fork: tid=7, code=
+TRACE:rpi_fork:rpi_fork: tid=8, code=
+TRACE:rpi_fork:rpi_fork: tid=9, code=
+TRACE:rpi_fork:rpi_fork: tid=10, code=
+TRACE:rpi_fork:rpi_fork: tid=11, code=
+TRACE:rpi_fork:rpi_fork: tid=12, code=
+TRACE:rpi_fork:rpi_fork: tid=13, code=
+TRACE:rpi_fork:rpi_fork: tid=14, code=
+TRACE:rpi_fork:rpi_fork: tid=15, code=
+TRACE:rpi_fork:rpi_fork: tid=16, code=
+TRACE:rpi_fork:rpi_fork: tid=17, code=
+TRACE:rpi_fork:rpi_fork: tid=18, code=
+TRACE:rpi_fork:rpi_fork: tid=19, code=
+TRACE:rpi_fork:rpi_fork: tid=20, code=
+TRACE:rpi_fork:rpi_fork: tid=21, code=
+TRACE:rpi_fork:rpi_fork: tid=22, code=
+TRACE:rpi_fork:rpi_fork: tid=23, code=
+TRACE:rpi_fork:rpi_fork: tid=24, code=
+TRACE:rpi_fork:rpi_fork: tid=25, code=
+TRACE:rpi_fork:rpi_fork: tid=26, code=
+TRACE:rpi_fork:rpi_fork: tid=27, code=
+TRACE:rpi_fork:rpi_fork: tid=28, code=
+TRACE:rpi_fork:rpi_fork: tid=29, code=
+TRACE:rpi_fork:rpi_fork: tid=30, code=
+TRACE:rpi_thread_start:starting threads!
+TRACE:thread_code:in thread tid=1, with x=0
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:thread_code:in thread tid=2, with x=1
+TRACE:rpi_yield:switching from tid=2 to tid=3
+TRACE:thread_code:in thread tid=3, with x=2
+TRACE:rpi_yield:switching from tid=3 to tid=4
+TRACE:thread_code:in thread tid=4, with x=3
+TRACE:rpi_yield:switching from tid=4 to tid=5
+TRACE:thread_code:in thread tid=5, with x=4
+TRACE:rpi_yield:switching from tid=5 to tid=6
+TRACE:thread_code:in thread tid=6, with x=5
+TRACE:rpi_yield:switching from tid=6 to tid=7
+TRACE:thread_code:in thread tid=7, with x=6
+TRACE:rpi_yield:switching from tid=7 to tid=8
+TRACE:thread_code:in thread tid=8, with x=7
+TRACE:rpi_yield:switching from tid=8 to tid=9
+TRACE:thread_code:in thread tid=9, with x=8
+TRACE:rpi_yield:switching from tid=9 to tid=10
+TRACE:thread_code:in thread tid=10, with x=9
+TRACE:rpi_yield:switching from tid=10 to tid=11
+TRACE:thread_code:in thread tid=11, with x=10
+TRACE:rpi_yield:switching from tid=11 to tid=12
+TRACE:thread_code:in thread tid=12, with x=11
+TRACE:rpi_yield:switching from tid=12 to tid=13
+TRACE:thread_code:in thread tid=13, with x=12
+TRACE:rpi_yield:switching from tid=13 to tid=14
+TRACE:thread_code:in thread tid=14, with x=13
+TRACE:rpi_yield:switching from tid=14 to tid=15
+TRACE:thread_code:in thread tid=15, with x=14
+TRACE:rpi_yield:switching from tid=15 to tid=16
+TRACE:thread_code:in thread tid=16, with x=15
+TRACE:rpi_yield:switching from tid=16 to tid=17
+TRACE:thread_code:in thread tid=17, with x=16
+TRACE:rpi_yield:switching from tid=17 to tid=18
+TRACE:thread_code:in thread tid=18, with x=17
+TRACE:rpi_yield:switching from tid=18 to tid=19
+TRACE:thread_code:in thread tid=19, with x=18
+TRACE:rpi_yield:switching from tid=19 to tid=20
+TRACE:thread_code:in thread tid=20, with x=19
+TRACE:rpi_yield:switching from tid=20 to tid=21
+TRACE:thread_code:in thread tid=21, with x=20
+TRACE:rpi_yield:switching from tid=21 to tid=22
+TRACE:thread_code:in thread tid=22, with x=21
+TRACE:rpi_yield:switching from tid=22 to tid=23
+TRACE:thread_code:in thread tid=23, with x=22
+TRACE:rpi_yield:switching from tid=23 to tid=24
+TRACE:thread_code:in thread tid=24, with x=23
+TRACE:rpi_yield:switching from tid=24 to tid=25
+TRACE:thread_code:in thread tid=25, with x=24
+TRACE:rpi_yield:switching from tid=25 to tid=26
+TRACE:thread_code:in thread tid=26, with x=25
+TRACE:rpi_yield:switching from tid=26 to tid=27
+TRACE:thread_code:in thread tid=27, with x=26
+TRACE:rpi_yield:switching from tid=27 to tid=28
+TRACE:thread_code:in thread tid=28, with x=27
+TRACE:rpi_yield:switching from tid=28 to tid=29
+TRACE:thread_code:in thread tid=29, with x=28
+TRACE:rpi_yield:switching from tid=29 to tid=30
+TRACE:thread_code:in thread tid=30, with x=29
+TRACE:rpi_yield:switching from tid=30 to tid=1
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:rpi_yield:switching from tid=2 to tid=3
+TRACE:rpi_yield:switching from tid=3 to tid=4
+TRACE:rpi_yield:switching from tid=4 to tid=5
+TRACE:rpi_yield:switching from tid=5 to tid=6
+TRACE:rpi_yield:switching from tid=6 to tid=7
+TRACE:rpi_yield:switching from tid=7 to tid=8
+TRACE:rpi_yield:switching from tid=8 to tid=9
+TRACE:rpi_yield:switching from tid=9 to tid=10
+TRACE:rpi_yield:switching from tid=10 to tid=11
+TRACE:rpi_yield:switching from tid=11 to tid=12
+TRACE:rpi_yield:switching from tid=12 to tid=13
+TRACE:rpi_yield:switching from tid=13 to tid=14
+TRACE:rpi_yield:switching from tid=14 to tid=15
+TRACE:rpi_yield:switching from tid=15 to tid=16
+TRACE:rpi_yield:switching from tid=16 to tid=17
+TRACE:rpi_yield:switching from tid=17 to tid=18
+TRACE:rpi_yield:switching from tid=18 to tid=19
+TRACE:rpi_yield:switching from tid=19 to tid=20
+TRACE:rpi_yield:switching from tid=20 to tid=21
+TRACE:rpi_yield:switching from tid=21 to tid=22
+TRACE:rpi_yield:switching from tid=22 to tid=23
+TRACE:rpi_yield:switching from tid=23 to tid=24
+TRACE:rpi_yield:switching from tid=24 to tid=25
+TRACE:rpi_yield:switching from tid=25 to tid=26
+TRACE:rpi_yield:switching from tid=26 to tid=27
+TRACE:rpi_yield:switching from tid=27 to tid=28
+TRACE:rpi_yield:switching from tid=28 to tid=29
+TRACE:rpi_yield:switching from tid=29 to tid=30
+TRACE:rpi_yield:switching from tid=30 to tid=1
+TRACE:rpi_yield:switching from tid=1 to tid=2
+TRACE:rpi_yield:switching from tid=2 to tid=3
+TRACE:rpi_yield:switching from tid=3 to tid=4
+TRACE:rpi_yield:switching from tid=4 to tid=5
+TRACE:rpi_yield:switching from tid=5 to tid=6
+TRACE:rpi_yield:switching from tid=6 to tid=7
+TRACE:rpi_yield:switching from tid=7 to tid=8
+TRACE:rpi_yield:switching from tid=8 to tid=9
+TRACE:rpi_yield:switching from tid=9 to tid=10
+TRACE:rpi_yield:switching from tid=10 to tid=11
+TRACE:rpi_yield:switching from tid=11 to tid=12
+TRACE:rpi_yield:switching from tid=12 to tid=13
+TRACE:rpi_yield:switching from tid=13 to tid=14
+TRACE:rpi_yield:switching from tid=14 to tid=15
+TRACE:rpi_yield:switching from tid=15 to tid=16
+TRACE:rpi_yield:switching from tid=16 to tid=17
+TRACE:rpi_yield:switching from tid=17 to tid=18
+TRACE:rpi_yield:switching from tid=18 to tid=19
+TRACE:rpi_yield:switching from tid=19 to tid=20
+TRACE:rpi_yield:switching from tid=20 to tid=21
+TRACE:rpi_yield:switching from tid=21 to tid=22
+TRACE:rpi_yield:switching from tid=22 to tid=23
+TRACE:rpi_yield:switching from tid=23 to tid=24
+TRACE:rpi_yield:switching from tid=24 to tid=25
+TRACE:rpi_yield:switching from tid=25 to tid=26
+TRACE:rpi_yield:switching from tid=26 to tid=27
+TRACE:rpi_yield:switching from tid=27 to tid=28
+TRACE:rpi_yield:switching from tid=28 to tid=29
+TRACE:rpi_yield:switching from tid=29 to tid=30
+TRACE:rpi_yield:switching from tid=30 to tid=1
+TRACE:rpi_exit:done running threads, back to scheduler
+TRACE:rpi_thread_start:done with all threads, returning
+TRACE:notmain:count = 30, sum=435
+TRACE:notmain:SUCCESS!
