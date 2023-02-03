@@ -16,7 +16,7 @@ RUN = 1
 
 ifdef CS140E_STAFF
 ifndef CS140_ACT_AS_STUDENT
-#STAFF_OBJS += staff-objs/kmalloc.o
+STAFF_OBJS += staff-objs/kmalloc.o
 #STAFF_OBJS += staff-objs/sw-uart.o
 #STAFF_OBJS += staff-objs/interrupts-asm.o      
 #STAFF_OBJS += staff-objs/interrupts-vec-asm.o 

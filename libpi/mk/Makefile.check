@@ -55,7 +55,7 @@ all: $(TEST_RUN) # $(TEST_CHECK)
 # we pull everything into .out so that it's easier to debug.
 %.out: %.bin
 	@echo -n "generating <$*.out> and <$*.raw>: ";
-	@$(BOOT_CMD) ./$< >  $*.raw 2>&1
+	@$(BOOT_CMD) ./$< >  $*.raw 2>&1 || (echo "error generating raw file:\n------------------"; cat $*.raw; echo "------------------" ; exit 1)
 	@grep -v simple_boot $*.raw | sed $(STRIP_BRACKETS) | grep $(GREP_STR) > $*.out
 	@echo " success!";
 

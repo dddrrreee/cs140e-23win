@@ -27,8 +27,16 @@
  * output routines.
  */
 
+
+// let the user override the system putchar routine.
+
+typedef int (*rpi_putchar_t)(int chr);
 // put a single char
-int rpi_putchar(int c);
+extern rpi_putchar_t rpi_putchar;
+
+// override the routine.
+void rpi_putchar_set(rpi_putchar_t putc);
+
 
 // emit a single string.
 int putk(const char *msg);
@@ -174,6 +182,11 @@ void notmain(void);
 // provide your own implementation if you want to 
 // do something during a busy wait.
 void rpi_wait(void);
+
+// enable branch and icache
+void caches_enable(void);
+// disable branch and icache
+void caches_disable(void);
 
 /*********************************************************
  * some gcc helpers.

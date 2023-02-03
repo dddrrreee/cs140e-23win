@@ -37,13 +37,19 @@ endif
 
 
 
+
 TEST_RUN   := $(patsubst %.bin, %.run, $(TESTS))  
 TEST_CHECK := $(patsubst %.bin, %.check, $(TESTS))  
 TEST_CKSUM := $(patsubst %.bin, %.cksum, $(TESTS))  
 TEST_OUT   := $(patsubst %.bin, %.out, $(TESTS))  
 
+ifeq ($(RUN),1)
+RUN_MK = $(TEST_RUN)
+endif
+
+
 # set whatever you want the default action to be.
-all: $(TEST_RUN) # $(TEST_CHECK) 
+all:: $(RUN_MK) # $(TEST_RUN) # $(TEST_CHECK) 
 
 %.run: %.bin
 	@echo "\n----------------[about to run <./$*]-----------------------";
@@ -90,7 +96,7 @@ cksum:  $(TEST_CKSUM)
 
 cleanall:
 	rm -f *.out *.raw
-clean:
+clean::
 	rm -f *.raw *~
 
 .PHONY: all clean run emit check cksum
