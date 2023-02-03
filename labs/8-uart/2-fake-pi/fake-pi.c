@@ -113,6 +113,7 @@ static inline void trace_off(void) { trace_on_p = 0; }
 
 #define GPIO_BASE 0x20200000
 
+
 // the locations we track.
 enum {
     gpio_fsel0 = (GPIO_BASE + 0x00),
@@ -140,11 +141,39 @@ static unsigned
         gpio_clr0_v,
         aux_periph_v;
 
+// simple UART memory model
+uint32_t * uart_addr_lookup(uint32_t addr) {
+    static uint32_t uart_val[uart_end - uart_start + 1];
+
+    if(addr >= uart_start && addr < uart_end) {
+        uint32_t i = (addr - uart_start)/4;
+        assert(i < 12);
+        return &uart_val[i];
+    }
+    return 0;
+}
+int uart_addr_get(uint32_t *v, uint32_t addr) {
+    uint32_t *p = uart_addr_lookup(addr);
+    if(!p)
+        return 0;
+    *v = *p;
+    return 1;
+}
+int uart_addr_put(uint32_t addr, uint32_t v) {
+    uint32_t *p = uart_addr_lookup(addr);
+    if(!p)
+        return 0;
+    *p = v;
+    return 1;
+}
+
 // same, but takes <addr> as a uint32_t
 void PUT32(uint32_t addr, uint32_t v) {
     if(!trace_on_p)
         output("initializing PUT32(0x%x) = 0x%x\n", addr, v);
     trace("PUT32(0x%x) = 0x%x\n", addr, v);
+    if(uart_addr_put(addr,v))
+        return;
     switch(addr) {
     case gpio_fsel0: gpio_fsel0_v = v;  break;
     case gpio_fsel1: gpio_fsel1_v = v;  break;
@@ -152,6 +181,7 @@ void PUT32(uint32_t addr, uint32_t v) {
     case gpio_fsel3: gpio_fsel3_v = v;  break;
     case gpio_set0:  gpio_set0_v  = v;  break;
     case gpio_clr0:  gpio_clr0_v  = v;  break;
+    case aux_periph: aux_periph_v = v; break;
     case gpio_lev0:  panic("illegal write to gpio_lev0!\n");
     default: panic("write to illegal address: %x\n", addr);
     }
@@ -171,27 +201,16 @@ uint32_t DEV_VAL32(uint32_t x) {
     return x;
 }
 
-// simple memory model
-int uart_addr(uint32_t *v, uint32_t addr) {
-    static uint32_t uart_val[uart_end - uart_start + 1];
-
-    if(addr >= uart_start && addr < uart_end) {
-        uint32_t i = (addr - uart_start)/4;
-        assert(i < 12);
-        *v = uart_val[i];
-        return 1;
-    }
-    return 0;
-}
 
 // same but takes <addr> as a uint32_t
 uint32_t GET32(uint32_t addr) {
     unsigned v;
 
-    if(uart_addr(&v, addr))
+    if(uart_addr_get(&v, addr))
         goto found;
 
     switch(addr) {
+    case aux_periph: v = aux_periph_v; break;
     case gpio_fsel0: v = gpio_fsel0_v; break;
     case gpio_fsel1: v = gpio_fsel1_v; break;
     case gpio_fsel2: v = gpio_fsel2_v; break;

@@ -44,18 +44,18 @@ $(LIBNAME): $(OBJS)
 -include $(dep)
 
 %.o: %.c 
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o ./$(notdir $@)
 
 check:
-	@make -s -C tests check
+	@make -s -C tests-uart check
 run:
-	@make -s -C tests run
+	@make -s -C tests-uart run
 emit:
-	@make -s -C tests emit
+	@make -s -C tests-uart emit
 cksum:
-	@make -s -C tests cksum
+	@make -s -C tests-uart cksum
 checkoff:
-	@make -s -C tests checkoff
+	@make -s -C tests-uart checkoff
 
 clean:
 	rm -rf *.o *~ *.o Makefile.bak   $(LIBNAME) *.d
