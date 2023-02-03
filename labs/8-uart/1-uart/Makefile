@@ -42,4 +42,6 @@ input-test-0-small-input.check: input-test-0-small-input.bin
 
 # if this hangs make sure your uart.c has stuff in it.
 checkoff:
-	make -C ./ COMMON_SRC="cstart.c" PROGS="$(wildcard *-test*.c)" check
+	make -C ./ COMMON_SRC="uart.c cstart.c" PROGS="$(wildcard *-test*.c)" check
+	@echo "checking that not using staff uart: if you see output is an error:"
+	arm-eabi-none-nm *.elf  | grep staff_uart
