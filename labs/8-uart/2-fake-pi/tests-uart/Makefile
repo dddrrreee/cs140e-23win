@@ -16,11 +16,11 @@ TEST_SRC := $(wildcard ./[2]-*.c)
 # easiest: tell makefile to make the first batch of tests.
 TEST_SRC := $(wildcard ./[1]-*.c)
 # just run one test.
-TEST_SRC = 0-uart-getc.c
 TEST_SRC += 0-uart-putc.c
+
+TEST_SRC = 0-uart-getc.c
 TEST_SRC += 0-uart-init.c
 TEST_SRC := $(wildcard ./0-*.c)
-
 
 # no other source code
 SRC = 
@@ -35,7 +35,7 @@ INC  =  -I../  -I.
 INC +=  -I$(CS140E_2023_PATH)/libpi/include
 INC +=  -I$(CS140E_2023_PATH)/libpi/libc
 INC +=  -I$(CS140E_2023_PATH)/libpi/staff-src
-CFLAGS = $(INC) -O -Wall -Wno-unused-function -Wno-unused-variable
+CFLAGS = $(INC) -g -Wall -Wno-unused-function -Wno-unused-variable
 
 DEPS = libpi-fake $(FAKE_PROGS) 
 

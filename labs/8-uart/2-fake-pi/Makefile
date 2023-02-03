@@ -8,7 +8,7 @@ SRC  += $(LPP)/libc/putchar.c
 SRC  += $(LPP)/staff-src/clean-reboot.c
 SRC  += $(wildcard ./*.c)
 
-# SRC  += $(LPP)/staff-private/uart.c
+#SRC  += $(LPP)/staff-private/uart.c
 SRC  += ../1-uart/uart.c
 
 # or copy your GPIO here.
@@ -22,7 +22,7 @@ INC +=  -I$(CS140E_2023_PATH)/libpi/include
 INC +=  -I$(CS140E_2023_PATH)/libpi/libc
 INC +=  -I$(CS140E_2023_PATH)/libpi/staff-src
 INC +=  -I.
-CFLAGS = $(INC) -O -Wall -Wno-unused-function -Wno-unused-variable -MMD -DRPI_UNIX
+CFLAGS = $(INC) -g -Wall -Wno-unused-function -Wno-unused-variable -MMD -DRPI_UNIX
 
 # all the directories we get code from.
 dirs := $(sort $(dir $(SRC)))
