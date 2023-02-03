@@ -42,8 +42,8 @@ all: $(TEST_RUN) # $(TEST_CHECK)
 
 # note: this will fail if output does not contain a trace.
 # we pull everything into .out so that it's easier to debug.
-%.out: ./%.fake
-	./$< 2>&1  | grep $(GREP_STR) > ./$*.out
+#%.out: ./%.fake
+#	./$< 2>&1  | grep $(GREP_STR) > ./$*.out
 
 # can use:
 #    @grep  $(GREP_STR) ./$*.out | diff ./$*.test -
