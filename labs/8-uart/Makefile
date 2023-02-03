@@ -1,4 +1,4 @@
-SUBDIRS= 
+SUBDIRS=  1-uart 3-sw-uart
 
 .PHONY: all check clean
 all check clean: $(SUBDIRS)

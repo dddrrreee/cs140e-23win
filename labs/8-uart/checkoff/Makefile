@@ -17,11 +17,13 @@ checkoff:
 	
 	make -C ../ clean
 	make -C ../1-uart checkoff
+
+	make -C ../ clean
+	make -C ../3-sw-uart checkoff
 	
 	make -C ../../7-bootloader/ clean
 	make -C ../../7-bootloader/checkoff checkoff
 	
-
 # so you don't have to type as much
 # you can add whatever.
 check-boot-hash: ./hash-file
@@ -32,3 +34,4 @@ check-boot-hash: ./hash-file
 	@echo "unix side code";
 	./hash-file  $(BOOT_DIR)/kernel.img
 	arm-none-eabi-nm $(BOOT_DIR)/main.elf | grep using_staff_uart
+
