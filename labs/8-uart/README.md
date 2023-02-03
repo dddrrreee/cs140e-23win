@@ -184,13 +184,18 @@ Now change your bootloader to use the new `uart.c`:
      to make sure they still work, too.
   
 -----------------------------------------------------------------------
-##### Part 3. `libpi-fake`
+##### Part 3. `2-fake-pi`
 
-Your top level directory now has a `libpi-fake` directory. 
+The fake pi is in `2-fake-pi`.
 
-  1. Check that the old code works by running the tests by
-     by doing `make check` in `libpi-fake/tests-gpio`:
-  2. Check that the uart code works by running the tests in `tests-uart`.
+  1. You'll have to modify the `Makefile` so that it knows where to find your
+     `uart.c`.  If you give it the path, it should work.  If not let me know.
+
+     `cd` into `tests-uart` and run the test for `0-uart-init.c`.  You
+     may have addresses written in order (there are multiple legal 
+     orders). If you don't match ours,  check with someone else and
+     have some reason that the reorder you do is ok.
+
      You'll have to compare your `.out` files with other people.  You
      probably want to run these by hand one at a time.
 
@@ -198,6 +203,7 @@ Your top level directory now has a `libpi-fake` directory.
      the same reads and writes be done in the same order.  This is
      unrealistic and makes checking kinda of a pain.   We will fix this
      in the homework.
+
 -----------------------------------------------------------------------
 ### Part 4. implement `sw_put8` for a software UART.
 
