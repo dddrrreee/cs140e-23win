@@ -61,7 +61,7 @@ all: $(TEST_RUN) # $(TEST_CHECK)
 
 # not sure if there is a better way: use these fake target to run our
 # checks for everything.
-emitall: $(TEST_OUT) 
+#emitall: $(TEST_OUT) 
 checkall: $(TEST_CHECK) 
 runall: $(TEST_RUN) 
 cksumall:  $(TEST_CKSUM)
