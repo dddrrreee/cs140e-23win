@@ -54,25 +54,30 @@ Multiple reasons:
 ### Checkoff
 
 Show that:
-   1. `1-uart`: `make checkoff` passes.  You should first ensure you
+   1. You have a quick way of switching directories, especially switching to
+      libpi and back.  Try setting up aliases based on the `pushd` and `popd`
+      commands.  Don't keep re-typing-out `cd ../../../libpi` and `cd
+      ../labs/8-uart/whatever`; that's a waste of your lab time.
+  
+   2. `1-uart`: `make checkoff` passes.  You should first ensure you
        can pass the tests one by one to make debugging easier.
      
       Your `uart.c` code should make it clear why you did what you did,
       and supporting reasons --- i.e., have page numbers and partial
       quotes for each thing you did.
 
-   2. You should put your `uart.c` in `libpi/src` and
+   3. You should put your `uart.c` in `libpi/src` and
       update the `libpi/makefile`.   Remake your bootloader and put it
       on your sd card.
 
       You should then make sure that `make check` and `make checkoff`
       in lab 7 still works.
 
-   3. Your fake pi implementation for `uart.c` gives the
+   4. Your fake pi implementation for `uart.c` gives the
       same hash as everyone else.  Note, there are multiple ways to do
       same thing, so maybe do the first one as a way to resolve ambiguity.
 
-   4. Your software UART can reliably print and echo text between the pi
+   5. Your software UART can reliably print and echo text between the pi
       and your laptop.
 
 There are tons and tons of [EXTENSIONS](./EXTENSIONS.md)
