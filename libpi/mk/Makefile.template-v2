@@ -50,6 +50,7 @@ BOOTLOADER ?= pi-install
 
 MAKEFLAGS += --no-print-directory
 TEST_PROGS := $(patsubst %.c, %.bin, $(PROGS))
+TESTS = $(TEST_PROGS)
 
 # if CHECK is defined, do that, otherwise if RUN is defined do that.
 ifeq ($(CHECK),1)
@@ -86,7 +87,7 @@ include $(CS140E_2023_PATH)/libpi/defs.mk
 CFLAGS += $(EXTRA_CFLAGS)
 
 ifndef MK_CHK
-    MK_CHK := $(LPP)/mk/Makefile.check
+    MK_CHK := $(LPP)/mk/Makefile.check-v2
 endif
 
 LIBS += $(LPI) 
@@ -147,18 +148,18 @@ endif
 %.run: %.bin
 	$(BOOTLOADER) $(TTYUSB) ./$<
 
-ifneq ($(CAN_EMIT), 0)
-emit: libs $(DEPS) $(TEST_PROGS)
-	@make -e -f $(MK_CHK) emit "TESTS=$(TEST_PROGS)"
-endif
+#ifneq ($(CAN_EMIT), 0)
+#emit: libs $(DEPS) $(TEST_PROGS)
+#	@make -e -f $(MK_CHK) emit "TESTS=$(TEST_PROGS)"
+#endif
+#
+#run: libs $(DEPS) $(TEST_PROGS)
+#	@make -f $(MK_CHK) run "TESTS=$(TEST_PROGS)"
+#check: libs $(DEPS) $(TEST_PROGS)
+###	@make -f $(MK_CHK) check "TESTS=$(TEST_PROGS)"
 
-run: libs $(DEPS) $(TEST_PROGS)
-	@make -f $(MK_CHK) run "TESTS=$(TEST_PROGS)"
-check: libs $(DEPS) $(TEST_PROGS)
-	@make -f $(MK_CHK) check "TESTS=$(TEST_PROGS)"
-
-update:
-	cp *.out ../code
+#update:
+#	cp *.out ../code
 
 tags: 
 	ctags *.[chSs] $(LPP)/*.[Ssch] $(LPP)/*/*.[chSs]
@@ -174,3 +175,6 @@ clean::
 
 # stop make from deleting these suffix'd files.
 .PRECIOUS: %.list %.elf %.o %.d
+
+
+include $(MK_CHK)
