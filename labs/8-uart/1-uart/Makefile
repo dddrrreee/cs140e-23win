@@ -44,4 +44,4 @@ input-test-0-small-input.check: input-test-0-small-input.bin
 checkoff:
 	make -C ./ COMMON_SRC="uart.c cstart.c" PROGS="$(wildcard *-test*.c)" check
 	@echo "checking that not using staff uart: if you see output is an error:"
-	arm-eabi-none-nm *.elf  | grep staff_uart
+	arm-none-eabi-nm *.elf  | grep staff_uart
