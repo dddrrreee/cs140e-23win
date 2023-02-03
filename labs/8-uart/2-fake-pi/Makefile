@@ -13,7 +13,7 @@ SRC  += ../1-uart/uart.c
 
 # or copy your GPIO here.
 ifndef CS140E_STAFF
-SRC  += ../../3-gpio/code/gpio.c 
+SRC  += $(LPP)/src/gpio.c 
 else
 SRC  += $(LPP)/staff-private/gpio.c 
 endif
