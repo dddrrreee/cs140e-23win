@@ -18,6 +18,42 @@
 //     matter for later labs).
 // 
 void *read_file(unsigned *size, const char *name) {
+    int fd;
+    struct stat st;
+    assert(name != NULL);
+
+    fd = open(name, O_RDONLY);
+    if (fd == -1) {
+        perror("open");
+        return NULL;
+    }
+
+    if (fstat(fd, &st) == -1) {
+        perror("fstat");
+        return NULL;
+    }
+
+    *size = st.st_size;
+
+    unsigned padded_size = (*size + 3) & ~0x03;
+    char *buffer = calloc(1, padded_size);
+    if (!buffer) {
+        perror("calloc");
+        return NULL;
+    }
+
+    ssize_t read_size = read(fd, buffer, *size);
+    if (read_size == -1) {
+        perror("read");
+        return NULL;
+    }
+
+    if (close(fd) == -1) {
+        perror("close");
+        return NULL;
+    }
+
+    return buffer;
     // How: 
     //    - use stat to get the size of the file.
     //    - round up to a multiple of 4.
@@ -26,5 +62,5 @@ void *read_file(unsigned *size, const char *name) {
     //    - read entire file into buffer.  
     //    - make sure any padding bytes have zeros.
     //    - return it.   
-    unimplemented();
+    //unimplemented();
 }

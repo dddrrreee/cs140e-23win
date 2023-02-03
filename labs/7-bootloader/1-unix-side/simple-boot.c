@@ -40,17 +40,41 @@ void simple_boot(int fd, const uint8_t *buf, unsigned n) {
         get_uint8(fd);
     } 
 
+
     // 1. reply to the GET_PROG_INFO
-    todo("reply to GET_PROG_INFO");
+    trace_put32(fd, PUT_PROG_INFO);
+    printf("being aclled\n");
+    trace_put32(fd, ARMBASE);
+    trace_put32(fd, n);
+    trace_put32(fd, crc32(buf, n));
+   // put_op(fd, PUT_PROG_INFO);
+    //put_uint32(fd, n);
+   // put_uint32(fd, crc32(buf,n));
+    //todo("reply to GET_PROG_INFO");
 
     // 2. drain any extra GET_PROG_INFOS
-    todo("drain any extra GET_PROG_INFOS");
+    while ((op = get_op(fd)) == GET_PROG_INFO) {
+        output("extra GET_PROG_INFO received: discarding\n");
+        //get_uint32(fd); // discard the size
+    }
+    //todo("drain any extra GET_PROG_INFOS");
 
     // 3. check that we received a GET_CODE
-    todo("check that we received a GET_CODE");
+    ck_eq32(fd, "GET_CODE not received", GET_CODE, op);
+    
+    //todo("check that we received a GET_CODE");
 
     // 4. handle it: send a PUT_CODE + the code.
-    todo("send PUT_CODE + the code in <buf>");
+    trace_put32(fd, PUT_CODE);
+    if (crc32(buf,n) != trace_get32(fd)){ 
+        panic("op code is not get code:");
+        }
+    //unsigned nbytes = get_uint32(fd);
+    for(int i = 0; i < n; i++)
+        trace_put8(fd, buf[i]);
+    
+    
+    //todo("send PUT_CODE + the code in <buf>");
 
     // 5. Wait for BOOT_SUCCESS
     ck_eq32(fd, "BOOT_SUCCESS mismatch", BOOT_SUCCESS, get_op(fd));
