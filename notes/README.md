@@ -12,3 +12,4 @@ be needed for a lab:
 
  - Interrupts: [armv6 interrupt cheatsheet](interrupts/INTERRUPT-CHEAT-SHEET.md)
    [armv6 mode bug examples](mode-bugs/README.md)
+ - [armv6 debug hardware cheatsheet](debug-hw/DEBUG-cheat-sheet.md)

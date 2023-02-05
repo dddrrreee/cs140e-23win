@@ -1,5 +1,5 @@
 # Makefile to build or clean all labs.
-SUBDIRS= caller-callee  observability makefiles  devices interrupts using-gcc-for-asm mode-bugs 
+SUBDIRS= caller-callee  observability makefiles  devices interrupts using-gcc-for-asm mode-bugs # debug-hw
 
 
 .PHONY: all check clean
