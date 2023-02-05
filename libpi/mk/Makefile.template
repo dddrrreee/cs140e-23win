@@ -142,7 +142,7 @@ endif
 
 %.list: %.elf
 	$(OD) -D   $*.elf > $*.list
-%.bin: %.list
+%.bin: %.list %.elf
 	$(OCP) $*.elf -O binary $*.bin
 %.run: %.bin
 	$(BOOTLOADER) $(TTYUSB) ./$<
