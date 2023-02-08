@@ -18,3 +18,8 @@ clean:
 
 .PHONY: force
 	force :;
+
+checkoff:
+	make -C 1-vector-base$(STAFF)/ checkoff
+	make -C 2-gpio-int$(STAFF)/ checkoff
+	make -C 3-handlers-gpio-int$(STAFF)/ checkoff
