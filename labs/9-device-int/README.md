@@ -83,7 +83,7 @@ to compare yours to ours / your partners and see that everyone
 has the same thing.
 
 Notes:
-  1. I checked pins were <= 32.   I did this before issuing a `dev_barrier`.
+  1. I rejected pins that were >= 32.   I did this before issuing a `dev_barrier`.
   2. I enabled the GPIO address before the Broadcom interrupt controller.
   3. The interrupt controller is a different device from GPIO so we need
      dev barriers between them.
