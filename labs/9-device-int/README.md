@@ -1,5 +1,10 @@
 ## Lab: device interrupts 
 
+<p align="center">
+  <img src="images/glowing-rpi.png" width="450" />
+</p>
+
+
 We're going to setup the pi so you can get GPIO interrupts, speed up
 the interrupt handling code, and finish building your sw-uart.
 
