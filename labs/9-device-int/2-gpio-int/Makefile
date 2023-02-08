@@ -10,8 +10,6 @@ include $(CS140E_2023_PATH)/libunix/mk/Makefile.unix.fake
 LIBNAME = libfake.a
 
 # i'm not sure this actually makes things better.
-emit: $(PROGS)
-	make -f ./Makefile.test emitall "TESTS=$(PROGS)"
 run: $(PROGS)
 	make -f ./Makefile.test runall "TESTS=$(PROGS)"
 check: $(PROGS)
