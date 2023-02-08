@@ -1,5 +1,7 @@
 #ifndef __RPI_INLINE_ASM_H__
 #define __RPI_INLINE_ASM_H__
+// try to keep most of the inline assembly in this header
+// so it's easy to flip to another arch or fake pi.
 
 // get the status register.
 static inline uint32_t cpsr_get(void) {
@@ -18,7 +20,6 @@ static inline int cpsr_int_enabled(void) {
     return ((cpsr_get() >> 7) & 1) == 0;
 }
 
-
 /*
   returns previous cpsr so you can do recursively.
   replaces:
@@ -35,6 +36,8 @@ static inline uint32_t cpsr_int_enable(void) {
 }
 
 /*
+  disable system interrupts: returns previous cpsr.
+
   replaces:
     .globl system_disable_interrupts
     system_disable_interrupts:
@@ -49,8 +52,21 @@ static inline uint32_t cpsr_int_disable(void) {
     return cpsr;
 }
 
-static inline void cpsr_int_reset(uint32_t cpsr) {
-    cpsr_set(cpsr);
+// reset cpsr to a previous state.  returns the 
+// current value.
+//
+// the if/else is a bit clearer than doing bit
+// manipulations.
+//
+// we don't just reset the entire cpsr in order to 
+// preserve the condition code flags. 
+//
+// NOTE: i think there is a suffix we can give
+// to the cpsr write to get around this.  check manual.
+static inline uint32_t cpsr_int_reset(uint32_t cpsr) {
+    if(cpsr & (1<<7))
+        return cpsr_int_disable();
+    else
+        return cpsr_int_enable();
 }
-
 #endif

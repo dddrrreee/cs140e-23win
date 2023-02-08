@@ -21,3 +21,8 @@ void asm_todo_helper(uint32_t pc, const char *todo_msg) {
     // should do an error.
     clean_reboot();
 }
+
+void asm_bad_exception_helper(uint32_t pc, const char *msg) {
+    output("ERROR:BAD EXCEPTION:%s: pc=%x\n", msg, pc);
+    clean_reboot();
+}

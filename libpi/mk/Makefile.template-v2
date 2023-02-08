@@ -77,7 +77,7 @@ endif
 
 # wait: you need src too?
 dep := $(patsubst %.c, %.d, $(PROGS)) $(COMMON_OBJS:.o=.d) 
-VPATH := $(sort $(dir $(dep)))
+VPATH := ./ $(sort $(dir $(dep)))
 
 .SUFFIXES: .run
 
@@ -94,11 +94,12 @@ LIBS += $(LPI)
 
 # add the memmap file, libpi and the makefile as dependencies
 # libpi serves as a sentinal covering everything in libpi
-DEPS += $(MEMMAP) ./Makefile $(LPI) $(LPP)/mk/Makefile.template
+DEPS += $(MEMMAP) ./Makefile $(LPI) $(LPP)/mk/Makefile.template-v2
 
 ALL_OBJS := $(COMMON_OBJS) $(STAFF_OBJS) 
 
-all:: libs $(TEST_PROGS) $(TEST_RUN) $(CHECK_RUN) 
+all:: libs $(TEST_PROGS) $(TEST_RUN)#  $(CHECK_RUN) 
+
 
 print:
 	# COMMON_OBJS = <$(COMMON_OBJS)>
@@ -119,6 +120,11 @@ $(LPI):
 	@make  -C $(LPP)
 endif
 endif
+
+# why does adding <libs> cause this to fail??
+gen-binaries:  $(TEST_PROGS)
+
+.PHONEY: gen-binaries libs FORCE
 
 $(COMMON_OBJS): $(DEPS)
 

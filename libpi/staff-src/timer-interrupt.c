@@ -19,7 +19,8 @@ void timer_interrupt_init(unsigned ncycles) {
 
     // from valvers:
     //	 Enable the timer interrupt IRQ
-    PUT32(Enable_Basic_IRQs, RPI_BASIC_ARM_TIMER_IRQ);
+    // PUT32(Enable_Basic_IRQs, RPI_BASIC_ARM_TIMER_IRQ);
+    PUT32(Enable_Basic_IRQs, GET32(Enable_Basic_IRQs) | RPI_BASIC_ARM_TIMER_IRQ);
 
     /* Setup the system timer interrupt */
     /* Timer frequency = Clk/256 * Load --- so smaller = more frequent. */
@@ -31,7 +32,7 @@ void timer_interrupt_init(unsigned ncycles) {
             RPI_ARMTIMER_CTRL_32BIT |
             RPI_ARMTIMER_CTRL_ENABLE |
             RPI_ARMTIMER_CTRL_INT_ENABLE |
-            RPI_ARMTIMER_CTRL_PRESCALE_256);
+            RPI_ARMTIMER_CTRL_PRESCALE_1);
 #else
     // example of how to use a structure instead.
     // structures often be better if you are doing a 

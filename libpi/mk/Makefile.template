@@ -135,6 +135,10 @@ ifneq ($(MAKECMDGOALS),cleanall)
 endif
 endif
 
+# this does not work.
+#gen-binaries: $(TEST_PROGS)
+#.PHONEY: gen-binaries
+
 ./%.d: %.c $(DEPS)
 	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
 ./%.d: %.S $(DEPS)
