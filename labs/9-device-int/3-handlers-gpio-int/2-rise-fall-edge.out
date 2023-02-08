@@ -1,0 +1,7 @@
+TRACE:notmain:test: single rise/fall edge detection.
+TRACE:notmain:--------------------- interrupts now off ----------------
+TRACE:notmain:--------------------- interrupts now on ----------------
+TRACE:test_one_fall_one_rise:about to test one rise/one fall
+TRACE:test_one_fall_one_rise:success: got a falling edge!
+TRACE:test_one_fall_one_rise:success: got a rising edge!
+TRACE:notmain:SUCCESS: test passed!
