@@ -9,6 +9,37 @@ Extension:
      one to make it darker.
 
 ------------------------------------------------------------------------
+### Interesting: make your sw_uart_get8/sw_uart_put8 as fast as possible.
+
+
+Simple puzzle: If you have a loopback, sw-uart interrupt based approach:
+how fast can you make it?
+
+There's a ton of overhead in the current implementation:
+  0. If you're energetic you can re-purpose your `gprof` implementation
+     from lab 5 to see where the time is spent.  This is an interesting
+     fun excercise on its own (especially if you do backtraces).
+  1. The GPIO and PUT/GET procedure calls are a major source of overhead.
+     Make clean inlined versions will speed stuff up.  
+  2. You can also switch to "Fast Interrupts" and do a custom handler.
+  3. To deal with large constants: there are three co-processor registers
+     you can use to hold them.
+  4. Lots of tricks, including getting rid of dev barriers :)
+
+------------------------------------------------------------------------
+### Interesting: a software UART network
+
+Given a working software UART:
+  1. Hook up two pi's using two jumper wires to form a network.
+  2. You can then send and receive bytes using your software UART 
+     implementation.  (Similar to how your laptop and pi do bootloading).
+  3. Challenge: how high of a bandwidth can you get?  
+
+This is related to the previous, but in a bit more of an interesting
+(but also hard to debug) form factor.
+
+
+------------------------------------------------------------------------
 ### Hard extension: change the hardware UART to use interrupts.
 
 Modify augment your UART driver so that clients can set up
