@@ -138,5 +138,5 @@ Congratulations.  Interrupts are tricky and you have a lot of working
 code.
 
 <p align="center">
-  <img src="images/robots.png" width="450" />
+  <img src="images/robots-small.png" width="450" />
 </p>
