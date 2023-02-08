@@ -1,4 +1,3 @@
-TRACE:simple_boot: sending 4628 bytes, crc32=a6c28927
 TRACE:notmain:aligned, non-null vector base: should be ok: passed
 TRACE:notmain:unaligned vector base: should detect: passed
 TRACE:notmain:about to set null vector base: should detect: passed!

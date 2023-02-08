@@ -11,6 +11,7 @@ COMMON_SRC := interrupt-asm.S
 # we use a higher optimization level for timings.
 OPT_LEVEL = -O2
 
+EXCLUDE ?= grep -v simple_boot
 include $(CS140E_2023_PATH)/libpi/mk/Makefile.template-v2
 
 checkoff:

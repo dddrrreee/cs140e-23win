@@ -1,4 +1,3 @@
-TRACE:simple_boot: sending 5444 bytes, crc32=b8659fea
 TRACE:test_swi:orig lab 5 vector(no cache)
 TRACE:test_swi:     single call took  cycles
 TRACE:test_swi:     single call took  cycles
