@@ -130,3 +130,13 @@ We will use that to make sure your code works.
 You can also do `sw_uart_get8`.   Of course, it is waiting for bits
 rather than writing them.  As a simple hack, you can just have it write
 to the loopback pin as well and then measure when these occur.
+
+------------------------------------------------------------------------
+### DONE!
+
+Congratulations.  Interrupts are tricky and you have a lot of working
+code.
+
+<p align="center">
+  <img src="images/robots.png" width="450" />
+</p>
