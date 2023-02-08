@@ -19,8 +19,10 @@ void timer_interrupt_init(unsigned ncycles) {
 
     // from valvers:
     //	 Enable the timer interrupt IRQ
-    // PUT32(Enable_Basic_IRQs, RPI_BASIC_ARM_TIMER_IRQ);
-    PUT32(Enable_Basic_IRQs, GET32(Enable_Basic_IRQs));
+    //
+    // NOTE: this is not a RMW.  there is a seperate disable flag 
+    // for basic IRQs
+    PUT32(Enable_Basic_IRQs, RPI_BASIC_ARM_TIMER_IRQ);
 
     /* Setup the system timer interrupt */
     /* Timer frequency = Clk/256 * Load --- so smaller = more frequent. */
