@@ -3,7 +3,6 @@ TRACE:1: dev_barrier
 TRACE:2: GET32(0x20200058) = 0x625558ec
 TRACE:3: PUT32(0x20200058) = 0x625558ec
 TRACE:4: dev_barrier
-TRACE:5: GET32(0x2000b214) = 0x238e1f29
-TRACE:6: PUT32(0x2000b214) = 0x238e1f29
-TRACE:7: dev_barrier
-TRACE: pi exited cleanly: 9 calls to random
+TRACE:5: PUT32(0x2000b214) = 0x20000
+TRACE:6: dev_barrier
+TRACE: pi exited cleanly: 8 calls to random
