@@ -1,5 +1,4 @@
-SUBDIRS= 0-circular-example #1-gpio-int 2-logic-analyzer 3-vector-base 
-# 1-gpio-int 3-vector-base
+SUBDIRS= 0-circular-example 1-vector-base 2-gpio-int 3-handlers-gpio-int 4-logic-analyzer
 
 .PHONY: all check clean
 all check clean: $(SUBDIRS)
