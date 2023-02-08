@@ -15,9 +15,10 @@ Check-off:
       from changing to `b`.
   2. `2-gpio-int` passes `make checkoff`.
   3. `3-handlers-gpio-int` passes `make checkoff`.
-  4. `4-logic-analyzer`: Your `sw_uart_putc` and `sw_uart_get` gives
+  4. `4-logic-analyzer`: Your `sw_uart_putc` gives
      reasonable values for its timings.
-  5. You have the basic `sw_uart_getc` interrupt working.
+  5. Ideally: You have the basic `sw_uart_getc` interrupt working and can send
+     back and forth.
 
 There are a ton of [EXTENSION](./EXTENSIONS.md).  We actually have a
 bunch that are not written, so ask if you want :).
@@ -33,7 +34,7 @@ You'll write the inline assembly to set the vector base.  See:
 
 What to do:
   - You only have to modify `1-vector-base/vector-base.h` and one line of
-    `1-vector-base/interrupt-asm.h`
+    `1-vector-base/interrupt-asm.S`
   - There are two tests: `0-test-checks.c` makes sure you have some of
     the checks and `1-test-run.c` does some timings.  You should see
     over 30% performance improvement.
