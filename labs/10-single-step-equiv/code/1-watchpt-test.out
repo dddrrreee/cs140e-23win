@@ -1,0 +1,6 @@
+TRACE:set watchpoint for addr 0x0
+TRACE:should see a store fault!
+TRACE:store fault at pc=0x8024
+TRACE:should see a load fault!
+TRACE:load fault at pc=0x802c
+TRACE:SUCCESS

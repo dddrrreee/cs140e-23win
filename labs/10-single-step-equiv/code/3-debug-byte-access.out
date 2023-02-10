@@ -1,0 +1,17 @@
+TRACE:about to test addr 0x0
+TRACE:set watchpoint for addr 0x0
+TRACE:should see a store fault!
+TRACE:should see a load fault!
+TRACE:about to test addr 0x1
+TRACE:set watchpoint for addr 0x1
+TRACE:should see a store fault!
+TRACE:should see a load fault!
+TRACE:about to test addr 0x2
+TRACE:set watchpoint for addr 0x2
+TRACE:should see a store fault!
+TRACE:should see a load fault!
+TRACE:about to test addr 0x3
+TRACE:set watchpoint for addr 0x3
+TRACE:should see a store fault!
+TRACE:should see a load fault!
+TRACE:SUCCESS
