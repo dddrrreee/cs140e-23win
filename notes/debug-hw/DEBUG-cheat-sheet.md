@@ -290,6 +290,10 @@ Or, `armv6-debug.h` provides some macros to make this more concise:
     //
     // you can see this by adding "-E" to the gcc compile line and inspecting
     // the output.
-    coproc_mk_get(debug_id_macro, p14, 0, c0, c0, 0)
+    cp_asm_get(debug_id, p14, 0, c0, c0, 0)
 
 
+A couple useful ones for the lab:
+
+    cp_asm(cp14_bvr0, p14, 0, c0, c0, 4)
+    cp_asm(cp14_bcr0, p14, 0, c0, c0, 5)
