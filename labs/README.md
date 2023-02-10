@@ -150,7 +150,6 @@ level code you've been using ---the bootloader and the UART
 driver.
 
   
-***We are here*** ===>
 
   - [7-bootloader](7-bootloader): two of the biggest pieces of code
     we've given you have been the Unix-side and pi-side bootloader code
@@ -182,7 +181,7 @@ driver.
 ---------------------------------------------------------------------
 ### 4. Execution: interrupts, exceptions, processes (part 2)
 
-  - ***device-interrupts***:
+  - [9-device-interrupts](9-device-int):
     if you keep doing this kind of work the single most common fancy
     "OS" type thing you'll likely do in the future is to setup GPIO
     pin interrupts so that you can get notified when a hardware device
@@ -194,7 +193,9 @@ driver.
     unless our code checks them at exactly the right time, incoming
     messages will vaporize.
 
-  - ***exceptions to catch errors***:
+  - [10-debug-hw](10-single-step-equiv): ***NOTE: this was misnamed:
+    it covered debugging hardware***.  
+
     This lab will give you exposure to exceptions by showing how you can
     abuse debugging hardware in a new way to catch memory corruption
     (such as null pointer bugs) *without virtual memory*.
@@ -205,6 +206,8 @@ driver.
     had to waste a bunch of time figuring out what was corrupting some
     random location in their program.  After today's lab you should be
     able to detect such corruption quickly.
+
+***We are here*** ===>
 
   - ***processes + equiv***:
     we will give you a few hundred line, trivial OS --- system calls,
