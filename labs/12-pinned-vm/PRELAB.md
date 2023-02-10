@@ -34,7 +34,7 @@ should understand.
 An an incomplete cheat-sheet for key things in the ARM manuals in the
 `docs` directory:
 
-  - [CHEATSHEET.md](CHEATSHEET.md).  Everything
+  - [VM-CHEATSHEET.md](./VM-CHEATSHEET.md).  Everything
     this references you should be reading.  It's not small; it's just
     the way it is.  IMO, once you grasp this material, there is nothing
     in any arch manual that you can't handle.
