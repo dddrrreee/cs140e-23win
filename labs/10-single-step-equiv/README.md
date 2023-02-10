@@ -11,7 +11,7 @@ Reminder:
     `arm1176-ch13-debug.pdf` is the debug hardware chapter for our
     arm1176 chip and the (shorter) excerpt `arm1176-fault-regs.pdf`
     gives the fault registers.
-  - There is a [cheat sheet](./DEBUG-cheat-sheet.md) that summarizes a
+  - There is a [cheat sheet](./../../notes/debug-hw/DEBUG-cheat-sheet.md) that summarizes a
     lot of the page numbers and rules .
 
 The ARM chip we use, like many machines, has a way to set both
