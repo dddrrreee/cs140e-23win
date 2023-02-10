@@ -212,4 +212,6 @@ void caches_disable(void);
 // any extra prototypes you want to add
 #include "your-prototypes.h"
 
+
+void custom_loader(void);
 #endif

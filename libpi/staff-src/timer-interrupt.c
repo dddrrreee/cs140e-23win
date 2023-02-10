@@ -22,7 +22,9 @@ void timer_interrupt_init(unsigned ncycles) {
     //
     // NOTE: this is not a RMW.  there is a seperate disable flag 
     // for basic IRQs
+    dev_barrier();
     PUT32(Enable_Basic_IRQs, RPI_BASIC_ARM_TIMER_IRQ);
+    dev_barrier();
 
     /* Setup the system timer interrupt */
     /* Timer frequency = Clk/256 * Load --- so smaller = more frequent. */

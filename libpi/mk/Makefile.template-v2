@@ -148,7 +148,7 @@ endif
 	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
 
 %.list: %.elf
-	$(OD) -D   $*.elf > $*.list
+	$(OD) -d   $*.elf > $*.list
 %.bin: %.list
 	$(OCP) $*.elf -O binary $*.bin
 %.run: %.bin
@@ -183,4 +183,6 @@ clean::
 .PRECIOUS: %.list %.elf %.o %.d
 
 
+ifneq ($(DEFINE_CHECK),0)
 include $(MK_CHK)
+endif

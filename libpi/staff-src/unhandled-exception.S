@@ -43,4 +43,5 @@ MK_TRAMPOLINE(prefetch_abort,   4, prefetch_abort_vector)
 MK_TRAMPOLINE(data_abort,       8, data_abort_vector)
 MK_TRAMPOLINE(interrupt,        4, int_vector)
 MK_TRAMPOLINE(swi,              4, syscall_vector)
+MK_TRAMPOLINE(fiq,              4, fiq_vector)
 
