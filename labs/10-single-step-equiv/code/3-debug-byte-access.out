@@ -1,0 +1,17 @@
+TRACE:test_bad_addr:about to test addr 0x0
+TRACE:test_bad_addr:set watchpoint for addr 0x0
+TRACE:test_bad_addr:should see a store fault!
+TRACE:test_bad_addr:should see a load fault!
+TRACE:test_bad_addr:about to test addr 0x1
+TRACE:test_bad_addr:set watchpoint for addr 0x1
+TRACE:test_bad_addr:should see a store fault!
+TRACE:test_bad_addr:should see a load fault!
+TRACE:test_bad_addr:about to test addr 0x2
+TRACE:test_bad_addr:set watchpoint for addr 0x2
+TRACE:test_bad_addr:should see a store fault!
+TRACE:test_bad_addr:should see a load fault!
+TRACE:test_bad_addr:about to test addr 0x3
+TRACE:test_bad_addr:set watchpoint for addr 0x3
+TRACE:test_bad_addr:should see a store fault!
+TRACE:test_bad_addr:should see a load fault!
+TRACE:notmain:SUCCESS

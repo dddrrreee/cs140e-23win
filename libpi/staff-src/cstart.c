@@ -6,6 +6,8 @@ void _cstart() {
     // extern int __bss_start__, __bss_end__;
 	void notmain();
 
+    custom_loader();
+
     // zero out the bss
     uint32_t * bss = __bss_start__;
     uint32_t * bss_end = __bss_end__;

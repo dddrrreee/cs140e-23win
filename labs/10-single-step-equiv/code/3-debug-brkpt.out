@@ -1,0 +1,33 @@
+TRACE:foo:running foo: 0
+TRACE:notmain:worked!  fill do 10 repeats
+TRACE:notmain:should see a breakpoint fault!
+TRACE:foo:running foo: 0
+TRACE:notmain:n_faults=1, i=0
+TRACE:notmain:should see a breakpoint fault!
+TRACE:foo:running foo: 1
+TRACE:notmain:n_faults=2, i=1
+TRACE:notmain:should see a breakpoint fault!
+TRACE:foo:running foo: 2
+TRACE:notmain:n_faults=3, i=2
+TRACE:notmain:should see a breakpoint fault!
+TRACE:foo:running foo: 3
+TRACE:notmain:n_faults=4, i=3
+TRACE:notmain:should see a breakpoint fault!
+TRACE:foo:running foo: 4
+TRACE:notmain:n_faults=5, i=4
+TRACE:notmain:should see a breakpoint fault!
+TRACE:foo:running foo: 5
+TRACE:notmain:n_faults=6, i=5
+TRACE:notmain:should see a breakpoint fault!
+TRACE:foo:running foo: 6
+TRACE:notmain:n_faults=7, i=6
+TRACE:notmain:should see a breakpoint fault!
+TRACE:foo:running foo: 7
+TRACE:notmain:n_faults=8, i=7
+TRACE:notmain:should see a breakpoint fault!
+TRACE:foo:running foo: 8
+TRACE:notmain:n_faults=9, i=8
+TRACE:notmain:should see a breakpoint fault!
+TRACE:foo:running foo: 9
+TRACE:notmain:n_faults=10, i=9
+TRACE:notmain:SUCCESS

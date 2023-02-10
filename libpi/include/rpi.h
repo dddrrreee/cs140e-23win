@@ -147,6 +147,9 @@ unsigned get32(const volatile void *addr);
 void put8(void *addr, uint8_t x);
 void PUT8(uint32_t addr, uint8_t x);
 
+uint8_t GET8(unsigned addr);
+uint8_t get8(const volatile void *addr);
+
 // jump to <addr>
 void BRANCHTO(unsigned addr);
 
@@ -212,4 +215,6 @@ void caches_disable(void);
 // any extra prototypes you want to add
 #include "your-prototypes.h"
 
+
+void custom_loader(void);
 #endif

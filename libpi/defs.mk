@@ -15,7 +15,7 @@ OD  = $(ARM)-objdump
 OCP = $(ARM)-objcopy
 CS140E_2023_LIBPI_PATH = $(CS140E_2023_PATH)/libpi
 LPP = $(CS140E_2023_LIBPI_PATH)
-LPI = $(LPP)/libpi.a
+LPI ?= $(LPP)/libpi.a
 
 START ?= $(LPP)/staff-start.o
 MEMMAP ?= $(LPP)/memmap

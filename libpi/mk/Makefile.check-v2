@@ -89,13 +89,16 @@ all:: $(RUN_MK) # $(TEST_RUN) # $(TEST_CHECK)
 
 # not sure if there is a better way: use these fake target to run our
 # checks for everything.
+ifneq ($(CAN_EMIT), 0)
 emit: $(TEST_OUT) 
+endif
+
 check: $(TEST_CHECK)  
 run: $(TEST_RUN) 
 cksum:  $(TEST_CKSUM)
 
-cleanall:
-	rm -f *.out *.raw
+#cleanall:
+#	rm -f *.out *.raw
 clean::
 	rm -f *.raw *~
 

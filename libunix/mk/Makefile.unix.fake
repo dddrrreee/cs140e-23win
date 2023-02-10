@@ -1,0 +1,62 @@
+# PROG_SRC : the names of the driver program files
+# SRC: shared source
+# SRC :=  $(REAL_SRC) $(wildcard ./*.c)
+# LIBNAME
+
+ifdef CS140E_USE_STAFF
+    LIBUNIX_PATH := $(CS140E_STAFF_2023_PATH)/libunix
+else
+    LIBUNIX_PATH := $(CS140E_2023_PATH)/libunix
+endif
+
+PROG_OBJS := $(PROG_SRC:.c=.o)
+PROG_OBJS := $(foreach obj, $(PROG_OBJS), ./$(notdir $(obj)))
+PROGS := $(patsubst %.o, ./%.fake, $(PROG_OBJS))
+
+# grab all .c files in the current directory
+
+OBJS := $(patsubst %.c, %.o, $(SRC))
+OBJS := $(foreach obj, $(OBJS), ./$(notdir $(obj)))
+
+dep := $(OBJS:.o=.d)  $(PROG_OBJS:.o=.d) # one dependency file for each source
+
+# automatically give make the directories to look in.
+VPATH := $(sort $(dir $(SRC)))
+
+OPT_LEVEL ?= -Og
+CC=gcc
+CFLAGS += $(OPT_LEVEL) -Wall -g -std=gnu99  -Werror -Wno-unused-function -Wno-unused-variable -DRPI_UNIX
+# added the include path for libpi-fake
+LU = $(LIBUNIX_PATH)
+CFLAGS += -I. -I$(LU)
+
+DEPS += ./Makefile
+
+all:: libs $(OBJS) $(PROG_OBJS) $(PROGS) $(LIBNAME) # $(OBJS) 
+
+libs::
+	make -C $(LU)
+
+# fix this rule: can't delete the targets in <all>
+./%.o: %.c $(DEPS)
+	$(CC) $(CFLAGS) -c $< -o $(notdir $@)
+
+$(LIBNAME): $(OBJS) $(DEPS)
+	ar cr $(LIBNAME) $(OBJS) 
+
+./%.fake: ./%.o $(OBJS) $(DEPS)  $(LU)/libunix.a 
+	$(CC) $(CFLAGS) $(OBJS) $< -o $*.fake  $(LU)/libunix.a $(LIBS) $(LU)/libunix.a
+
+ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),cleanall)
+-include $(dep)  # include dep files
+endif
+endif
+
+./%.d: %.c
+	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
+
+clean :
+	rm -f *.o *.d *~ Makefile.bak $(NAME) *.pitag  $(PROGS) $(LIBNAME)
+
+.PHONY: clean tags libs run check 

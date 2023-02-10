@@ -9,6 +9,9 @@
 .globl fn_name;             \
 fn_name:
 
+// declare a weak global symbol
+#define MK_WEAK_SYM(name)   .weak name; name
+
 // used to make a cp15 function: clear the input "read-only" register
 #define MK_CP15_FUNC(name, macro_name)           \
 .globl name;                                \
@@ -31,7 +34,7 @@ name:                                       \
 // we do some iffy hacks to make a concatenated
 // string with "file:lineno:msg" and pass it to 
 // the asm_todo_helper.
-#define call_helper_w_msg(fn, msg)  \
+#define asm_call_helper_w_msg(fn, msg)  \
     mov sp, #INT_STACK_ADDR;        \
     sub r0, pc, #4;                 \
     /* grab the string address */   \
@@ -48,14 +51,17 @@ name:                                       \
 
 // use in ASM to annotate TODOs for lab
 #define asm_todo(msg)  \
-    call_helper_w_msg(asm_todo_helper, msg)
+    asm_call_helper_w_msg(asm_todo_helper, msg)
 
 // use in ASM to annotate impossible to reach locations
 #define asm_not_reached()  \
-    call_helper_w_msg(asm_not_reached_helper, NOT REACHED)
+    asm_call_helper_w_msg(asm_not_reached_helper, NOT REACHED)
 
 // use in ASM to annotate unimplemented code
 #define asm_not_implemented()  \
-    call_helper_w_msg(asm_not_implemented_helper, NOT IMPLEMENTED)
+    asm_call_helper_w_msg(asm_not_implemented_helper, NOT IMPLEMENTED)
+
+#define asm_bad_exception(msg)  \
+    asm_call_helper_w_msg(asm_bad_exception_helper, msg)
 
 #endif

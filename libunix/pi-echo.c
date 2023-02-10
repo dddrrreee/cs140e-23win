@@ -51,7 +51,7 @@ void pi_echo(int unix_fd, int pi_fd, const char *portname) {
         int n;
         if((n=read_timeout(unix_fd, buf, sizeof buf, 1000))) {
             buf[n] = 0;
-            output("about to echo <%s> to pi\n", buf);
+            // output("about to echo <%s> to pi\n", buf);
             write_exact(pi_fd, buf, n);
         }
 

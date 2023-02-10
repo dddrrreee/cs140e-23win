@@ -35,7 +35,7 @@ CFLAGS += -I. -I$(LU)
 
 DEPS += ./Makefile
 
-all : libs $(OBJS) $(PROG_OBJS) $(PROGS) $(LIBNAME) # $(OBJS) 
+all:: libs $(OBJS) $(PROG_OBJS) $(PROGS) $(LIBNAME) # $(OBJS) 
 
 libs::
 	make -C $(LU)

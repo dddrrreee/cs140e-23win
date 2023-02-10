@@ -1,0 +1,98 @@
+TRACE:0: calling pi code
+TRACE:1: dev_barrier
+TRACE:2: PUT32(0x20200040) = 0x1
+TRACE:3: dev_barrier
+TRACE:4: dev_barrier
+TRACE:5: PUT32(0x20200040) = 0x2
+TRACE:6: dev_barrier
+TRACE:7: dev_barrier
+TRACE:8: PUT32(0x20200040) = 0x4
+TRACE:9: dev_barrier
+TRACE:10: dev_barrier
+TRACE:11: PUT32(0x20200040) = 0x8
+TRACE:12: dev_barrier
+TRACE:13: dev_barrier
+TRACE:14: PUT32(0x20200040) = 0x10
+TRACE:15: dev_barrier
+TRACE:16: dev_barrier
+TRACE:17: PUT32(0x20200040) = 0x20
+TRACE:18: dev_barrier
+TRACE:19: dev_barrier
+TRACE:20: PUT32(0x20200040) = 0x40
+TRACE:21: dev_barrier
+TRACE:22: dev_barrier
+TRACE:23: PUT32(0x20200040) = 0x80
+TRACE:24: dev_barrier
+TRACE:25: dev_barrier
+TRACE:26: PUT32(0x20200040) = 0x100
+TRACE:27: dev_barrier
+TRACE:28: dev_barrier
+TRACE:29: PUT32(0x20200040) = 0x200
+TRACE:30: dev_barrier
+TRACE:31: dev_barrier
+TRACE:32: PUT32(0x20200040) = 0x400
+TRACE:33: dev_barrier
+TRACE:34: dev_barrier
+TRACE:35: PUT32(0x20200040) = 0x800
+TRACE:36: dev_barrier
+TRACE:37: dev_barrier
+TRACE:38: PUT32(0x20200040) = 0x1000
+TRACE:39: dev_barrier
+TRACE:40: dev_barrier
+TRACE:41: PUT32(0x20200040) = 0x2000
+TRACE:42: dev_barrier
+TRACE:43: dev_barrier
+TRACE:44: PUT32(0x20200040) = 0x4000
+TRACE:45: dev_barrier
+TRACE:46: dev_barrier
+TRACE:47: PUT32(0x20200040) = 0x8000
+TRACE:48: dev_barrier
+TRACE:49: dev_barrier
+TRACE:50: PUT32(0x20200040) = 0x10000
+TRACE:51: dev_barrier
+TRACE:52: dev_barrier
+TRACE:53: PUT32(0x20200040) = 0x20000
+TRACE:54: dev_barrier
+TRACE:55: dev_barrier
+TRACE:56: PUT32(0x20200040) = 0x40000
+TRACE:57: dev_barrier
+TRACE:58: dev_barrier
+TRACE:59: PUT32(0x20200040) = 0x80000
+TRACE:60: dev_barrier
+TRACE:61: dev_barrier
+TRACE:62: PUT32(0x20200040) = 0x100000
+TRACE:63: dev_barrier
+TRACE:64: dev_barrier
+TRACE:65: PUT32(0x20200040) = 0x200000
+TRACE:66: dev_barrier
+TRACE:67: dev_barrier
+TRACE:68: PUT32(0x20200040) = 0x400000
+TRACE:69: dev_barrier
+TRACE:70: dev_barrier
+TRACE:71: PUT32(0x20200040) = 0x800000
+TRACE:72: dev_barrier
+TRACE:73: dev_barrier
+TRACE:74: PUT32(0x20200040) = 0x1000000
+TRACE:75: dev_barrier
+TRACE:76: dev_barrier
+TRACE:77: PUT32(0x20200040) = 0x2000000
+TRACE:78: dev_barrier
+TRACE:79: dev_barrier
+TRACE:80: PUT32(0x20200040) = 0x4000000
+TRACE:81: dev_barrier
+TRACE:82: dev_barrier
+TRACE:83: PUT32(0x20200040) = 0x8000000
+TRACE:84: dev_barrier
+TRACE:85: dev_barrier
+TRACE:86: PUT32(0x20200040) = 0x10000000
+TRACE:87: dev_barrier
+TRACE:88: dev_barrier
+TRACE:89: PUT32(0x20200040) = 0x20000000
+TRACE:90: dev_barrier
+TRACE:91: dev_barrier
+TRACE:92: PUT32(0x20200040) = 0x40000000
+TRACE:93: dev_barrier
+TRACE:94: dev_barrier
+TRACE:95: PUT32(0x20200040) = 0x80000000
+TRACE:96: dev_barrier
+TRACE: pi exited cleanly: 7 calls to random

@@ -1,0 +1,6 @@
+TRACE:notmain:test: single falling edge detection.
+TRACE:notmain:--------------------- interrupts now off ----------------
+TRACE:notmain:--------------------- interrupts now on ----------------
+TRACE:test_one_falling:about to test a single falling edge
+TRACE:test_one_falling:success: got a falling edge!
+TRACE:notmain:SUCCESS: test passed!

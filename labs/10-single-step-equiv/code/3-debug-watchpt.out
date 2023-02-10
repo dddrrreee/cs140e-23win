@@ -1,0 +1,6 @@
+TRACE:notmain:set watchpoint for addr 0x0
+TRACE:notmain:should see a store fault!
+TRACE:watchpt_handler:store fault at pc=0x8024
+TRACE:notmain:should see a load fault!
+TRACE:watchpt_handler:load fault at pc=0x802c
+TRACE:notmain:SUCCESS

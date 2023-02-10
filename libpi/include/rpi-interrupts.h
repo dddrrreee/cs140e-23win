@@ -63,7 +63,7 @@ void int_init_reg(void *int_vector_addr);
 
 // need to disable mmu if it's enabled.
 #define INT_UNHANDLED(msg,r) \
-    panic("ERROR: unhandled exception <%s> at PC=%x\n", msg,r)
+    panic("called default handler: unhandled exception <%s> at PC=%x\n", msg,r)
 
 // can override these.
 void data_abort_vector(unsigned pc);
@@ -78,5 +78,16 @@ void int_clear_state(void);
 void int_init(void);
 // initialize interrupts using table <vec>
 void int_init_vec(uint32_t *vec, uint32_t *vec_end);
+
+// do a hard reset of all hardware interrupt
+// sources to off (BCM and system).
+//
+// used during initialization.
+uint32_t set_all_interrupts_off(void);
+
+void bcm_set_interrupts_off(void);
+
+void * int_vec_reset(void *vec);
+void int_vec_init(void *v);
 
 #endif 

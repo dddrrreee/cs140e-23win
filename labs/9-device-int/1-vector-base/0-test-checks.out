@@ -1,0 +1,5 @@
+TRACE:notmain:aligned, non-null vector base: should be ok: passed
+TRACE:notmain:unaligned vector base: should detect: passed
+TRACE:notmain:about to set null vector base: should detect: passed!
+TRACE:notmain:about to set vector base: passed!
+TRACE:notmain:success

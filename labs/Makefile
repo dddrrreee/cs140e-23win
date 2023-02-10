@@ -5,6 +5,7 @@ SUBDIRS = 1-compile
 #SUBDIRS += 4-cross-checking
 SUBDIRS += 5-interrupts
 SUBDIRS += 6-threads
+SUBDIRS += 7-bootloader
 
 # 0-trusting-trust 0-blink 1-gpio 2-cross-check 3-bootloader 4-uart 5-replay 6-interrupts 7-device-interrupts 8-threads 9-debug-hardware
 

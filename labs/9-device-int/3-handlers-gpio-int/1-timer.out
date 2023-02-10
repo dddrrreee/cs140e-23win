@@ -1,0 +1,7 @@
+TRACE:notmain:test: single falling edge detection.
+TRACE:notmain:--------------------- interrupts now off ----------------
+TRACE:notmain:--------------------- interrupts now on ----------------
+TRACE:test_timer:about to test timer ints
+TRACE:test_timer:delay_ms(10) =  timer interrupts
+TRACE:test_timer:success: timer interrupts!
+TRACE:notmain:SUCCESS: test passed!

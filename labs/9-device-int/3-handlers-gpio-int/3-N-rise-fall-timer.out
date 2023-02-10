@@ -1,0 +1,35 @@
+TRACE:notmain:multiple rise/fall/timer test.
+TRACE:test_N_all:should see 32768 falling edges!
+TRACE:test_N_all:passed 1024 tests so far 
+TRACE:test_N_all:passed 2048 tests so far 
+TRACE:test_N_all:passed 3072 tests so far 
+TRACE:test_N_all:passed 4096 tests so far 
+TRACE:test_N_all:passed 5120 tests so far 
+TRACE:test_N_all:passed 6144 tests so far 
+TRACE:test_N_all:passed 7168 tests so far 
+TRACE:test_N_all:passed 8192 tests so far 
+TRACE:test_N_all:passed 9216 tests so far 
+TRACE:test_N_all:passed 10240 tests so far 
+TRACE:test_N_all:passed 11264 tests so far 
+TRACE:test_N_all:passed 12288 tests so far 
+TRACE:test_N_all:passed 13312 tests so far 
+TRACE:test_N_all:passed 14336 tests so far 
+TRACE:test_N_all:passed 15360 tests so far 
+TRACE:test_N_all:passed 16384 tests so far 
+TRACE:test_N_all:passed 17408 tests so far 
+TRACE:test_N_all:passed 18432 tests so far 
+TRACE:test_N_all:passed 19456 tests so far 
+TRACE:test_N_all:passed 20480 tests so far 
+TRACE:test_N_all:passed 21504 tests so far 
+TRACE:test_N_all:passed 22528 tests so far 
+TRACE:test_N_all:passed 23552 tests so far 
+TRACE:test_N_all:passed 24576 tests so far 
+TRACE:test_N_all:passed 25600 tests so far 
+TRACE:test_N_all:passed 26624 tests so far 
+TRACE:test_N_all:passed 27648 tests so far 
+TRACE:test_N_all:passed 28672 tests so far 
+TRACE:test_N_all:passed 29696 tests so far 
+TRACE:test_N_all:passed 30720 tests so far 
+TRACE:test_N_all:passed 31744 tests so far 
+TRACE:test_N_all:passed 32768 tests so far 
+TRACE:notmain:SUCCESS: test passed!

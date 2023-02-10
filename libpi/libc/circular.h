@@ -6,6 +6,7 @@
 #ifndef RPI_UNIX
 #   include "rpi.h"
 #   include "rpi-interrupts.h"
+#   include "rpi-inline-asm.h"
 #else
 #   define printk printf
 #   include <assert.h>
@@ -91,7 +92,7 @@ static inline cqe_t cq_pop(cq_t *c) {
     // this will deadlock: need to yield.
     while(!cq_pop_nonblock(c,&e)) {
         // at this point you would call rpi_wait()
-        if(!int_is_enabled())
+        if(!cpsr_int_enabled())
             panic("will deadlock: interrupts not enabled [FIXME]\n"); 
     }
     return e;

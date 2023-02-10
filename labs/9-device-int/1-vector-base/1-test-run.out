@@ -1,0 +1,32 @@
+TRACE:test_swi:orig lab 5 vector(no cache)
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     10 calls took  per call
+TRACE:test_swi:better relocation (no cache)
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     10 calls took  per call
+TRACE:test_swi:fast relocation (no cache)
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     10 calls took  per call
+TRACE:notmain:---------------------------------------------------------
+TRACE:notmain:------------------- turning on caching ------------------
+TRACE:test_swi:orig lab 5 (no cache)
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     10 calls took  per call
+TRACE:test_swi:better relocation (icache enabled)
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     10 calls took  per call
+TRACE:test_swi:fast relocation (icache enabled)
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     10 calls took  per call

@@ -1,0 +1,7 @@
+TRACE:notmain:test: single rise/fall edge detection with timer ints.
+TRACE:notmain:--------------------- interrupts now off ----------------
+TRACE:notmain:--------------------- interrupts now on ----------------
+TRACE:test_fall_rise_timer:about to test a single falling edge
+TRACE:test_fall_rise_timer:success: got a falling edge !
+TRACE:test_fall_rise_timer:success: got a rising edge! 
+TRACE:notmain:SUCCESS: test passed !

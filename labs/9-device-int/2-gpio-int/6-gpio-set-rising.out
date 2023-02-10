@@ -1,0 +1,8 @@
+TRACE:0: calling pi code
+TRACE:1: dev_barrier
+TRACE:2: GET32(0x2020004c) = 0x625558ec
+TRACE:3: PUT32(0x2020004c) = 0x625558ec
+TRACE:4: dev_barrier
+TRACE:5: PUT32(0x2000b214) = 0x20000
+TRACE:6: dev_barrier
+TRACE: pi exited cleanly: 8 calls to random

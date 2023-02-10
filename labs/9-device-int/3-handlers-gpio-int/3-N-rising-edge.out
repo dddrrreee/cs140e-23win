@@ -1,0 +1,4 @@
+TRACE:notmain:32768 rising edge detection test.
+TRACE:notmain:interrupts enabled
+TRACE:test_N_rising:should see 32768 rising edges!
+TRACE:notmain:SUCCESS: test passed!
