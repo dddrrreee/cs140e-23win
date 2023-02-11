@@ -1,6 +1,6 @@
 ## CS140E: embedded operating systems (Engler, Winter, 2023)
 
-All material for CS140E, winter 2023.  
+This repository contains all material for CS140E, winter 2023.
 
 Tl;dr:
   - It's a lab class, so [jump right to the labs](./labs/README.md).
@@ -25,16 +25,15 @@ Staff:
   - Akshay Srivatsan (akshay01);
   - Alex Fu (afu625);
   - Manya Bansal (manya227).
+  - Joe Tan.
 
 ------------------------------------------------------------------------
 ### Details
 
 140e is a lab-based class with no explicit lectures.  We will do two
-three-to-five hour labs each week.  You should be able to complete
+five to eight hour labs each week.  You should be able to complete
 almost all of the lab in one sitting.  There will be several homeworks,
 that act as mini-capstone projects tying together the preceding labs.
-Since we are breaking new ground by having the class virtual only,
-we may add an additional discussion section to help people that need it.
 
 By the end of the class you will have built your own simple, clean OS
 for the widely-used, ARM-based raspberry pi --- including interrupts,
@@ -66,8 +65,8 @@ used to build many other things.
 
 You should take this class if:
 
-   1. You write code well OR (you don't yet write code well AND have
-      a lot of time to devote to the class);
+   1. You write systems code well OR (you don't yet write code well
+      AND have a lot of time to devote to the class);
 
    2. AND you find these systems topics interesting.
 
@@ -80,10 +79,10 @@ requirement.
 
    1. It always helps, but you do not need any background in hardware
       or OS stuff to do well in the class.  In fact, you don't even need
-      to have been trained in CS: one of the best students from last year
+      to have been trained in CS: one of the best students from the past
       was a physics PhD student with fairly minimal background in coding,
       so we've had fantastic luck with non-CS folks :) With that said,
-      the less background you have, the more motivation you might need.
+      the less background you have, the more motivation you'll need.
 
       By the end of the class you'll have learned how to comfortably do
       many things that may well seem like superpowers and could easily
@@ -98,11 +97,10 @@ requirement.
       as a basis for building many interesting systems.
 
       As one measure: Last year, I taught two extra follow-on classes
-      (cs240lx and cs340lx) ``for free'' because of all the interesting
+      (cs240lx and cs340lx) "for free" because of all the interesting
       things that came up from cs140e.   In addition, it's caused me
       to write more code than I have since grad school.  At my age,
       that's an unusual result :)
-
 
 #### What this class is not
 
@@ -136,9 +134,9 @@ A quick skim might falsely pattern-match on a couple of things:
 
 With that said, I set aside the entire quarter to work on this course,
 so am happy to help people that need it --- some of the biggest success
-stories last year were from students that had an initially large gap
-between their understanding and the topic but started to really "get it"
-after some weeks of struggle.
+stories from past years were from students that had an initially large
+gap between their understanding and the topic but started to really
+"get it" after 4-5 weeks of struggle.
 
 ------------------------------------------------------------------------
 ### Lab policies.
@@ -170,10 +168,10 @@ students each week through makeup labs.
 ------------------------------------------------------------------------
 ### Grading policy
 
-Since this is starting as a virtual class, and we are short-staffed,
-you are strongly encouraged to help other people!    We will try to keep
-a note of who does so effectively, and will guarantee that you will be
-pushed up a grade if you are on the border.
+Since we are short-staffed --- as are all Stanford lab classes for reasons
+I do not understand --- you are strongly encouraged to help other people!
+We will try to keep a note of who does so effectively, and will guarantee
+that you will be pushed up a grade if you are on the border.
 
 Notes:
  1. Prelabs must be completed before class, and labs must be completed
@@ -214,6 +212,10 @@ First things first:
 
 ------------------------------------------------------------------------
 ### Previous Iterations:
+
+Past years for reference: note that there is significant churn from year
+to year, and some of these labs relied heavily on in-person discussion to
+paper over quality issues with their writeups.
 
 - [Winter 2022][2022]
 - [Spring 2021][2021]
