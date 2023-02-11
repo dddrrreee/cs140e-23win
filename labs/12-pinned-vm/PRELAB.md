@@ -73,6 +73,7 @@ Useful in combination: [CS140 lecture notes](http://www.scs.stanford.edu/19wi-cs
 
   1. [Virtual memory hardware](http://www.scs.stanford.edu/19wi-cs140/notes/vm_hardware-print.pdf).
   2. [Virtual memory OS](http://www.scs.stanford.edu/19wi-cs140/notes/vm_os-print.pdf)
+  3. [VM-STUDENT-OVERVIEW.md](./VM-STUDENT-OVERVIEW.md)
 
 
 ### Useful code to compare to
