@@ -79,6 +79,8 @@ void hello(void) {
 }
 
 void notmain(void) {
+    kmalloc_init_set_start((void*)(1024*1024), 1024*1024);
+
     extern uint32_t test5_full_single[];
     vector_base_set(test5_full_single);
     brkpt_mismatch_start(); 
