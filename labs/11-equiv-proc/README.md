@@ -59,12 +59,12 @@ Roadmap:
      output should match when just running the `nop` routines (`printk`
      can change.
 
-  7. Pull the pieces of code you need into a small two file system in
-     a seperate directory and do some kind of interesting test.  Two
-     of the most "straightforward" options: (1) add timer interrupts
-     with a very small timeout and/or (2) speed up the code signifantly.
-     Speedup is fun because we don't have much code and we have a 
-     very thorough correctness check. 
+  7. Pull the pieces of code you need into a small two or three files in
+     a seperate directory and do some kind of interesting test.  Two of
+     the most "straightforward" options: (1) add timer interrupts with
+     a very small timeout and/or (2) speed up the code signifantly.
+     Speedup is fun because we don't have much code and we have a very
+     thorough correctness check.
 
      Note: for interrupts, you may need to modify the hashed `cpsr`.
 
@@ -77,6 +77,12 @@ Roadmap:
      A simple option: add bug finding to the single step handler: check
      that the stack pointer is within the process's stack, that the pc
      is within the code text segment, and anything else you can figure out.
+
+     A simple option: add statistics so we have more visibility into what
+     is happening --- how many processes run, how long they took, how 
+     many instructions singled stepped, switched, etc.  Answering
+     the question "what happened?" better.
+
 
 Extension:
   - I meant to build this but didn't: a massive source of bugs has been
