@@ -1,15 +1,5 @@
 #include "regs-save-restore.h"
 
-@MK_FN(switchto_user_asm)
-@    mov sp, r0
-@    @ load user copies.
-@    ldm   sp, {r0-r14}^
-@    @ spsr and pc.
-@    add  sp, sp, #60
-@    rfe sp          @ rfe loads [pc and cpsr]
-@    asm_not_reached()
-
-
 @ save all the registers in ascending order.
 swi_trampoline:
     mov sp, #INT_STACK_ADDR
