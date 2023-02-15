@@ -1,10 +1,11 @@
 # input is harder.
 PROGS = $(wildcard ./input-test-0-small-input.c)
-PROGS = $(wildcard ./input-test*.c)
+#PROGS = $(wildcard ./input-test-0*.c)
+#PROGS = $(wildcard ./input-test-1*.c)
 
-PROGS = $(wildcard ./output-test*.c)
+#PROGS = $(wildcard ./output-test*.c)
 # easiest output
-PROGS = $(wildcard ./output-test-0-hello.c)
+#PROGS = $(wildcard ./output-test-0-hello.c)
 
 COMMON_SRC = cstart.c
 # if you commment this out, will be using our libpi version: should pass!
@@ -13,6 +14,7 @@ COMMON_SRC += uart.c
 # uncomment if you want it to automatically run.
 # RUN=1
 
+# LIBPI = ../../9-device-int
 BOOTLOADER = my-install
 CAN_EMIT = 0
 
@@ -22,6 +24,7 @@ include $(CS140E_2023_PATH)/libpi/mk/Makefile.template-v2
 # we check that echo'ing input works.  gross hack b/c we didn't make it
 # easy to filter all bootloader input (very annoying) so we grep out 
 # the leading number that our inputs are tagged w/
+input-test-1-echo.run: 
 input-test-1-echo.check: input-test-1-echo.bin
 	my-install $< < ../test-input/trivial.c  > trivial.tmp  2>&1 
 	@grep "[0-9][0-9][0-9][0-9]:" trivial.tmp | grep -v BOOT: > trivial.test
@@ -38,6 +41,8 @@ input-test-1-echo.check: input-test-1-echo.bin
 	@rm -f *.tmp
 
 input-test-0-small-input.check: input-test-0-small-input.bin 
+	my-install $< < input-hello.txt
+input-test-0-small-input.run: input-test-0-small-input.bin 
 	my-install $< < input-hello.txt
 
 # if this hangs make sure your uart.c has stuff in it.

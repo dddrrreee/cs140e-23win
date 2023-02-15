@@ -8,9 +8,9 @@
 #include "simple-boot.h"
 
 // Implement steps
-//    1,2,3,4.
+// 1,2,3,4.
 //
-//  0 and 5 are implemented as demonstration.
+// 0 and 5 are implemented as demonstration.
 //
 // Note: if timeout in <set_tty_to_8n1> is too small (set by our caller)
 // you can fail here. when you do a read and the pi doesn't send data quickly enough.
@@ -39,39 +39,42 @@ void simple_boot(int fd, const uint8_t *buf, unsigned n) {
         // have to remove just one byte since if not aligned, stays not aligned
         get_uint8(fd);
     } 
-
+    unsigned red = crc32(buf, n);
 
     // 1. reply to the GET_PROG_INFO
     trace_put32(fd, PUT_PROG_INFO);
-    printf("being aclled\n");
+   //printf("being aclled\n");
     trace_put32(fd, ARMBASE);
     trace_put32(fd, n);
     trace_put32(fd, crc32(buf, n));
-   // put_op(fd, PUT_PROG_INFO);
-    //put_uint32(fd, n);
-   // put_uint32(fd, crc32(buf,n));
-    //todo("reply to GET_PROG_INFO");
+ 
 
     // 2. drain any extra GET_PROG_INFOS
     while ((op = get_op(fd)) == GET_PROG_INFO) {
         output("extra GET_PROG_INFO received: discarding\n");
-        //get_uint32(fd); // discard the size
     }
     //todo("drain any extra GET_PROG_INFOS");
 
     // 3. check that we received a GET_CODE
     ck_eq32(fd, "GET_CODE not received", GET_CODE, op);
+
+
+    ck_eq32(fd, "check sum not equal", red, get_op(fd));
     
     //todo("check that we received a GET_CODE");
 
     // 4. handle it: send a PUT_CODE + the code.
+    
+    //if (crc32(buf,n) != trace_get32(fd)){ 
+        //panic("op code is not get code:");
+    //}
     trace_put32(fd, PUT_CODE);
-    if (crc32(buf,n) != trace_get32(fd)){ 
-        panic("op code is not get code:");
-        }
-    //unsigned nbytes = get_uint32(fd);
     for(int i = 0; i < n; i++)
         trace_put8(fd, buf[i]);
+
+    
+    //unsigned nbytes = get_uint32(fd);
+    
     
     
     //todo("send PUT_CODE + the code in <buf>");

@@ -20,12 +20,13 @@
 //   - look at <delay_us()> : for how to correctly 
 //     wait for <n> microseconds given that the hardware
 //     counter can overflow.
-unsigned long code_start;
-unsigned long code_end;
-unsigned char *exec_addr;
-unsigned long put_prog_info[4];
-unsigned long get_code_info[2];
-
+//unsigned long code_start;
+//unsigned long code_end;
+//unsigned char *exec_addr;
+//unsigned long put_prog_info[4];
+//unsigned long get_code_info[2];
+extern uint32_t  __code_start__[];
+extern uint32_t  __prog_end__[];
 static unsigned 
 has_data_timeout(unsigned timeout) {
       unsigned start = timer_get_usec();
@@ -35,11 +36,10 @@ has_data_timeout(unsigned timeout) {
         unsigned curr = timer_get_usec();
         if((curr - start) >= timeout)
             return 0;
-        delay_us(10);
+        //delay_us(10);
     }
     return 0;
     //boot_todo("has_data_timeout: implement this routine");
-    return 0;
 }
 
 // iterate:
@@ -62,6 +62,7 @@ static void wait_for_data(unsigned usec_timeout) {
             break;
         delay_us(usec_timeout);
     }
+    
     //boot_todo("wait_for_data: implement this routine");
 }
 
@@ -76,53 +77,81 @@ int get_code(uint32_t *code_addr) {
     /****************************************************************
      * Add your code below: 2,3,4,5,6
      */
-    uint32_t addr = 0;
-    code_start = (unsigned long)code_addr;
-    code_end = code_start + put_prog_info[2];
-    unsigned char exec_addr_ptr = *exec_addr;
+    uint32_t addr;
+    uint32_t nbytes;
+    uint32_t cksum;
+    uint32_t put_prog_info;
+    //uint32_t addr = 0;
+    //code_start = (unsigned long)code_addr;
+    //code_end = code_start + put_prog_info;
+    //unsigned char exec_addr_ptr = *exec_addr;
+  
         // 2. Expect: [PUT_PROG_INFO, addr, nbytes, cksum]
-    if (boot_get32((unsigned long*)put_prog_info, 4) != 4) {
-        return -1;
+    put_prog_info = boot_get32();
+    if (put_prog_info != PUT_PROG_INFO) {
+        boot_err(BOOT_ERROR, "Error");
     }
-    
 
-    if (put_prog_info[0] != PUT_PROG_INFO) {
-        return BOOT_ERROR;
-    }
+    addr = boot_get32();
+    nbytes = boot_get32();
+    cksum = boot_get32();
+   
 
 // 3. Check if the binary will collide with the bootloader code
-    if (code_start < (unsigned long)get_code || code_end > (unsigned long)__PROG_END__) {
-        return BOOT_ERROR;
+    if (((unsigned)&PUT32 > (unsigned)&code_addr) && ((unsigned)&__prog_end__ > (unsigned)&code_addr))
+    //if ((addr+nbytes) >= PUT32)
+    {
+   // if (addr < * __prog_end__ && addr < *__code_start__) {
+        //panic("Error");
+        boot_err(BOOT_ERROR, "Error");
     }
 
-    unsigned long cksum = put_prog_info[3];
+    //unsigned long cksum = put_prog_info[3];
 
     // 4. Send [GET_CODE, cksum] back
-    get_code_info[0] = GET_CODE;
-    get_code_info[1] = cksum;
-    boot_get32((unsigned long*)get_code_info, 2);
+   
+    boot_put32(GET_CODE);
+    boot_put32(cksum);
+    //get_code_info[0] = GET_CODE;
+    //get_code_info[1] = cksum;
+    //boot_get32((unsigned long*)get_code_info, 2);
 
     // 5. Expect: [PUT_CODE, <code>]
-    unsigned char buffer[put_prog_info[2]];
-    if (boot_get32(buffer, put_prog_info[2]) != put_prog_info[2]) {
-        return BOOT_ERROR;
+    
+    //uint32_t code;
+    unsigned put_code;
+    put_code = boot_get32();
+    if (put_code != PUT_CODE) {
+        panic("Error");
     }
 
-    for (int i = 0; i < put_prog_info[2]; i++) {
-        PUT8(code_start + i, buffer[i]);
+    for(int i = 0; i < nbytes; i++) {
+        int8_t byte = uart_get8();
+        PUT8(addr + i , byte);
     }
+        
+    
+    //code = boot_get32();
+    //unsigned char buf[i];
+    //code = boot_get32();
+
+    //for (int i = 0; i < put_prog_info; i++) {
+        //PUT8(code_start + i, buffer[i]);
+   // }
 
     // 6. Verify the checksum of copied code
-    if (cksum != crc32(buffer, put_prog_info[2])) {
-        return BOOT_ERROR;
+   // if (cksum != crc32(addr)) {
+     //   panic("op code is not get code:");
+    //}
+    if (crc32((void*)addr, nbytes) != cksum){ 
+        boot_err(BOOT_ERROR, "Error");
     }
 
 
+    //return put_prog_info;
 
-    return put_prog_info[2];
 
-
-    boot_putk("Mo Akintan: Success: Received the program!");
+    boot_putk("UART");
     boot_put32(BOOT_SUCCESS);
     // 2. expect: [PUT_PROG_INFO, addr, nbytes, cksum] 
     //    we echo cksum back in step 4 to help debugging.

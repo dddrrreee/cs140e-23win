@@ -7,9 +7,10 @@ SRC  += $(LPP)/libc/putk.c
 SRC  += $(LPP)/libc/putchar.c
 SRC  += $(LPP)/staff-src/clean-reboot.c
 SRC  += $(wildcard ./*.c)
+SRC  += $(LPP)/libpi/src/uart.c
 
 #SRC  += $(LPP)/staff-private/uart.c
-SRC  += ../1-uart/uart.c
+#SRC  += ../1-uart/uart.c
 
 # or copy your GPIO here.
 ifndef CS140E_STAFF
@@ -43,7 +44,7 @@ $(LIBNAME): $(OBJS)
 
 -include $(dep)
 
-%.o: %.c 
+%.o: %.c t
 	$(CC) $(CFLAGS) -c $< -o ./$(notdir $@)
 
 check:

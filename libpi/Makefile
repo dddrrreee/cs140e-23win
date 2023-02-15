@@ -15,6 +15,10 @@
 #   SRC := $(wildcard ./src/*.[Sc])
 #
 # currently not defined to hold anything
+# grab stuff from libpi
+
+#SRC  += $(LPP)/staff-private/uart.c
+#SRC  += ../1-uart/uart.c
 SRC :=
 
 # if you want to use our gpio.o or other .o (e.g., if yours
@@ -36,6 +40,10 @@ SRC :=  $(SRC)                              \
         $(wildcard ./libc/*.[Sc])           \
         $(wildcard ./staff-src/*.[Sc])      \
         staff-start.S
+
+#SRC += ./src/gpio.c
+#SRC += ./src/uart.c
+#SRC += ./src/sw-uart.c
 
 DEPS += ./Makefile ./manifest.mk
 

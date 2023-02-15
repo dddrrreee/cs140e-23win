@@ -18,6 +18,25 @@ static volatile unsigned n_rising_edge, n_falling_edge;
 
 // client has to define this.
 void interrupt_vector(unsigned pc) {
+    static uint32_t prev_pin_value = 1;
+    unsigned curr_pin_value = gpio_read(in_pin);
+    unsigned s  = cycle_cnt_read();
+
+    dev_barrier();
+
+    // Push the cycles since the last event into the queue.
+    cq_push32(&uartQ, s);
+
+    // Push the previous pin value into the queue. If the previous event was a falling edge,
+    // the value pushed is 1. Otherwise, it's 0.
+    cq_push32(&uartQ, prev_pin_value);
+
+    // Update the previous pin value.
+    prev_pin_value = curr_pin_value;
+
+    gpio_event_clear(in_pin);
+
+    dev_barrier();
     // 1. compute the cycles since the last event and push32 in the queue
     // 2. push the previous pin value in the circular queue (so if was
     //    falling edge: previous must have been a 1).
@@ -25,12 +44,8 @@ void interrupt_vector(unsigned pc) {
     // notes:
     //  - make sure you clear the GPIO event!
     //  - using the circular buffer is pretty slow. should tune this.
-    //    easy way is to use a uint32_t array where the counter is volatile.
-    unsigned s = cycle_cnt_read();
-
-    dev_barrier();
-    unimplemented();
-    dev_barrier();
+    //    easy way is to use a uint32_t array where the counter is volatile. 
+    //unimplemented();
 }
 
 void notmain() {

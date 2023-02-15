@@ -30,11 +30,12 @@ void data_abort_vector(unsigned lr) {
 }
 
 void notmain(void) {
-
+    install_exception_handlers();
+    cp15_install_vector_table();
     // 1. install exception handlers using vector base.
     //      must have an entry for data-aborts that has
     //      a valid trampoline to call <data_abort_vector>
-    unimplemented();
+    //unimplemented();
 
     // 2. enable the debug coprocessor.
     cp14_enable();
@@ -51,9 +52,14 @@ void notmain(void) {
 
     // setup watchpoint 0.  needs two registers.
     //  - see 13-17 for how to set bits in the <wcr0>
-
+     //uint32_t b = WCR0_ENABLE | WCR0_LDS | WCR0_LSU | WCR0_PRIV | WCR0_BAS(0);
     uint32_t b = 0;  // set this to the needed bits in wcr0
-    unimplemented();
+    cp14_wvr_write(0, null);
+    cp14_wcr0_set(b);
+
+   
+   
+    //unimplemented();
 
     assert(cp14_wcr0_is_enabled());
     trace("set watchpoint for addr %p\n", null);

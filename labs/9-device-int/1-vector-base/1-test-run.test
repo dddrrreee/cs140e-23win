@@ -1,0 +1,12 @@
+TRACE:test_swi:orig lab 5 vector(no cache)
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     10 calls took  per call
+TRACE:test_swi:better relocation (no cache)
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     single call took  cycles
+TRACE:test_swi:     10 calls took  per call
+TRACE:test_swi:fast relocation (no cache)
+PANIC:./staff-src/default-handler-swi.c:syscall_vector:3:called default handler: unhandled exception <swi> at PC=0x840c

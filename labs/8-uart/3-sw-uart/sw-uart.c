@@ -7,6 +7,7 @@
 #include "rpi.h"
 #include "cycle-count.h"
 #include "sw-uart.h"
+#include "cycle-util.h"
 
 // simple putk to the given <uart>
 void sw_uart_putk(sw_uart_t *uart, const char *msg) {
@@ -27,15 +28,51 @@ static inline void timed_write(int pin, int v, unsigned usec) {
 
 // do this first: used timed_write to cleanup.
 //  recall: time to write each bit (0 or 1) is in <uart->usec_per_bit>
+//time it in terms of cycce; ms are not granular alone; cycles/bit
 void sw_uart_put8(sw_uart_t *uart, unsigned char c) {
-    todo("implement this routine");
+    unsigned sttime = cycle_cnt_read();
+    write_cyc_until(uart->tx, 0,sttime, uart->cycle_per_bit);
+    //timed_write(uart->tx, 0, uart->usec_per_bit);
+
+    // send the data bits
+    for (int i = 0; i < 8; i++) {
+        int bit = (c >> i) & 1;
+        sttime += (uart -> cycle_per_bit);
+        write_cyc_until(uart->tx, bit ,sttime, uart->cycle_per_bit);
+        //timed_write(uart->tx, bit, uart->usec_per_bit);
+    }
+
+    // send the stop bits
+    write_cyc_until(uart->tx, 0,sttime + (uart->cycle_per_bit), uart->cycle_per_bit);
+   // timed_write(uart->tx, 1, uart->usec_per_bit);
+    //todo("implement this routine");
 }
 
 // do this second: you can type in pi-cat to send stuff.
 //      EASY BUG: if you are reading input, but you do not get here in 
 //      time it will disappear.
 int sw_uart_get8(sw_uart_t *uart) {
-    todo("getc is an extension");
+    // int bit_time = uart->usec_per_bit;
+    // unsigned char c = 0;
+
+    // // wait for start bit
+    // while(gpio_read(uart->rx) == 1)
+    //     delay_us(bit_time);
+
+    // // read each bit
+    // for(int i = 0; i < 8; i++) {
+    //     delay_us(bit_time/2);
+    //     int bit = gpio_read(uart->rx);
+    //     c |= bit << (7-i);
+    //     delay_us(bit_time/2);
+    // }
+
+    // // wait for stop bit
+    // delay_us(bit_time);
+
+    // return c;
+    unimplemented();
+    //todo("getc is an extension");
 }
 
 // setup the GPIO pins
@@ -48,7 +85,14 @@ sw_uart_t sw_uart_mk_helper(unsigned tx, unsigned rx,
     //  1. set rx and tx as input/output.
     //  2: what is the default value of tx for 8n1?  make sure
     //     this is set!!
-    todo("set up the right GPIO pins with the right values");
+    //tx output rx ouptut: tx high
+    //luca 
+    gpio_set_function (tx, GPIO_FUNC_OUTPUT);
+    gpio_set_function (rx, GPIO_FUNC_OUTPUT);
+    //gpio_set_output(tx);
+    //gpio_set_input(rx);
+    gpio_write(tx, 1);
+    //todo("set up the right GPIO pins with the right values");
 
     // check that the given values make sense.
     //

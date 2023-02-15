@@ -55,9 +55,14 @@ void prefetch_abort_vector(unsigned lr) {
 
 
 void notmain(void) {
+    if (install_exception_vector(EXCEPT_PREFABORT, prefetch_abort_vector) < 0)
+        panic("error installing prefetch abort vector!\n");
+
+    // 2. enable the debug coprocessor.
+   // cp14_enable();
     // 1. install exception handlers: must have a valid trampoline for
     // prefetch_abort_vector
-    unimplemented();
+    //unimplemented();
 
     // 2. enable the debug coprocessor.
     cp14_enable();
@@ -79,7 +84,8 @@ void notmain(void) {
             BCR[0] = 1
         prefetch flush.
     */
-
+   
+    cp14_flush_prefetch();
     /* 
      * see 13-17 for how to set bits
      * set:
@@ -94,7 +100,29 @@ void notmain(void) {
 
 
     // set breakpoint using bcr0 and bvr0
-    unimplemented();
+     b = cp14_bcr0_get();
+    b = bits_clear(b, 0); // disable the breakpoint temporarily
+    cp14_bcr0_set(b);
+
+    cp14_bvr0_set((uint32_t)foo);
+
+    b = cp14_bcr0_get();
+    b = bits_set(b, 0); // enable the breakpoint
+    b = bits_set(b, 1); // match on load
+    b = bits_set(b, 14); // match in both secure and non-secure worlds
+    b = bits_set(b, 15); // disable linking
+    b = bits_set(b, 16); // match
+    b = bits_set(b, 18); // supervisor or not
+    cp14_bcr0_set(b);
+
+    // cp14_bcr0_write(0);
+    // cp14_bvr0_write((uint32_t)foo);
+    // cp14_bcr0_set_match();
+    // cp14_bcr0_set_disable_link();
+    // cp14_bcr0_set_privileged();
+    // cp14_bcr0_set_instruction();
+    // cp14_bcr0_enable();
+    //unimplemented();
 
     assert(cp14_bcr0_is_enabled());
     output("set breakpoint for addr %p\n", foo);
