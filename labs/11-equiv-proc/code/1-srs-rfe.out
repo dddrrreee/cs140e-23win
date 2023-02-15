@@ -1,0 +1,6 @@
+TRACE:notmain:lr=), spsr=0x10 (expect=0x10)
+TRACE:notmain:SUCCESS: <srs> matched what we expected
+TRACE:notmain:about to jump to pc= with cpsr=0x10
+TRACE:rfe_c_code:sp=, should equal INT_STACK_ADDR=0x9000000
+TRACE:rfe_c_code:cpsr=, mode=USER MODE
+TRACE:rfe_c_code:SUCCESS: we are at user level!
