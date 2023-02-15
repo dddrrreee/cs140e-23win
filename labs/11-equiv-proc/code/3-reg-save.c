@@ -37,28 +37,6 @@ int do_syscall(uint32_t regs[17]) {
     clean_reboot();
 }
 
-#if 0
-void simple_single_step(uint32_t regs[17]) {
-    static int cnt;
-
-    if(!brkpt_fault_p())
-        panic("pc=%x: is not a breakpoint fault??\n", pc);
-
-    trace("---------------------------------------\n");
-    trace("cnt=%d: single step pc=%x\n", i, regs[15]);
-    for(unsigned i = 0; i < 17; i++)
-        if(regs[i]))
-            trace("reg[%d]=%x\n", i, regs[i]);
-
-    uint32_t spsr = spsr_get();
-    if(mode_get(spsr) != USER_MODE)
-        panic("pc=%x: is not at user level: <%s>?\n", pc, mode_str(spsr));
-    if(regs[16] != spsr)
-        panic("saved spsr %x not equal to <%x>?\n", regs[16], spsr);
-    brkpt_mismatch_set(pc);
-}
-#endif
-
 void rfe_asm(uint32_t regs[2]);
 void nop_10(void);
 void mov_ident(void);
@@ -70,7 +48,7 @@ void notmain(void) {
 
     output("about to check that swi test works\n");
     // from <1-srs-rfe.c>
-    uint32_t regs[0];
+    uint32_t regs[2];
     regs[0] = (uint32_t)mov_ident;   // in <start.S>
     regs[1] = USER_MODE;
     trace("about to jump to pc=[%x] with cpsr=%x\n",

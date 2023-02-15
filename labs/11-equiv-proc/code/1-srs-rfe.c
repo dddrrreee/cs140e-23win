@@ -104,7 +104,7 @@ void notmain(void) {
     // do a simple <rfe> that will call <rfe_trampoline>
     // with <cpsr>=USER_MODE
     //      see: <1-srs-rfe-asm.S>
-    uint32_t regs[0];
+    uint32_t regs[2];
     regs[0] = (uint32_t)rfe_trampoline;   // in <1-srs-rfe-asm.S>
     regs[1] = USER_MODE;
     trace("about to jump to pc=[%x] with cpsr=%x\n",
