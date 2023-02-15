@@ -16,8 +16,10 @@ void asm_not_implemented_helper(uint32_t pc, const char *msg) {
 
 // the asm code does some hacks to pass in the file and lineno
 void asm_todo_helper(uint32_t pc, const char *todo_msg) {
-    output("ERROR:TODO:%s: must implement this ASM code for lab\n", todo_msg);
-    output("\tUse pc=%x and .list file to see what happened!\n", pc);
+    output("----------------------------------------------------\n");
+    output("ERROR:TODO: must implement this ASM code for lab:\n");
+    output("   %s\n", todo_msg);
+    // output("   Use pc=%x and .list file to see what happened!\n", pc);
     // should do an error.
     clean_reboot();
 }

@@ -1,0 +1,184 @@
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=0: single step pc=0x80a8, hash=0x4fecac0
+TRACE:dump_regs:reg=0x80a8
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=1: single step pc=0x80ac, hash=0xd0e5a719
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x80ac
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=2: single step pc=0x80b0, hash=0x55b8d344
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x80b0
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=3: single step pc=0x80b4, hash=0x706553d8
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x80b4
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=4: single step pc=0x80b8, hash=0xf48b3a00
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x80b8
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=5: single step pc=0x80bc, hash=0xc3ee2d5b
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x5
+TRACE:dump_regs:reg=0x80bc
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=6: single step pc=0x80c0, hash=0x738acb29
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x5
+TRACE:dump_regs:reg=0x6
+TRACE:dump_regs:reg=0x80c0
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=7: single step pc=0x80c4, hash=0xb6200db8
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x5
+TRACE:dump_regs:reg=0x6
+TRACE:dump_regs:reg=0x7
+TRACE:dump_regs:reg=0x80c4
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=8: single step pc=0x80c8, hash=0x7ab88d09
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x5
+TRACE:dump_regs:reg=0x6
+TRACE:dump_regs:reg=0x7
+TRACE:dump_regs:reg=0x8
+TRACE:dump_regs:reg=0x80c8
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=9: single step pc=0x80cc, hash=0x3377e50e
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x5
+TRACE:dump_regs:reg=0x6
+TRACE:dump_regs:reg=0x7
+TRACE:dump_regs:reg=0x8
+TRACE:dump_regs:reg=0x9
+TRACE:dump_regs:reg=0x80cc
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=10: single step pc=0x80d0, hash=0xf1e2c7f4
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x5
+TRACE:dump_regs:reg=0x6
+TRACE:dump_regs:reg=0x7
+TRACE:dump_regs:reg=0x8
+TRACE:dump_regs:reg=0x9
+TRACE:dump_regs:reg=0xa
+TRACE:dump_regs:reg=0x80d0
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=11: single step pc=0x80d4, hash=0x87008ff3
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x5
+TRACE:dump_regs:reg=0x6
+TRACE:dump_regs:reg=0x7
+TRACE:dump_regs:reg=0x8
+TRACE:dump_regs:reg=0x9
+TRACE:dump_regs:reg=0xa
+TRACE:dump_regs:reg=0xb
+TRACE:dump_regs:reg=0x80d4
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=12: single step pc=0x80d8, hash=0xf4398ba8
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x5
+TRACE:dump_regs:reg=0x6
+TRACE:dump_regs:reg=0x7
+TRACE:dump_regs:reg=0x8
+TRACE:dump_regs:reg=0x9
+TRACE:dump_regs:reg=0xa
+TRACE:dump_regs:reg=0xb
+TRACE:dump_regs:reg=0xc
+TRACE:dump_regs:reg=0x80d8
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=13: single step pc=0x80dc, hash=0x187adb8c
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x5
+TRACE:dump_regs:reg=0x6
+TRACE:dump_regs:reg=0x7
+TRACE:dump_regs:reg=0x8
+TRACE:dump_regs:reg=0x9
+TRACE:dump_regs:reg=0xa
+TRACE:dump_regs:reg=0xb
+TRACE:dump_regs:reg=0xc
+TRACE:dump_regs:reg=0xd
+TRACE:dump_regs:reg=0x80dc
+TRACE:dump_regs:reg=0x10
+TRACE:single_step_full:------------------------------------------------
+TRACE:single_step_full:cnt=14: single step pc=0x80e0, hash=0xcd6e5626
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x5
+TRACE:dump_regs:reg=0x6
+TRACE:dump_regs:reg=0x7
+TRACE:dump_regs:reg=0x8
+TRACE:dump_regs:reg=0x9
+TRACE:dump_regs:reg=0xa
+TRACE:dump_regs:reg=0xb
+TRACE:dump_regs:reg=0xc
+TRACE:dump_regs:reg=0xd
+TRACE:dump_regs:reg=0xe
+TRACE:dump_regs:reg=0x80e0
+TRACE:dump_regs:reg=0x10
+TRACE:do_syscall:------------------------------------------------
+TRACE:do_syscall:in syscall: sysno=0
+TRACE:dump_regs:reg=0x1
+TRACE:dump_regs:reg=0x2
+TRACE:dump_regs:reg=0x3
+TRACE:dump_regs:reg=0x4
+TRACE:dump_regs:reg=0x5
+TRACE:dump_regs:reg=0x6
+TRACE:dump_regs:reg=0x7
+TRACE:dump_regs:reg=0x8
+TRACE:dump_regs:reg=0x9
+TRACE:dump_regs:reg=0xa
+TRACE:dump_regs:reg=0xb
+TRACE:dump_regs:reg=0xc
+TRACE:dump_regs:reg=0xd
+TRACE:dump_regs:reg=0xe
+TRACE:dump_regs:reg=0x80e4
+TRACE:dump_regs:reg=0x10
+TRACE:do_syscall:FINAL: total instructions=15, reg-hash=0xcd6e5626

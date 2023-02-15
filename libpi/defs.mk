@@ -17,12 +17,13 @@ CS140E_2023_LIBPI_PATH = $(CS140E_2023_PATH)/libpi
 LPP = $(CS140E_2023_LIBPI_PATH)
 LPI ?= $(LPP)/libpi.a
 
+# let the client override these.
 START ?= $(LPP)/staff-start.o
 MEMMAP ?= $(LPP)/memmap
 
 # include path: user can override
 INC ?= -I$(LPP)/include -I$(LPP)/ -I$(LPP)/src -I. -I$(LPP)/staff-private -I$(LPP)/libc
-# optimization level: user can override
+# optimization level: client can override
 OPT_LEVEL ?= -Og
 
 # various warnings.  any warning = error, so you must fix it.
@@ -36,7 +37,7 @@ CFLAGS += -mtp=soft
 
 
 # for assembly file compilation.
-ASFLAGS = --warn --fatal-warnings  -mcpu=arm1176jzf-s -march=armv6zk $(INC)
+# ASFLAGS = --warn --fatal-warnings  -mcpu=arm1176jzf-s -march=armv6zk $(INC)
 
 # for .S compilation so we can use the preprocessor.
 CPP_ASFLAGS =  -nostdlib -nostartfiles -ffreestanding   -Wa,--warn -Wa,--fatal-warnings -Wa,-mcpu=arm1176jzf-s -Wa,-march=armv6zk   $(INC)

@@ -1,5 +1,7 @@
 ## Using debug hardware to catch mistakes
 
+***NOTE: This lab directory has the wrong name: we are doing debug hardware***
+
 Today is a "fetch-quest" style lab that has you setup simple breakpoint
 and watchpoints.  It should mostly be defining inline assembly routines
 and calling them.  Should be  fairly mechanical, straightforward but
@@ -268,10 +270,13 @@ client handler.
     to run.
 
 If you do things correctly, the tests should match previous tests exactly:
-  - First copy `Makefile.new` over `Makefile` (this extends the `Makefile` and
-    avoids some git conflicts).
   - `3-debug-watchpt.c` will generate a `.out` that matches `1-watchpt-test.c`.
   - `3-debug-brkpt.c` will generate a `.out` that matches `2-brkpt-test.c`.
+
+Extension:
+  - This interface could be more useful (we changed it in 240lx).
+  - So rewrite it!
+  - Alternatively: do the lab 11 in :q
 
 -----------------------------------------------------------------------------
 ### Extension: make an always-on assertion system

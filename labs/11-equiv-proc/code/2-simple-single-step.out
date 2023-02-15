@@ -1,0 +1,14 @@
+TRACE:notmain:about to jump to pc= with cpsr=0x10
+TRACE:simple_single_step:single step pc=0x8044
+TRACE:simple_single_step:single step pc=0x8048
+TRACE:simple_single_step:single step pc=0x804c
+TRACE:simple_single_step:single step pc=0x8050
+TRACE:simple_single_step:single step pc=0x8054
+TRACE:simple_single_step:single step pc=0x8058
+TRACE:simple_single_step:single step pc=0x805c
+TRACE:simple_single_step:single step pc=0x8060
+TRACE:simple_single_step:single step pc=0x8064
+TRACE:simple_single_step:single step pc=0x8068
+TRACE:simple_single_step:single step pc=0x806c
+TRACE:simple_single_step:single step pc=0x8070
+TRACE:do_syscall:in syscall: sysno=0

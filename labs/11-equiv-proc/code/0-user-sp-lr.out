@@ -1,0 +1,15 @@
+TRACE:notmain:-----------------------------------------------------------
+TRACE:notmain:part 1: get/set USER sp/lr by switching to SYSTEM and back
+TRACE:notmain:	got USER sp=0xfeedface
+TRACE:notmain:	got USER lr=0xdeadbeef
+TRACE:notmain:part 1: passed
+TRACE:notmain:-----------------------------------------------------------
+TRACE:notmain:part 2: set/get USER sp/lr using ldm/stm with ^
+TRACE:notmain:	got USER sp=0xfeedface
+TRACE:notmain:	got USER lr=0xdeadbeef
+TRACE:notmain:part 2 passed
+TRACE:notmain:-----------------------------------------------------------
+TRACE:notmain:part 3: set/get USER sp/lr using single ldm/stm ^ instruction
+TRACE:notmain:	got USER sp=0xfeedface
+TRACE:notmain:	got USER lr=0xfeedface
+TRACE:notmain:part 3: passed

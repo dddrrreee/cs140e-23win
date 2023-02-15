@@ -1,0 +1,18 @@
+TRACE:notmain:about to jump to pc= with cpsr=0x10
+TRACE:do_syscall:in syscall: sysno=0
+TRACE:do_syscall:reg=0x1
+TRACE:do_syscall:reg=0x2
+TRACE:do_syscall:reg=0x3
+TRACE:do_syscall:reg=0x4
+TRACE:do_syscall:reg=0x5
+TRACE:do_syscall:reg=0x6
+TRACE:do_syscall:reg=0x7
+TRACE:do_syscall:reg=0x8
+TRACE:do_syscall:reg=0x9
+TRACE:do_syscall:reg=0xa
+TRACE:do_syscall:reg=0xb
+TRACE:do_syscall:reg=0xc
+TRACE:do_syscall:reg=0xd
+TRACE:do_syscall:reg=0xe
+TRACE:do_syscall:reg=0x80e4
+TRACE:do_syscall:reg=0x10

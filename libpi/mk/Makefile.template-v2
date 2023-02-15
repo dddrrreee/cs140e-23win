@@ -20,7 +20,6 @@ ifdef TEST_SRC
 $(error TEST_SRC set: old var -- use PROGS)
 endif
 
-
 #ifndef PROGS
 #$(error PROGS is not set in the calling Makefile)
 #endif
@@ -64,7 +63,13 @@ COMMON_OBJS := $(COMMON_OBJS) $(COMMON_SRC:.c=.o)
 COMMON_OBJS := $(COMMON_OBJS:.S=.o)
 COMMON_OBJS := $(COMMON_OBJS:.s=.o)
 
+LIB_OBJS := $(LIB_SRC:.c=.o)
+LIB_OBJS := $(LIB_OBJS:.S=.o)
+
 TEST_OBJS   := $(PROGS:.c=.o)
+ifdef TEST_ASM
+TEST_ASM_OBJS   := $(PROGS:.c=-asm.o)
+endif
 TEST_LIST   := $(PROGS:.c=.list)
 TEST_ELF   := $(PROGS:.c=.elf)
 TEST_DEP   := $(PROGS:.c=.d)
@@ -90,7 +95,7 @@ ifndef MK_CHK
     MK_CHK := $(LPP)/mk/Makefile.check-v2
 endif
 
-LIBS += $(LPI) 
+LIBS += $(LIB) $(LPI) 
 
 # add the memmap file, libpi and the makefile as dependencies
 # libpi serves as a sentinal covering everything in libpi
@@ -98,17 +103,18 @@ DEPS += $(MEMMAP) ./Makefile $(LPI) $(LPP)/mk/Makefile.template-v2
 
 ALL_OBJS := $(COMMON_OBJS) $(STAFF_OBJS) 
 
-all:: libs $(TEST_PROGS) $(TEST_RUN)#  $(CHECK_RUN) 
-
+all:: libs $(LIB) $(TEST_PROGS) $(TEST_RUN)#  $(CHECK_RUN) 
 
 print:
 	# COMMON_OBJS = <$(COMMON_OBJS)>
+	# TEST_ASM_OBJS = <$(TEST_ASM_OBJS)>
+	# LIB_OBJS = <$(LIB_OBJS)>
 
 # double colon is so user can add transparently.
 libs:: FORCE
 ifneq ($(LIB),libpi.a)
 ifneq ($(LIB),libpi-fp.a)
-	make -C $(LPP)
+	@make -s -C $(LPP)
 endif
 endif
 
@@ -117,12 +123,22 @@ FORCE:
 ifneq ($(LIB),libpi.a)
 ifneq ($(LIB),libpi-fp.a)
 $(LPI):
-	@make  -C $(LPP)
+	@make -s -C $(LPP)
 endif
 endif
 
 # why does adding <libs> cause this to fail??
 gen-binaries:  $(TEST_PROGS)
+
+# we delete the archive before creating so that the hack of
+# having duplicate symbols in it resolved in order works.
+# otherwise it *appears* we need to use the 
+# put-your-src-here.mk hack.
+$(LIB): $(LIB_OBJS) $(STAFF_LIB_OBJS) $(DEPS) $(LINK_DEPS)
+	@rm -f $@
+	$(AR) crf $@ $(LIB_OBJS) $(STAFF_LIB_OBJS)
+	$(OD) -D $@ > $@.list
+
 
 .PHONEY: gen-binaries libs FORCE
 
@@ -131,10 +147,17 @@ $(COMMON_OBJS): $(DEPS)
 %.o: %.c $(DEPS)
 	$(CC) $(CFLAGS) -c $< -o $@
 %.o: %.S $(DEPS)
-	$(CC) -c $(CPP_ASFLAGS) $< -o $@
+	$(CC) $(CPP_ASFLAGS) -c $< -o $@
 
-%.elf: %.o $(ALL_OBJS) $(DEPS) $(START) $(LIBS)
+ifndef TEST_ASM
+%.elf: %.o $(ALL_OBJS) $(DEPS) $(START) $(LIBS) 
 	$(LD) $(LDFLAGS) $(START)  $< $(ALL_OBJS) -T $(MEMMAP) -o $@  $(LIBS)
+else
+# we put the assembly code right after start to guarantee it always
+# begins at the same address.
+%.elf: %.o %-asm.o $(ALL_OBJS) $(DEPS) $(START) $(LIBS)
+	$(LD) $(LDFLAGS) $(START) $*-asm.o $< $(ALL_OBJS) -T $(MEMMAP) -o $@  $(LIBS)
+endif
 
 ifneq ($(MAKECMDGOALS),clean)
 ifneq ($(MAKECMDGOALS),cleanall)
@@ -145,7 +168,7 @@ endif
 ./%.d: %.c $(DEPS)
 	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
 ./%.d: %.S $(DEPS)
-	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
+	$(CC) $(CPP_ASFLAGS) -c $< -MM -MT $(@:.d=.o) >$@
 
 %.list: %.elf
 	$(OD) -d   $*.elf > $*.list
@@ -172,7 +195,7 @@ tags:
 
 # note: double :: is so user can add transparently
 clean::
-	rm -rf $(NAME) *~ tags $(COMMON_OBJS) *.bin *.elf *.list *.img Makefile.bak  *.d  $(TEST_OBJS) *.raw *.test
+	rm -rf $(NAME) *~ tags $(COMMON_OBJS) *.bin *.elf *.list *.img Makefile.bak  *.d  $(TEST_OBJS) *.raw *.test $(TEST_ASM_OBJS) $(LIB_OBJS) $(LIB)
 
 #@rm -f $(TEST_TMP)
 
