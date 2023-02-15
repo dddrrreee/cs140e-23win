@@ -3,12 +3,12 @@ BOOTLOADER=my-install
 START = staff-start.o
 
 
-PROGS  += 0-user-sp-lr.c
 PROGS  += 1-srs-rfe.c
 PROGS  += 2-simple-single-step.c
 PROGS  += 3-reg-save.c
 PROGS += 4-reg-restore.c
 PROGS += 5-single-step-one.c
+PROGS  = 0-user-sp-lr.c
 
 # part 6: final
 # PROGS = 6-single-step-proc.c
@@ -27,7 +27,7 @@ STAFF_LIB_OBJS += staff-1-srs-rfe-asm.o
 
 # part 2
 #LIB_SRC += 2-simple-single-step-asm.S breakpoint.c
-STAFF_LIB_OBJS += 2-simple-single-step-asm.o breakpoint.o
+STAFF_LIB_OBJS += 2-simple-single-step-asm.o staff-breakpoint.o
 
 # part 3
 # LIB_SRC += 3-reg-save-asm.S

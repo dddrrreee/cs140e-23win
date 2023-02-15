@@ -21,7 +21,7 @@ static proc_t * volatile cur_proc = 0;
 static inline void proc_fork(void (*fn)(void), uint32_t expected_hash) {
     static int npid;
     enum { STACK_SIZE = 1024*64 };
-    proc_t *p = kmalloc_aligned(sizeof *p, STACK_SIZE);
+    proc_t *p = kmalloc_aligned(STACK_SIZE, 16);
     p->regs[13] = (uint32_t)((char*)p+STACK_SIZE);
     p->regs[15] = (uint32_t)fn;
     p->regs[16] = USER_MODE;
