@@ -4,7 +4,7 @@
  * simple process support.
  */
 typedef struct proc {
-    uint32_t regs[17];
+    uint32_t regs[17+4];
     uint32_t expected_hash;
     uint32_t reg_hash;
     volatile uint32_t pid;
@@ -16,19 +16,41 @@ typedef struct proc {
 
 // very bad form.
 static Q_t runq;
+uint32_t buf[1024];
 static proc_t * volatile cur_proc = 0;
+uint32_t buf2[1024];
 
-static inline void proc_fork(void (*fn)(void), uint32_t expected_hash) {
+
+#include "helper-macros.h"
+
+
+static inline void 
+proc_init(proc_t *p, void (*fn)(void), uint32_t expected_hash) {
     static int npid;
-    enum { STACK_SIZE = 1024*64 };
-    proc_t *p = kmalloc_aligned(STACK_SIZE, 16);
-    p->regs[13] = (uint32_t)((char*)p+STACK_SIZE);
+    assert((uint32_t)p%8==0);
+    assert(is_aligned_ptr(p->regs, 8));
     p->regs[15] = (uint32_t)fn;
     p->regs[16] = USER_MODE;
     p->expected_hash = expected_hash;
     p->pid = ++npid;
+}
+
+static inline void 
+proc_fork_stack(void (*fn)(void), uint32_t expected_hash) {
+    enum { STACK_SIZE = 1024*64 };
+    proc_t *p = kmalloc_aligned(STACK_SIZE, 16);
+    proc_init(p, fn, expected_hash);
+    p->regs[13] = (uint32_t)((char*)p+STACK_SIZE-2048);
     Q_append(&runq, p);
 }
+
+static inline void 
+proc_fork_nostack(void (*fn)(void), uint32_t expected_hash) {
+    proc_t *p = kmalloc_aligned(sizeof *p, 16);
+    proc_init(p, fn, expected_hash);
+    Q_append(&runq, p);
+}
+
 
 void switchto_user_asm(uint32_t regs[16]);
 
@@ -55,7 +77,5 @@ static inline void proc_run_one(void) {
     not_reached();
 }
 
-static inline proc_t *curproc_get(void) { 
-    assert(cur_proc);
-    return cur_proc;
-}
+#define curproc_get()  ({ assert(cur_proc); cur_proc; })
+

@@ -76,6 +76,7 @@ void single_step_full(uint32_t regs[17]) {
 
 void hello(void) {
     output("hello world from pid=%d\n", curproc_get()->pid);
+    asm volatile("swi 1" ::: "memory");
 }
 
 void notmain(void) {
@@ -90,9 +91,9 @@ void notmain(void) {
     output("about to check that swi test works\n");
     enum { N = 10 };
     for(int i = 0; i < N; i++) {
-        //proc_fork(mov_ident, 0xcd6e5626);
-        //proc_fork(nop_1, 0xbfde46be);
-        proc_fork(hello, 0);
+        //proc_fork_nostack(mov_ident, 0xcd6e5626);
+        //proc_fork_nostack(nop_1, 0xbfde46be);
+        proc_fork_stack(hello, 0);
     }
     proc_run_one();
 }
