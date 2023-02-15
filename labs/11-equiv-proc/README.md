@@ -44,7 +44,7 @@ Roadmap:
      to the system call exception handler.  
      This is the first step of getting to full processes.   
 
-     Test: `4-reg-restore.c`.  Code to implement: `4-reg-restore-asm.S`.
+     Test: `3-reg-save.c`.  Code to implement: `3-reg-save-asm.S`.
 
   4. Implement the assembly to take an array saved in the previous step
      and restore it, including mode switching.   Test: `4-reg-restore.c`
