@@ -60,13 +60,30 @@ Roadmap:
      can change.
 
   7. Pull the pieces of code you need into a small two file system in
-     a seperate directory and do some kind of interesting test.  For 
-     example, add interrupts (note you will have to modify the hashed
-     `cpsr`), do overclocking and see at what point hashes change,
-     recompile libpi with higher optimization (note: the hashes
-     for any C routines will change from previous runs).
+     a seperate directory and do some kind of interesting test.  Two
+     of the most "straightforward" options: (1) add timer interrupts
+     with a very small timeout and/or (2) speed up the code signifantly.
+     Speedup is fun because we don't have much code and we have a 
+     very thorough correctness check. 
 
-We'll add more discussion as the lab goes on.
+     Note: for interrupts, you may need to modify the hashed `cpsr`.
+
+     Another interesting option (I'd love to see this): do overclocking
+     and see where exactly things start breaking down.  For this you
+     need to use the mailbox interface (lab 10 from last year has some
+     on this, though there is a bug in the mailbox message description
+     we can explain).
+
+     A simple option: add bug finding to the single step handler: check
+     that the stack pointer is within the process's stack, that the pc
+     is within the code text segment, and anything else you can figure out.
+
+Extension:
+  - I meant to build this but didn't: a massive source of bugs has been
+    people not saving or restoring registers in exception handlers.
+    You should be able to check this by using both match and mismatch
+    exceptions to grab the pc right after an exception handler returns
+    and checking that the current registers are what you expect.  
 
 The high bit of all of this:
   1. You have pre-emptive save/restore code that can switch between
