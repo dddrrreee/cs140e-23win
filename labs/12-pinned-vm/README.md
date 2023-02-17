@@ -4,9 +4,6 @@
   <img src="images/int-int.jpg" width="450" />
 </p>
 
-code   docs	   Makefile  orig-README.md  PRELAB.md~  README.md~  VM-STUDENT-OVERVIEW.md
-
-
 
 Given that it's midterm week we'll do a fairly simple virtual memory
 (VM) lab that side-steps a major source of VM complexity --- the need
