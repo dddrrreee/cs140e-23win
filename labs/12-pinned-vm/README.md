@@ -1,11 +1,26 @@
 ## Simple virtual memory using pinned TLB entries.
 
+<p align="center">
+  <img src="images/int-int.jpg" width="450" />
+</p>
+
+code   docs	   Makefile  orig-README.md  PRELAB.md~  README.md~  VM-STUDENT-OVERVIEW.md
+
+
+
 Given that it's midterm week we'll do a fairly simple virtual memory
 (VM) lab that side-steps a major source of VM complexity --- the need
 to use a page table --- by instead "pinning" the translations we need
 in the TLB.  This dramatically simplifies what you have to understand
 and makes it possible to write a working VM system in a few hundred
-lines of code.  Make sure you've read the [PRELAB.md](PRELAB.md)!
+lines of code.  
+
+Make sure you've read:
+  - [PRELAB.md](PRELAB.md)!
+  - [VM-CHEATSHEET.md](VM-CHEATSHEET.md) has a bunch of useful page numbers.
+  - [VM-STUDENT-OVERVIEW.md](VM-STUDENT-OVERVIEW.md) is a writeup from 
+    Ayelet from last year (some of you are taking her/Akshay's 45 class).
+
 
 For today:
   1. You'll get a single address space working that just prints
@@ -184,8 +199,16 @@ The above is pretty much all we will do:
 
 What to do today:
   - Read the pages: 3-149--- 3-152 and 3-80 --- 3-82.
-  - Implement `pin_mmu_on` to pin all the memory needed and turn the MMU on.
   - Assume 1MB sections.
+  - Implement `pin_mmu_sec`.
+
+        // pinned-vm.c
+        // map <va>-><pa> at TLB index <idx> with attributes <e>
+        void pin_mmu_sec(unsigned idx,
+                        uint32_t va,
+                        uint32_t pa,
+                        pin_t e) {
+
 
 Where to look:
   - `pinnned-vm.c`: all your code goes here.  The main routine is `pin_mmu_sec`
@@ -213,4 +236,44 @@ Note that you'll have to handle the domains in the domain control register.
 ----------------------------------------------------------------------
 ## Part 3: handle a couple exceptions
 
-***I'm filling this in.  Will have to push later in the lab.***
+For this part you'll write all the code.  
+
+A domain fault.  Write a single test that:
+  1. Tags the heap with its own domain id `d`.
+  2. Removes permissions for `d`, does a load using `GET32`, and gets the fault.
+  3. In the fault handler, prints the `pc`, the ARMv6 "reason" for the 
+     fault (using the `dfsr`), re-enables the domain permissions, and returns.
+  4. Do (2) and (3) for store.  Use (`PUT32`) so you can check the `pc`.
+  5. Do (2) and (3) for a jump.  You'll have to write the instruction
+     for `bx lr` to a heap location and jump to it.
+
+
+A invalid access fault:
+  1. Write tests that 
+     do load, store, and jump to an unmapped addresss and extend the
+     data abort and prefetch abort handlers above to print out the 
+     reason and faulting address.
+     
+----------------------------------------------------------------------
+## Extension:
+
+Bunch of possible extensions:
+
+  - Rewrite the code to also handle 16mb sections.
+
+  - Fun extension: Implement "failure oblivious computing" a very fun
+    hack from Rinard that when you get a load load fault a random value 
+    and when you get a store fault ignores it.  This paper is the most unsound
+    in systems, and is fun to read.
+
+  - You have have the basic infrastructure to do lab 11 in 240lx
+    ("memory trace") where you can trace all loads and stores by:
+
+      1. Use domains to trap all loads or store;
+      2. Re-enable domain permission.
+      3. Use single step to jump back and run that one load or store instruction.
+      4. Remove the domain permission.
+      5. Resume.
+
+   This lets you build many tools that monitor loads or stores with only
+   a few hundred lines of code.  Good source of final projects!
