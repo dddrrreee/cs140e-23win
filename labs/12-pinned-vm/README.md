@@ -280,11 +280,24 @@ A domain fault.  Write a single test that:
      for `bx lr` to a heap location and jump to it.
 
 
+
 A invalid access fault:
   1. Write tests that 
      do load, store, and jump to an unmapped addresss and extend the
      data abort and prefetch abort handlers above to print out the 
      reason and faulting address.
+
+
+NOTE: if you delete `staff-mmu-except.o` and your `panic` or `reboot`
+locks up, add this code to your pinned-vm.c`:
+
+        // this is called by reboot: we turn off mmu so that things work.
+        void reboot_callout(void) {
+            if(mmu_is_enabled())
+                staff_mmu_disable();
+        }
+
+which will let `reboot` / `panic` reboot without hanging.
      
 ----------------------------------------------------------------------
 ## Extension:
