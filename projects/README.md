@@ -262,6 +262,17 @@ you can mix/match or come up with your own!
   To be really fancy, we can buffer up the stores that are done and then
   try all possible legal orders of them when the other thread does a load.
   This checker should find a lot of bugs.
+  
+ - Use JTAG to implement interesting checkers: Via JTAG, a remote 
+  device can halt the execution of instructions, read machine state, 
+  single-step through code, set breakpoints and set watchpoints on a the 
+  target device. This is in contrast to the native debugging performed 
+  by a device on its own code. You can use this to debug and check code
+  on a remote pi: you can single step through super level instructions 
+  as well (native single-stepping is only possible for code running in
+  user mode). The JTAG protocol is specified in the 
+  ARM1176 document (chapter 14).
+  
 
 #### Protection Systems (using CPU Domains)
 
