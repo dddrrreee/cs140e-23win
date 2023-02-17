@@ -211,6 +211,7 @@ The tests for this:
 If you want, you can ignore our starter code and write all that from scratch.
 If you want to use our stuff, there's a few helpers you implement.
 
+
 ----------------------------------------------------------------------
 ## Part 2: implement `pinned-vm.c:pin_mmu_on(procmap_t *p)` 
 
@@ -279,6 +280,12 @@ A domain fault.  Write a single test that:
   5. Do (2) and (3) for a jump.  You'll have to write the instruction
      for `bx lr` to a heap location and jump to it.
 
+
+Useful domain pages:
+  - B4-10: what the bit values mean for the `domain` field.
+  - B4-15: how addresses are translated and checked for faults.
+  - B4-27: the location / size of the `domain` field in the segment page table entry.
+  - B4-42: setting the domain register.
 
 
 A invalid access fault:
