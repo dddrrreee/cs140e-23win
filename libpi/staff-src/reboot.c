@@ -35,8 +35,10 @@ void rpi_reboot(void) {
         // of stuff.
         // assert(!at_user_level());
     }
+    reboot_callout();
     uart_flush_tx();
     delay_ms(10);
+
 
     // is there a way to speed this up?
     const int PM_RSTC = 0x2010001c;

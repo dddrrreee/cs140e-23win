@@ -137,7 +137,7 @@ gen-binaries:  $(TEST_PROGS)
 $(LIB): $(LIB_OBJS) $(STAFF_LIB_OBJS) $(DEPS) $(LINK_DEPS)
 	@rm -f $@
 	$(AR) crf $@ $(LIB_OBJS) $(STAFF_LIB_OBJS)
-	$(OD) -D $@ > $@.list
+	$(OD) -d $@ > $@.list
 
 
 .PHONEY: gen-binaries libs FORCE

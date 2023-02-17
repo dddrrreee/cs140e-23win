@@ -32,12 +32,15 @@ static inline void prefetch_flush(void) {
     asm volatile ("mcr p15, 0, %0, c7, c5, 4" :: "r" (r));
 }
 
+// ugly: have two versions: the *_fn macros expand without
+// "static inline" the others with "static inline"  
+// cleaner to define a return type, but that interferes w/ some
+// things.
+
 // turn <x> into a string
 #define MK_STR(x) #x
-
-// no prefetch flush.
-#define cp_asm_set_raw(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)   \
-    static inline void fn_name ## _set_raw(uint32_t v) {                    \
+#define cp_asm_set_raw_fn(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)   \
+    void fn_name ## _set_raw(uint32_t v) {                    \
         asm volatile ("mcr " MK_STR(coproc) ", "                        \
                              MK_STR(opcode_1) ", "                      \
                              "%0, "                                     \
@@ -45,6 +48,10 @@ static inline void prefetch_flush(void) {
                             MK_STR(Crm) ", "                            \
                             MK_STR(opcode_2) :: "r" (v));               \
     }
+
+// no prefetch flush.
+#define cp_asm_set_raw(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)   \
+    static inline cp_asm_set_raw_fn(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)
 
 
 // define a general co-processor inline assembly routine to set the value.
@@ -56,8 +63,15 @@ static inline void prefetch_flush(void) {
         prefetch_flush();                                               \
     }
 
-#define cp_asm_get(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)       \
-    static inline uint32_t fn_name ## _get(void) {                      \
+#define cp_asm_set_fn(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)       \
+    cp_asm_set_raw_fn(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)       \
+    void fn_name ## _set(uint32_t v) {                    \
+        fn_name ## _set_raw(v);                                         \
+        prefetch_flush();                                               \
+    }
+
+#define cp_asm_get_fn(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)       \
+    uint32_t fn_name ## _get(void) {                      \
         uint32_t ret=0;                                                   \
         asm volatile ("mrc " MK_STR(coproc) ", "                        \
                              MK_STR(opcode_1) ", "                      \
@@ -68,9 +82,16 @@ static inline void prefetch_flush(void) {
         return ret;                                                     \
     }
 
+#define cp_asm_get(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)       \
+        static inline cp_asm_get_fn(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)
+
 #define cp_asm(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)   \
     cp_asm_set(fn_name, coproc, opcode_1, Crn, Crm, opcode_2) \
     cp_asm_get(fn_name, coproc, opcode_1, Crn, Crm, opcode_2) 
+
+#define cp_asm_fn(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)   \
+    cp_asm_set_fn(fn_name, coproc, opcode_1, Crn, Crm, opcode_2) \
+    cp_asm_get_fn(fn_name, coproc, opcode_1, Crn, Crm, opcode_2) 
 
 #define cp_asm_raw(fn_name, coproc, opcode_1, Crn, Crm, opcode_2)   \
     cp_asm_set_raw(fn_name, coproc, opcode_1, Crn, Crm, opcode_2) \

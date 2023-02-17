@@ -106,7 +106,7 @@ void rpi_reboot(void) __attribute__((noreturn));
 void clean_reboot(void) __attribute__((noreturn));
 
 // user can provide an implementation: will get called during reboot.
-void reboot_handler(void);
+void reboot_callout(void);
 
 /*****************************************************************************
  * memory related helpers
@@ -130,6 +130,14 @@ void *kmalloc_aligned(unsigned nbytes, unsigned alignment);
 // initialize and set where the heap starts and give a maximum
 // size in bytes
 void kmalloc_init_set_start(void *addr, unsigned max_nbytes);
+
+// return pointer to the first free byte.  used for
+// bounds checking.
+void *kmalloc_heap_ptr(void);
+// pointer to initial start of heap
+void *kmalloc_heap_start(void);
+// pointer to end of heap
+void *kmalloc_heap_end(void);
 
 /*****************************************************************************
  * Low-level code: you could do in C, but these are in assembly to defeat
