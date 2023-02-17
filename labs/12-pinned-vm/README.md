@@ -305,6 +305,64 @@ locks up, add this code to your pinned-vm.c`:
         }
 
 which will let `reboot` / `panic` reboot without hanging.
+
+----------------------------------------------------------------------
+#### Some intuition and background on domains.
+
+ARM has an interesting take on protection.  Like most modern architectures
+it allows you to mark pages as invalid, read-only, read-write, executable.
+However, it gives you a way to quickly disable these restrictions in a
+fine-grained way through the use of domains.
+
+Mechanically it works as follows.
+  - each page-table entry (PTE) has a 4-bit field stating which single
+  domain (out of 16 possible) the entry belongs to.
+
+  - the system control register (CP15) has a 32-bit domain register (`c3`,
+  page B4-42) that contains 2-bits for each of the 16 domains stating
+  what mode each the domain is in.
+    - no-access (`0b00`): no load or store can be done to any virtual
+    address belonging to the domain;
+
+  - a "client" (`0b01`): all accesses must be consistent with the
+    permissions in their associated PTE;
+
+  - a "manager" (`0b11`): no permission checks are done, can read or
+    write any virtual address in the PTE region.
+
+  - B4-15: On each memory reference, the hardware looks up the page
+    table entry (in reality: the cached TLB entry) for the virtual address,
+    gets the domain number, looks up the 2-bit state of the domain in the
+    domain register checks if it is allowed.
+
+As a result, you can quickly do a combination of both removing all access
+to a set of regions, and granting all access to others by simply writing
+a 32-bit value to a single coprocessor register.
+
+To see how these pieces play together, consider an example where code
+with more privileges (e.g., the OS) wants to run code that has less
+privileges using the same address translations (e.g., a device driver
+it doesn't trust).
+   - The OS assigns the device driver a unique domain id (e.g., `2`).
+   - The OS tags all PTE entries the driver is allowed to touch with `2`
+   in the `domain` field.
+   - When the OS is running it sets all domains to manager (`0b11`) mode
+   so that it can read and write all memory.
+   - When the OS wants to call the device driver, it switches the state of
+   domain `2` to be a client (`0b01`) and all other domains as no-access
+   (`0b00`).
+
+Result:
+  1. When the driver code runs, it cannot corrupt any other kernel memory.
+  2. Switching domains is fast compared to switching page tables (the
+  typical approach).
+  3. As a nice bonus: All the addresses are the same in both pieces of
+  code, which makes many things easier.
+
+##### Bits to set in Domain
+<table><tr><td>
+  <img src="images/part2-domain.png"/>
+</td></tr></table>
      
 ----------------------------------------------------------------------
 ## Extension:
