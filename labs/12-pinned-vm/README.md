@@ -222,7 +222,51 @@ tests.
 Note that you'll have to handle the domains in the domain control register.
 
 ----------------------------------------------------------------------
-## Part 3: handle a couple exceptions
+## Part 3: implement `pinned-vm.c:lockdown_print_entries`
+
+
+Mine is something like:
+
+
+        void lockdown_print_entry(unsigned idx) {
+            trace("   idx=%d\n", idx);
+            lockdown_index_set(idx);
+            uint32_t va_ent = lockdown_va_get();
+            uint32_t pa_ent = lockdown_pa_get();
+            unsigned v = bit_get(pa_ent, 0);
+        
+            if(!v) {
+                trace("     [invalid entry %d]\n", idx);
+                return;
+            }
+        
+            // 3-149
+            ...fill in the needed vars...
+            trace("     va_ent=%x: va=%x|G=%d|ASID=%d\n",
+                va_ent, va, G, asid);
+        
+            // 3-150
+            ...fill in the needed vars...
+            trace("     pa_ent=%x: pa=%x|nsa=%d|nstid=%d|size=%b|apx=%b|v=%d\n",
+                        pa_ent, pa, nsa,nstid,size, apx,v);
+        
+            // 3-151
+            ...fill in the needed vars...
+            trace("     attr=%x: dom=%d|xn=%d|tex=%b|C=%d|B=%d\n",
+                    attr, dom,xn,tex,C,B);
+        }
+        
+        void lockdown_print_entries(const char *msg) {
+            trace("-----  <%s> ----- \n", msg);
+            trace("  pinned TLB lockdown entries:\n");
+            for(int i = 0; i < 8; i++)
+                lockdown_print_entry(i);
+            trace("----- ---------------------------------- \n");
+        }
+
+
+----------------------------------------------------------------------
+## Part 4: handle a couple exceptions
 
 For this part you'll write all the code.  
 
