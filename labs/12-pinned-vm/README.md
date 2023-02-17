@@ -103,8 +103,6 @@ state) there's a bunch of data structure code.   The rough breakdown:
   - `mmu.h`: this has the data structures we will use today.   I've tried
     to comment and give some page numbers, but buyer beware.
 
-  - `mmu-helpers.c`: these contain printing and sanity checking routines.
-
   - `arm-coprocessor-asm.h`: has a fair number of instructions used to
     access the privileged state (typically using "co-processor 15").
     Sometimes the arm docs do not match the syntax expected by the GNU
@@ -116,13 +114,6 @@ state) there's a bunch of data structure code.   The rough breakdown:
      with a `b` they are from the armv6 general documents (the pdf's that
      begin with `armv6` such as `armv6.b2-memory.annot.pdf`) Without a
      letter prefix they come from the `arm1176*` pdf's.
-
-What to modify:
-
-  - `mmu.c`: this will hold your MMU code.  Each routine should have
-    a corresponding staff implementation.
-  - `vm-ident.c` this has simple calls to setup an identity address space.
-  - the various tests.
 
 #### Check-off
 
