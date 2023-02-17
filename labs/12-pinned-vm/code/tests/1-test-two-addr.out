@@ -1,0 +1,74 @@
+TRACE:notmain:about to enable
+TRACE:lockdown_print_entries:-----  <about to turn on first time> ----- 
+TRACE:lockdown_print_entries:  pinned TLB lockdown entries:
+TRACE:lockdown_print_entry:   idx=0
+TRACE:lockdown_print_entry:     va_ent=0x20000200: va=0x20000|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0x200000c3: pa=0x20000|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=1
+TRACE:lockdown_print_entry:     va_ent=0x20100200: va=0x20100|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0x201000c3: pa=0x20100|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=2
+TRACE:lockdown_print_entry:     va_ent=0x20200200: va=0x20200|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0x202000c3: pa=0x20200|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=3
+TRACE:lockdown_print_entry:     va_ent=0x200: va=0x0|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0xc3: pa=0x0|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=4
+TRACE:lockdown_print_entry:     va_ent=0x100200: va=0x100|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0x1000c3: pa=0x100|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=5
+TRACE:lockdown_print_entry:     va_ent=0x7f00200: va=0x7f00|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0x7f000c3: pa=0x7f00|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=6
+TRACE:lockdown_print_entry:     va_ent=0x1000001: va=0x1000|G=0|ASID=1
+TRACE:lockdown_print_entry:     pa_ent=0x1000003: pa=0x1000|nsa=0|nstid=0|size=0|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=7
+TRACE:lockdown_print_entry:     
+TRACE:lockdown_print_entries:----- ---------------------------------- 
+TRACE:notmain:MMU is on and working!
+TRACE:notmain:asid 1 = got: 0xdeadbeef
+TRACE:notmain:MMU is off!
+TRACE:notmain:phys addr1=0x1
+TRACE:lockdown_print_entries:-----  <about to turn on> ----- 
+TRACE:lockdown_print_entries:  pinned TLB lockdown entries:
+TRACE:lockdown_print_entry:   idx=0
+TRACE:lockdown_print_entry:     va_ent=0x20000200: va=0x20000|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0x200000c3: pa=0x20000|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=1
+TRACE:lockdown_print_entry:     va_ent=0x20100200: va=0x20100|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0x201000c3: pa=0x20100|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=2
+TRACE:lockdown_print_entry:     va_ent=0x20200200: va=0x20200|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0x202000c3: pa=0x20200|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=3
+TRACE:lockdown_print_entry:     va_ent=0x200: va=0x0|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0xc3: pa=0x0|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=4
+TRACE:lockdown_print_entry:     va_ent=0x100200: va=0x100|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0x1000c3: pa=0x100|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=5
+TRACE:lockdown_print_entry:     va_ent=0x7f00200: va=0x7f00|G=1|ASID=0
+TRACE:lockdown_print_entry:     pa_ent=0x7f000c3: pa=0x7f00|nsa=0|nstid=0|size=11|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=6
+TRACE:lockdown_print_entry:     va_ent=0x1000002: va=0x1000|G=0|ASID=2
+TRACE:lockdown_print_entry:     pa_ent=0x2000003: pa=0x2000|nsa=0|nstid=0|size=0|apx=1|v=1
+TRACE:lockdown_print_entry:     attr=0x88: dom=1|xn=0|tex=1|C=0|B=0
+TRACE:lockdown_print_entry:   idx=7
+TRACE:lockdown_print_entry:     
+TRACE:lockdown_print_entries:----- ---------------------------------- 
+TRACE:notmain:asid 2 = got: 0xdeadbeef
+TRACE:notmain:checking user2=0x2
+TRACE:notmain:SUCCESS!

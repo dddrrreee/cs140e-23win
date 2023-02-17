@@ -1,0 +1,10 @@
+TRACE:PIN_VM:about to turn on mmu
+TRACE:PIN_VM:enabled!
+TRACE:PIN_VM:going to check entries are pinned
+TRACE:PIN_VM:success: TLB contains 0x20000000, returned 0x20000000
+TRACE:PIN_VM:success: TLB contains 0x20100000, returned 0x20100000
+TRACE:PIN_VM:success: TLB contains 0x20200000, returned 0x20200000
+TRACE:PIN_VM:success: TLB contains 0x0, returned 0x0
+TRACE:PIN_VM:success: TLB contains 0x100000, returned 0x100000
+TRACE:PIN_VM:success: TLB contains 0x8f00000, returned 0x8f00000
+TRACE:PIN_VM:success: TLB contains 0x7f00000, returned 0x7f00000
