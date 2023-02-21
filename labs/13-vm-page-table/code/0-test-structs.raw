@@ -1,0 +1,16 @@
+FOUND: </dev/ttyUSB0>
+opened tty port </dev/ttyUSB0>.
+my-install: tty-usb=</dev/ttyUSB0> program=<./0-test-structs.bin> about to boot
+TRACE:simple_boot: sending 16800 bytes, crc32=5f75425d
+waiting for a start
+pi: <addr=0x8000, n=16800, cksum=0x5f75425d>
+putting code
+bootloader: Done.
+listening on ttyusb=</dev/ttyUSB0>
+about to check structure offsets
+SUCCESS: offsets passed
+DONE!!!
+
+Saw done
+
+bootloader: pi exited.  cleaning up
