@@ -69,7 +69,6 @@
    on pi: organized from bit 0 to high.
 */
 
-#if 0
 typedef struct first_level_descriptor {
     unsigned
         tag,      // 0-1:2    should be 0b10
@@ -91,32 +90,6 @@ typedef struct first_level_descriptor {
         _sbz1,    // 19:1     sbz
         sec_base_addr; // 20-31.  must be aligned.
 } fld_t;
-#else
-typedef struct first_level_descriptor {
-    unsigned
-        tag:2,      // 0-1:2    should be 0b10
-        B:1,        // 2:1      set to 0
-        C:1,        // 3:1      set to 0
-        XN:1,       // 4:1      1 = execute never, 0 = can execute
-                    // needs to have XP=1 in ctrl-1.
-
-        domain:4,   // 5-8:4    b4-10: 0b11 = manager, 0b01 checked perms
-        IMP:1,      // 9:1      should be set to 0 unless imp-defined 
-                    //          functionality is needed.
-
-        AP:2,       // 10-11:2  permissions, see b4-8/9
-        TEX:3,      // 12-14:3
-        APX:1,      // 15:1     
-        S:1,        // 16:1     set=0, deprecated.
-        nG:1,       // 17:1     nG=0 ==> global mapping, =1 ==> process specific
-        super:1,    // 18:1     selects between section (0) and supersection (1)
-        _sbz1:1,    // 19:1     sbz
-        sec_base_addr:12; // 20-31.  must be aligned.
-} fld_t;
-
-
-
-#endif
 _Static_assert(sizeof(fld_t) == 4, "invalid size for fld_t: you need to define the bitfields!");
 
 // B4-9: AP field:  no/access=0b00, r/o=0b10, rw=0b11
