@@ -2,6 +2,7 @@
 #include "libc/helper-macros.h"
 
 #include "mmu.h"
+#include "fast-hash32.h"
 
 #define print_field(x, field) do {                   \
         printk("\t0b%b\t= %s\n", (x)->field, #field);   \
@@ -15,7 +16,7 @@ void mmu_be_quiet(void) { quiet_p = 1; }
 void hash_print(const char *msg, const void *data, unsigned n) {
     if(quiet_p)
         return;
-    printk("HASH:%s: hash=%x,nbytes=%d\n", msg, fast_hash(data,n),n);
+    printk("HASH:%s: hash=%x,nbytes=%d\n", msg, fast_hash32(data,n),n);
 }
 
 /*************************************************************************

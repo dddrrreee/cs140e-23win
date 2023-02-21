@@ -35,8 +35,8 @@ fld_t *mmu_pt_alloc(unsigned n) {
 
     // first-level page table is 4096 entries.
     fld_t *pt = kmalloc_aligned(nbytes, 1<<14);
-    demand(mod_pow2_ptr(pt, 14), must be 14-bit aligned!);
 
+    demand(is_aligned_ptr(pt, 1<<14), must be 14-bit aligned!);
     return mmu_pt_init(pt, nbytes);
 }
 

@@ -149,22 +149,19 @@ static inline unsigned mmu_sec_bits_only(unsigned u) { return u & ~((1<<21)-1); 
 // extrac the (virt/phys) section number.
 static inline unsigned mmu_sec_num(unsigned u)       { return u >> 20; }
 
-
-
 static inline uint32_t mod_pow2(uint32_t x, uint32_t n) {
     assert(n<32);
     uint32_t rem = x % (1<<n);
-
     if(rem)
         panic("cannot divide %x by 2^%d : remainder=%x\n", x, n, rem);
     return 1;
 }
-static inline uint32_t mod_pow2_ptr(void *x, uint32_t n) {
+static inline uint32_t 
+mod_pow2_ptr(void *x, uint32_t n) {
     return mod_pow2((uint32_t)x,n);
 }
 
 // turn off all the output from mmu helpers
 void mmu_be_quiet(void);
-
 
 #endif
