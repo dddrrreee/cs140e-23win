@@ -198,6 +198,8 @@ void rpi_wait(void);
 void caches_enable(void);
 // disable branch and icache
 void caches_disable(void);
+int caches_is_enabled(void);
+
 
 /*********************************************************
  * some gcc helpers.

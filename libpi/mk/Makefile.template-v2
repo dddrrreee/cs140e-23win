@@ -62,6 +62,8 @@ endif
 COMMON_OBJS := $(COMMON_OBJS) $(COMMON_SRC:.c=.o)
 COMMON_OBJS := $(COMMON_OBJS:.S=.o)
 COMMON_OBJS := $(COMMON_OBJS:.s=.o)
+COMMON_OBJS := $(COMMON_OBJS) 
+
 
 LIB_OBJS := $(LIB_SRC:.c=.o)
 LIB_OBJS := $(LIB_OBJS:.S=.o)
@@ -81,7 +83,8 @@ ENABLE_EMIT :=1
 endif
 
 # wait: you need src too?
-dep := $(patsubst %.c, %.d, $(PROGS)) $(COMMON_OBJS:.o=.d) 
+dep := $(patsubst %.c, %.d, $(PROGS)) 
+dep := $(dep) $(LIB_OBJS:.o=.d) $(START:.o=.d) $(COMMON_OBJS:.o=.d) 
 VPATH := ./ $(sort $(dir $(dep)))
 
 .SUFFIXES: .run
@@ -109,6 +112,7 @@ print:
 	# COMMON_OBJS = <$(COMMON_OBJS)>
 	# TEST_ASM_OBJS = <$(TEST_ASM_OBJS)>
 	# LIB_OBJS = <$(LIB_OBJS)>
+	# START = <$(START)>
 
 # double colon is so user can add transparently.
 libs:: FORCE
@@ -144,19 +148,14 @@ $(LIB): $(LIB_OBJS) $(STAFF_LIB_OBJS) $(DEPS) $(LINK_DEPS)
 
 $(COMMON_OBJS): $(DEPS)
 
-%.o: %.c $(DEPS)
-	$(CC) $(CFLAGS) -c $< -o $@
-%.o: %.S $(DEPS)
-	$(CC) $(CPP_ASFLAGS) -c $< -o $@
-
 ifndef TEST_ASM
 %.elf: %.o $(ALL_OBJS) $(DEPS) $(START) $(LIBS) 
-	$(LD) $(LDFLAGS) $(START)  $< $(ALL_OBJS) -T $(MEMMAP) -o $@  $(LIBS)
+	$(LD) $(LDFLAGS) $(START)  $< $(ALL_OBJS) -T $(MEMMAP) -o $@  $(LIBS) $(LIB_POST)
 else
 # we put the assembly code right after start to guarantee it always
 # begins at the same address.
 %.elf: %.o %-asm.o $(ALL_OBJS) $(DEPS) $(START) $(LIBS)
-	$(LD) $(LDFLAGS) $(START) $*-asm.o $< $(ALL_OBJS) -T $(MEMMAP) -o $@  $(LIBS)
+	$(LD) $(LDFLAGS) $(START) $*-asm.o $< $(ALL_OBJS) -T $(MEMMAP) -o $@  $(LIBS) $(LIB_POST)
 endif
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -164,6 +163,12 @@ ifneq ($(MAKECMDGOALS),cleanall)
 -include $(dep)  # include dep files
 endif
 endif
+
+%.o: %.c  $(DEPS)
+	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.S $(DEPS)
+	$(CC) $(CPP_ASFLAGS) -c $< -o $@
+
 
 ./%.d: %.c $(DEPS)
 	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
