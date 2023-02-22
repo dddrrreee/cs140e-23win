@@ -272,14 +272,14 @@ This test:
 For this part you'll write your own test case.  
 
   1. Create a page table with a single additional segment after the current heap
-     (so at 0x200000) that is not marked as a non-global entry.
+     (so at 0x200000) that is marked as a non-global entry.
 
   2. Write a routine to duplicate a page table, cloning any non-global entry (it
      should clone the single page from step 1).
 
   3. Write the test to switch between two different ASIDs, showing that the 
      writes in one do not go to the other for non-shared data, but do go
-     for shared.
+     for shared. This will not be an identity map.
 
 ----------------------------------------------------------------------
 ## Extension: die with informative error messages.
