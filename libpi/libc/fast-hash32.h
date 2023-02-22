@@ -44,6 +44,6 @@ static inline uint32_t fast_hash_inc32(const void * _data, unsigned long len, ui
 }
 
 static inline uint32_t fast_hash32(const void * data, unsigned long len) {
-    return fast_hash_inc32(data, len, 0);
+    return fast_hash_inc32(data, len, len);
 }
 #endif

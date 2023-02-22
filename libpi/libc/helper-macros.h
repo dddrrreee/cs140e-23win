@@ -3,7 +3,7 @@
 #define __RPI_MACROS_H__
 
 // i think this only works for power of 2?
-#define is_aligned(x, a)        ((unsigned)x % a == 0)
+#define is_aligned(x, a)        ((unsigned)(x) % (a) == 0)
 #define is_aligned_ptr(x, a)        is_aligned((uint32_t)x,a)
 
 #define pi_roundup(x,n) (((x)+((n)-1))&(~((n)-1)))
