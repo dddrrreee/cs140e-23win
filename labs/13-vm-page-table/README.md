@@ -134,6 +134,17 @@ Testing:
 ----------------------------------------------------------------------
 ## Part 2: finish implementing  `mmu.c`.
 
+***NOTE: you'll have to do the following***:
+
+  - add the following to `mmu.c`:
+
+        void domain_access_ctrl_set(uint32_t r) {
+            staff_cp15_domain_ctrl_wr(r);
+        }
+
+  - delete the staff calls in `vm-ident.c`
+
+
 Go through and start implementing your own versions of the MMU routines.
 You'll write the code to fill in the page table assuming the use of
 1MB sections.
@@ -149,6 +160,8 @@ You'll write the code to fill in the page table assuming the use of
 
   - You'll do the other calls on thursday --- these
     require following some rules that we don't want to get into here.
+
+
 
 The document you'll need for this part is:
   - The annotated B4 of the ARM manual `docs/armv6.b4-mmu.annot.pdf`,
