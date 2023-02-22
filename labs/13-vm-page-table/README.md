@@ -1,9 +1,7 @@
 ## Simple virtual memory with page tables.
 
-adad
-
 <p align="center">
-  <img src="images/cat-laptop.jpg" width="450" />
+  <img src="images/cat-laptop.png" width="450" />
 </p>
 
 
@@ -298,5 +296,5 @@ There's a ton of extensions to do:
     enable the datacache.
 
 <p align="center">
-  <img src="images/cat-debug.jpg" width="450" />
+  <img src="images/cat-debug.png" width="450" />
 </p>
