@@ -64,7 +64,7 @@ void vm_test(void) {
 }
 
 void notmain() {
-    kmalloc_init_set_start(OneMB, OneMB);
+    kmalloc_init_set_start((void*)OneMB, OneMB);
     printk("implement one at a time.\n");
     check_vm_structs();
     vm_test();

@@ -36,7 +36,7 @@ void vm_test(void) {
 
 void notmain() {
     mmu_be_quiet();
-    kmalloc_init_set_start(OneMB, OneMB);
+    kmalloc_init_set_start((void*)OneMB, OneMB);
     output("testing we can write and resume\n");
     check_vm_structs();
     vm_test();

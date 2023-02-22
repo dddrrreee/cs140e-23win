@@ -1,0 +1,14 @@
+HASH:PTE crc:: hash=0x2f782a81,nbytes=4
+HASH:PTE crc:: hash=0x5f6614fe,nbytes=4
+HASH:PTE crc:: hash=0x314dc8fc,nbytes=4
+HASH:PTE crc:: hash=0x93a2dadc,nbytes=4
+HASH:PTE crc:: hash=0xb76d0d60,nbytes=4
+HASH:PTE crc:: hash=0xe22b84dd,nbytes=4
+HASH:PTE crc:: hash=0x87a285bd,nbytes=4
+HASH: about to do an invalid write to 0x7effff0
+HASH:PTE crc:: hash=0x579891f,nbytes=4
+HASH:done with invalid write to 0x7effff0 have=11
+HASH:test1: success
+HASH: marked no access0x7effff0 (vpn=0x7e00000)
+HASH: done with invalid perm write to 0x7effff0 have=12
+HASH: test2: success!

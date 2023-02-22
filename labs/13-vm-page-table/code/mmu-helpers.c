@@ -169,7 +169,7 @@ void fld_print(fld_t *f) {
     printk("------------------------------\n");
     printk("0x%x:\n", f);
     print_field(f, sec_base_addr);
-    printk("\t  --> va=0x%8x\n", f->sec_base_addr<<20);
+    printk("\t  --> va=%x\n", f->sec_base_addr<<20);
     printk("\t           76543210\n");
 
     print_field(f, nG);

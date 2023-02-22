@@ -11,12 +11,14 @@ fld_t * vm_ident_mmu_init(int start_p);
 void vm_ident_mmu_on(fld_t *pt);
 void vm_ident_mmu_off(void);
 
+// we use a non-zero domain id to test things out.
+// (this shouldn't be a global) 
+enum { dom_id = 1};
+
 // kinda lame, but useful to have around.
 enum { OneMB = 1024 * 1024 };
 
-// we use a non-zero domain id to test things out.
-enum { dom_id = 1};
-
+// used for tests.
 extern volatile struct proc_state {
     fld_t *pt;
     unsigned sp_lowest_addr;
@@ -27,5 +29,7 @@ extern volatile struct proc_state {
     // used for the die checks.
     unsigned die_addr;
 } proc;
+
+
 
 #endif

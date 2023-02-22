@@ -22,7 +22,7 @@ void vm_test(void) {
 
 void notmain() {
     mmu_be_quiet();
-    kmalloc_init_set_start(OneMB, OneMB);
+    kmalloc_init_set_start((void*)OneMB, OneMB);
     output("testing we die if jump to unmmapped memory\n");
     check_vm_structs();
     vm_test();

@@ -50,6 +50,7 @@ fld_t *mmu_pt_alloc(unsigned n) {
 void mmu_disable_set(cp15_ctrl_reg1_t c) {
     assert(!c.MMU_enabled);
     assert(!c.C_unified_enable);
+    // You'll implement this next lab.
     staff_mmu_disable_set_asm(c);
 }
 
@@ -70,6 +71,7 @@ void mmu_disable(void) {
 // real work (you'll write this code next time).
 void mmu_enable_set(cp15_ctrl_reg1_t c) {
     assert(c.MMU_enabled);
+    // you'll implement this next lab.
     staff_mmu_enable_set_asm(c);
 }
 
@@ -86,14 +88,8 @@ void set_procid_ttbr0(unsigned pid, unsigned asid, fld_t *pt) {
     assert((pid >> 24) == 0);
     assert(pid > 64);
     assert(asid < 64 && asid);
+    // you'll implement this next lab.
     staff_cp15_set_procid_ttbr0(pid << 8 | asid, pt);
-}
-
-// hopefully catch if you call unimplemented stuff.
-void asm_not_implemented(unsigned lr) {
-    if(mmu_is_enabled())
-        mmu_disable();
-    panic("called unimplemented asm routine at %x\n", lr);
 }
 
 /**************************************************************************
@@ -117,8 +113,8 @@ fld_t * mmu_lookup_section(fld_t *pt, unsigned va) {
     assert(mod_pow2(va, 20));
     fld_t *pte = 0;
 
-
-    unimplemented();
+    // implement
+    pte = staff_mmu_lookup_section(pt,va);
 
     // for today: tag should be set.  in the future you'd return 0.
     demand(pte->tag, invalid section);
@@ -149,7 +145,7 @@ void mmu_init(void) {
 
     // trivial: RMW the xp bit in control reg 1.
     // leave mmu disabled.
-    unimplemented();
+    todo("read control reg 1, turn on XP bit (non-back compat)");
 
     // make sure write succeeded.
     struct control_reg1 c1 = cp15_ctrl_reg1_rd();
@@ -157,23 +153,17 @@ void mmu_init(void) {
     assert(!c1.MMU_enabled);
 }
 
-#include "vector-base.h"
-
-void mmu_install_handlers(void) {
-    unimplemented();
-}
-
 // set f->sec_base_addr correctly: called by <mmu_map_section>
 static void fld_set_base_addr(fld_t *f, unsigned addr) {
     // 20 b/c we have 1MB sections.
     demand(mod_pow2(addr,20), addr is not aligned!);
 
-    unimplemented();
+    // make sure if you read it back, it's what you set it to.
+    todo("set <sec_base_addr>: look in <armv6-vm.h>");
 
     // if the previous code worked, this should always succeed.
     assert((f->sec_base_addr << 20) == addr);
 }
-
 
 // create a mapping for <va> to <pa> in the page table <pt>
 // for now: 
@@ -189,10 +179,8 @@ fld_t * mmu_map_section(fld_t *pt, uint32_t va, uint32_t pa, uint32_t dom) {
     assert(mod_pow2(va, 20));
     assert(mod_pow2(pa, 20));
 
-    fld_t *pte = 0;
-
-    // assign pte
-    unimplemented();
+    // assign pte: call <fld_set_base_addr> to set <sec_base_addr>
+    fld_t *pte = staff_mmu_map_section(pt, va, pa, dom);
 
     fld_print(pte);
     printk("my.pte@ 0x%x = %b\n", pt, *(unsigned*)pte);
@@ -202,7 +190,7 @@ fld_t * mmu_map_section(fld_t *pt, uint32_t va, uint32_t pa, uint32_t dom) {
 
 // read and return the domain access control register
 uint32_t domain_access_ctrl_get(void) {
-    unimplemented();
+    return staff_domain_access_ctrl_get();
 }
 
 // b4-42

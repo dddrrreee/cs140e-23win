@@ -22,8 +22,6 @@
 #include "rpi-asm.h"
 #include "armv6-coprocessor-asm.h"
 
-#define UNIMPL mov r0, lr; b asm_not_implemented
-
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @ many page numbers are in 
 @    armv6-coprocessor-asm.h
@@ -32,25 +30,25 @@
 // just read the cache type: use C code to figure out if it is unified
 // b6-13, b6-14
 MK_FN(get_cache_type)
-    UNIMPL
+    asm_todo("implement this")
     bx lr
 
 // void reset(void)
 // clear the dcache, icache, tlbs
 MK_FN(mmu_reset)
-    UNIMPL
+    asm_todo("implement this thursday")
     bx lr
 
 // void cp15_domain_ctrl_wr(uint32_t dom_reg);
 //  need to do cp15 sync: flush_btb, dsb, prefetch flush
 MK_FN(cp15_domain_ctrl_wr)
-    UNIMPL
+    asm_todo("implement this thursday")
     bx lr
 
 // void cp15_set_procid_ttbr0(uint32_t proc_and_asid, fld_t *pt);
 // sequence from b2-25
 MK_FN(cp15_set_procid_ttbr0)
-    UNIMPL
+    asm_todo("implement this thursday")
     bx lr
 
 // void mmu_disable_set_asm(cp15_ctrl_reg1_t c);
@@ -64,11 +62,11 @@ MK_FN(mmu_disable_set_asm)
     @ flush, but instructions could get fetched before we could disable,
     @ defeating the purpose.
 
-    UNIMPL
+    asm_todo("implement this thursday")
     bx lr
 
 // void mmu_enable_set_asm(cp15_ctrl_reg1_t c);
 MK_FN(mmu_enable_set_asm)
-    UNIMPL
+    asm_todo("implement this thursday")
     bx lr
 

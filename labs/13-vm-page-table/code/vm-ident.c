@@ -13,6 +13,7 @@
 //    - 1 section of heap (starting at one MB: 0x100000)
 //    - 3 sections of GPIO ( 0x20000000 ---  0x20200000)
 #include "vm-ident.h"
+#include "vector-base.h"
 
 // do one time initialization of MMU, setup identity mappings, and start
 // running in mmu
@@ -21,6 +22,7 @@ fld_t * vm_ident_mmu_init(int start_p) {
     staff_mmu_init();
     assert(!mmu_is_enabled());
 
+    // ugly hack: we start by allocating a single page table at a known address.
     fld_t *pt = mmu_pt_alloc(4096);
     assert(pt == (void*)0x100000);
 
@@ -28,28 +30,27 @@ fld_t * vm_ident_mmu_init(int start_p) {
 
     // map the first MB: shouldn't need more memory than this.
     staff_mmu_map_section(pt, 0x0, 0x0, dom_id);
-    // map the page table: for lab cksums must be at 0x100000.
+    // map the heap/page table: for lab cksums must be at 0x100000.
     staff_mmu_map_section(pt, 0x100000,  0x100000, dom_id);
 
     // map the GPIO: make sure these are not cached and not writeback.
     // [how to check this in general?]
-    staff_mmu_map_section(pt, 0x20000000, 0x20000000, dom_id);
-    staff_mmu_map_section(pt, 0x20100000, 0x20100000, dom_id);
-    staff_mmu_map_section(pt, 0x20200000, 0x20200000, dom_id);
+    todo("map GPIO (see procmap.h)");
 
     // setup user stack (note: grows down!)
-    unimplemented();
+    todo("map user stack (see procmap.h)");
 
     // setup interrupt stack (note: grows down!)
     // if we don't do this, then the first exception = bad infinite loop
-    unimplemented();
+    todo("map interrupt stack (see procmap.h)");
 
     // 3. install fault handler to catch if we make mistake.
-    mmu_install_handlers();
+    extern uint32_t default_vec_ints[];
+    vector_base_set(default_vec_ints);
 
     // 4. start the context switch:
 
-    // set up permissions for the different domains: is this right or wrong?
+    // set up permissions for the one domain we use rn.
     staff_domain_access_ctrl_set(0b01 << dom_id*2);
 
     if(start_p)

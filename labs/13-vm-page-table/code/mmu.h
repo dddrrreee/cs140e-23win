@@ -15,7 +15,6 @@ void staff_mmu_init(void);
 // install trap handlers: should make more fine-grained.
 void mmu_install_handlers(void);
 
-
 // allocate page table and initialize.  handles alignment.
 //
 // Naive: we assume a single page table, which forces it to be 4096 entries.
@@ -33,14 +32,13 @@ fld_t *mmu_pt_alloc(unsigned n_entries);
 // initialize a preallocated chunk of memory
 fld_t *mmu_pt_init(void *addr, unsigned nbytes);
 
-
 // map a 1mb section starting at <va> to <pa>
 fld_t *mmu_map_section(fld_t *pt, uint32_t va, uint32_t pa, uint32_t dom);
 fld_t *staff_mmu_map_section(fld_t *pt, uint32_t va, uint32_t pa, uint32_t dom);
+
 // map <nsec> 1mb sections starting at <va> to <pa>
 void mmu_map_sections(fld_t *pt, unsigned va, unsigned pa, unsigned nsec, uint32_t dom);
 void staff_mmu_map_sections(fld_t *pt, unsigned va, unsigned pa, unsigned nsec, uint32_t dom);
-
 
 // lookup section <va> in page table <pt>
 fld_t *mmu_lookup(fld_t *pt, uint32_t va);
@@ -52,8 +50,8 @@ void staff_mmu_sync_pte_mods(void);
 // *<pte> = e.   more precisely flushes state.
 void mmu_sync_pte_mod(fld_t *pte, fld_t e);
 
-
-
+fld_t * mmu_lookup_section(fld_t *pt, unsigned va);
+fld_t * staff_mmu_lookup_section(fld_t *pt, unsigned va);
 
 /*
  * enable, disable init.
@@ -61,9 +59,9 @@ void mmu_sync_pte_mod(fld_t *pte, fld_t e);
 
 // turn on/off mmu: handles all the cache flushing, barriers, etc.
 void mmu_enable(void);
-void mmu_disable(void);
-
 void staff_mmu_enable(void);
+
+void mmu_disable(void);
 void staff_mmu_disable(void);
 
 // same as disable/enable except client gives the control reg to use --- 
@@ -136,7 +134,7 @@ void staff_mmu_enable_set_asm(cp15_ctrl_reg1_t c);
  * simple helpers.
  */
 int mmu_is_enabled(void);
-
+int staff_mmu_is_enabled(void);
 
 // b4-20
 enum {
@@ -149,6 +147,7 @@ static inline unsigned mmu_sec_bits_only(unsigned u) { return u & ~((1<<21)-1); 
 // extrac the (virt/phys) section number.
 static inline unsigned mmu_sec_num(unsigned u)       { return u >> 20; }
 
+// is <x> divisible by 1<<n?
 static inline uint32_t mod_pow2(uint32_t x, uint32_t n) {
     assert(n<32);
     uint32_t rem = x % (1<<n);
@@ -156,6 +155,7 @@ static inline uint32_t mod_pow2(uint32_t x, uint32_t n) {
         panic("cannot divide %x by 2^%d : remainder=%x\n", x, n, rem);
     return 1;
 }
+// is <x> divisible by 1<<n?
 static inline uint32_t 
 mod_pow2_ptr(void *x, uint32_t n) {
     return mod_pow2((uint32_t)x,n);
