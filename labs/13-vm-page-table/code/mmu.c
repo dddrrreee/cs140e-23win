@@ -180,6 +180,13 @@ fld_t * mmu_map_section(fld_t *pt, uint32_t va, uint32_t pa, uint32_t dom) {
     assert(mod_pow2(pa, 20));
 
     // assign pte: call <fld_set_base_addr> to set <sec_base_addr>
+    // set each pte entry to: 
+    //   1. global
+    //   2. AP = full access in user and kernel (B4-9)
+    //   3. APX = 0
+    //   4. domain to <dom>
+    //   5. TEX strongly ordered (B4-12)
+    //   6. executable.
     fld_t *pte = staff_mmu_map_section(pt, va, pa, dom);
 
     fld_print(pte);
