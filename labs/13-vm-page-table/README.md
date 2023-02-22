@@ -134,7 +134,7 @@ Testing:
 ----------------------------------------------------------------------
 ## Part 2: finish implementing  `mmu.c`.
 
-***NOTE: you'll have to do the following***:
+***NOTE: the initial readme left out the following***:
 
   - add the following to `mmu.c`:
 
@@ -143,6 +143,12 @@ Testing:
         }
 
   - delete the staff calls in `vm-ident.c`
+
+  - also implement `domain_access_ctrl_get` (see: b4-42), which
+    you should be able to steal from last lab:
+
+        uint32_t domain_access_ctrl_get(void) {
+
 
 
 Go through and start implementing your own versions of the MMU routines.
