@@ -22,36 +22,49 @@
 #include "rpi-asm.h"
 #include "armv6-coprocessor-asm.h"
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@ many page numbers are in 
-@    armv6-coprocessor-asm.h
-@ and the other armv6-*.h files
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ armv6-coprocessor-asm.h
+@   - has many macros for the privileged instructions.
+@   - many page numbers 
+@
+@ make sure you look at B2 as well as 
 
-// just read the cache type: use C code to figure out if it is unified
-// b6-13, b6-14
+@ just read the cache type: use C code to figure out if it is unified
+@ b6-13, b6-14
 MK_FN(get_cache_type)
     asm_todo("implement this")
     bx lr
 
-// void reset(void)
-// clear the dcache, icache, tlbs
+@ void mmu_reset(void)
+@   - clear the dcache, icache, tlbs: make sure you obey 
+@     any rules from B2
 MK_FN(mmu_reset)
     asm_todo("implement this thursday")
     bx lr
 
-// void cp15_domain_ctrl_wr(uint32_t dom_reg);
-//  need to do cp15 sync: flush_btb, dsb, prefetch flush
+@ void cp15_domain_ctrl_wr(uint32_t dom_reg);
+@    easy rule: look at 2.7.6
 MK_FN(cp15_domain_ctrl_wr)
     asm_todo("implement this thursday")
     bx lr
 
-// void cp15_set_procid_ttbr0(uint32_t proc_and_asid, fld_t *pt);
-// sequence from b2-25
+@ void cp15_set_procid_ttbr0(uint32_t proc_and_asid, fld_t *pt);
+@     sequence from b2-25 + rules from 3-129
 MK_FN(cp15_set_procid_ttbr0)
     asm_todo("implement this thursday")
     bx lr
 
-// void mmu_disable_set_asm(cp15_ctrl_reg1_t c);
+@ void mmu_disable_set_asm(cp15_ctrl_reg1_t c);
+@
+@ given the control register value <c>, write it 
+@ and do any needed sync
+@
+@ this is a pretty tricky routine.  make sure you handle the 
+@ icache and dcache.   when the mmu is off, these mappings will
+@ change.  also, dcache does not work with MMU off.
+@
+@ make sure you look at arm1176, 6-9.
+@
 MK_FN(mmu_disable_set_asm)
 
     @ note: this piece of code is mapped into the sample place in both
@@ -65,8 +78,23 @@ MK_FN(mmu_disable_set_asm)
     asm_todo("implement this thursday")
     bx lr
 
-// void mmu_enable_set_asm(cp15_ctrl_reg1_t c);
+@ void mmu_enable_set_asm(cp15_ctrl_reg1_t c);
+@  called by <mmu.c:mmu_enable()>
+@
+@ make sure you look at arm1176, 6-9.
+@
 MK_FN(mmu_enable_set_asm)
     asm_todo("implement this thursday")
     bx lr
 
+@ this just turns the MMU on for the first time.
+@ r0 = asid
+@ r1 = pointer to empty page table
+@
+@ is a combination/simplification of mmu_init() and 
+@ mmu_enable_set_asm().
+@
+@ also could just call them from C code! :)
+MK_FN(mmu_on_first_time)
+    asm_todo("implement this for pinned vm")
+    bx lr
