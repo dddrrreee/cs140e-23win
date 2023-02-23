@@ -26,13 +26,13 @@ cache: this will likely take significant time [measure!]
 
 Operations to add ordering:
   - DMB (2.6.1): all explicit [load/store, but not instruction fetch]
-    before DMB are globally observed before any explicit [load/store]
+    before DMB are globally *observed* before any explicit [load/store]
     after is observered.
 
     *HOWEVER*: does not guarantee *completion* of load/store.
-    especially does not guarantee completion of non-load/store
-    operations.  [page table, tlb flush, etc]  So, in general today,
-    doesn't seem to help us much.
+    Especially does not guarantee completion of non-load/store operations.
+    [page table, tlb flush, etc]  So, in general today, doesn't seem to
+    help us much.
 
   - DSB (2.6.2):  includes all cache, tlb and branch prediction
     maintanance ops as well as load/store.
@@ -55,13 +55,13 @@ Operations to add ordering:
 #### 2.7.1: coherence
 
 Tension:
-   - correctness: we want memory acts as if there is one copy of X.
-   - speed: X and it's meta-data (e.g., VM translation) gets cached in
+   - correctness: we want memory to act as if there is one copy of X.  -
+   speed: X and its meta-data (e.g., VA to PA translations) gets cached in
      different ways.
 
      when you write X or change its mapping, these different caches may
-     not be automatically: have to seek and destroy all copies to don't
-     access stale data.
+     not be automatically sync'd: have to seek and destroy all copies
+     to don't access stale data.
 
 Example state we have to keep coherent:
   - if data read/written: data cache (several levels) and write buffer
@@ -90,7 +90,7 @@ Example state we have to keep coherent:
     I'm not sure if this applies to modifications in exception handlers?)
 
   - B2.7.2 (b2-21): page table modifications that occur before management
-    operations require the sequence on page B2-22 before the modificatoin
+    operations require the sequence on page B2-22 before the modification
     is guaranteed to be visible.
 
   + DMB: causes all *cache* (not branch prediction) maintance ops to be
@@ -135,7 +135,9 @@ Example state we have to keep coherent:
 
 ***Summary***:
   - no maintanance operation can influence previous loads or stores.
-  - maintanance operation ordered sequentially w.r.t. each other
+  - maintanance operation ordered sequentially w.r.t. each other.  thus, 
+    an operation cannot "reach back" and affect previous maintanance 
+    operations.
   - [only] DSB guarantees completion.
   - Even with DSB, instruction memory requires a PrefetchFlush [data does not]
   - It appears that taking an exception / returning from an exception is

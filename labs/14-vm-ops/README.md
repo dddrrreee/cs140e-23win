@@ -1,9 +1,16 @@
 ## Hooking translation up to hardware
 
-***NOTE***:
-   - I'm rewriting the lab alot over the weekend (we didn't have pinned
-     memory last year) but everything in this one should be relevant
-     for either tuesday or thursday.
+Make sure you've read, re-read, re-re-read:
+
+  - B2, especially B2-18 --- B-25.
+  - 3-129 has an addition rule for arm1176.
+  - 6-9 and related in the arm1176.pdf.
+  - [MEMORY-ORDER-cheatsheet.md](MEMORY-ORDER-cheatsheet.md) is a 
+    sprawling summary of the above.
+  - [DEUX-MEM-ORDER.md](DEUX-MEM-ORDER.md) is a distillation I wrote
+    from scratch today to make sure I understood everything.  I think 
+    it's a bit simpler.
+  - The BTB/BTAC is described in 5-1 --- 5-6 of the arm1176 pdf.
 
 Last lab we did the page table, the main noun of the VM universe.  This
 lab we do the main gerunds needed to hook it up to the hardware: 
@@ -13,11 +20,21 @@ lab we do the main gerunds needed to hook it up to the hardware:
    - making sure the state is coherent.  
 
 You'll write assembly helper routines implement these (put them
-in `12-vm/code/your-mmu-asm.s`) and then at the end remove our
-`staff-vm-asm.o` from the `Makefile`.  Mechanically, you will go through,
+in `13-vm-page-table/code/your-mmu-asm.s`) and then at the end remove our
+`staff-mmu-asm.o` from the `Makefile`.  Mechanically, you will go through,
 one-at-a-time and replace every function prefixed with `staff_` to be
 your own code.  The code is setup so that you can knock these off one
 at a time, making sure that things work after each modification.
+
+At the end, you can replace all our code (the `staff-mmu-asm.o`
+in the previous 12 and 13 labs).  At that point all the code for two
+different ways to do VM will be yours.  They aren't fancy, but they are
+complete.  From these working examples you should be able to make a much
+fancier system if you are inclined or (my favorite) a much faster one.
+In addition, these are the most complex topics in the ARM.  They are
+generally the most complex on any architecture.  Now that you understand
+them (roughly): there is nothing harder.  You have the ability to drop
+in anywhere and figure things out.
 
 If you look in `mmu.h` you'll see the five routines you have to 
 implement, which will be in `mmu-asm.S`:
@@ -28,40 +45,57 @@ implement, which will be in `mmu-asm.S`:
     void mmu_disable_set_asm(cp15_ctrl_reg1_t c);
     void mmu_enable_set_asm(cp15_ctrl_reg1_t c);
 
-You'll use the B2 chapter to figure these out.  Their callers are in
-`mmu.c`.
+You'll use the B2 chapter to figure these out as well as 3-129 for
+additional ASID rules.  Their callers are all in `mmu.c`.
 
-The different arm-specific data structures have migrated to:
-  - `armv6-coprocessor-asm.h` --- many useful assembly instructions and page numbers.
-  - `armv6-cp15.h` --- the arm coprocessor 15 definition and related things.
-  - `armv6-vm.h` --- the arm vm definitions.
+  - `armv6-coprocessor-asm.h` --- many useful assembly 
+    instructions and page numbers.
 
 #### Workflow
 
-A key part of this lab will be working closely with your peers and
-arguing and double-checking each other's reasoning.
+The lab approach today is different from the others.  Today you must
+have a group of 5-8 people that you have discussed and agreed on the
+implementation for each of the operations. 
 
-Today's code is short, but  difficult.  Possibly it requires more
-careful reasoning than any other OS code you will ever write.  Even if
-you are very careful, it is hard to write this code correctly.  And if
-you get it wrong, it's very hard to detect the error with a test case.
-The fact that it "happened to work" on the tests you tried tells you
-very little (only that it didn't break, not that it isn't broken).
-But, if you ship such code to thousands of customers they will form a
-Normal distribution, and on the extrema, some of them will hit the bug.
-And you won't be able to figure out what is going on.
+Today's code is short, but  difficult.  Possibly it requires more careful
+reasoning than any other OS code (or other code) you have written.
+Even if you are very careful, it is hard to write this code correctly.
+And if you get it wrong, it's very hard to detect the error with a test
+case.  The fact that it "happened to work" on the tests you tried tells
+you very little (only that it didn't break, not that it isn't broken).
+But, if you ship such code to thousands of sites that will form a Normal
+distribution, and on the extrema, some of them will hit the bug.  And you
+won't be able to figure out what is going on.
+
+The Stanford algorithm you learn in most classes is: write a bunch of
+code quickly, try a bunch of things until it passes a test case (if you
+have one) and then move on.  (Yeah, I know.) This is worse than nothing
+in our context.  Better to have never written the VM code: VM bugs will
+trash random application memory or code, causing non-sensical loads,
+stores, PC jumps, or instruction execution in application code that was
+not doing anything obviously VM relevant.  (The application might not
+even have used `malloc` or any pointers at all, but simply had its code
+corrupted by a stale VM cache.)  Whoever wrote the code will never find
+the error. It won't even occur to them that it's a bug in the VM code. The
+only thing we can do is make sure we have no errors.  Very non-Stanford.
 
 So, the way we handle this is how you generally handle things that are
-(1) very difficult to reason about and (2) very difficult to test: careful
-discussion with peers and lots of specific comments giving the basis and
-logical argument for why you are doing what you are doing.  Without this
-informal "proof" someone will have a hard time figuring out if you know
-what you are doing and if the code does what it purports to do.
+(1) very difficult to reason about and (2) very difficult to test:
+careful discussion with peers and lots of specific comments giving the
+basis and logical argument for why you are doing what you are doing.
+Without this informal "proof" someone will have a hard time figuring
+out if you know what you are doing and if the code does what it purports
+to do.  This kind of careful, manual reasoining is the state of the art
+--- there is no silver bullet.  You just have to work closely with your
+peers, arguing and double-checking each other's reasoning and having a
+citeable sentence for why you did (or did not do) something and in the
+order you chose.
 
-This class generally has no real code style requirements.  However, this
-lab has a hard requirement: you must write comments for each important
-action stating (1) why you decided to do that (give page numbers) and
-(2) what you intend to accomplish (give page numbers).
+This class generally has no real code style requirements.  However,
+this lab has a hard requirement: you must write comments for each
+important action stating (1) why you decided to do that (give page
+numbers or section numbers) and (2) what you intend to accomplish (give
+page numbers).
 
 #### Check-off
 
@@ -70,14 +104,16 @@ but it has to be the right code.
 
 You will:
 
-  1. Replace all of our code from last lab and show that the tests
-     (not many, sorry) run.
+  1. Replace all of our code from labs 12 and 13 lab and show that
+     the previous tests run.  (Note: our "tests" are incredibly 
+     weak so this isn't a high bar; apologies.  Next tuesday
+     will have a more ruthless approach)
 
-     How: run `make emit` with our code, then do `make check` with yours
-     for all tests.
+  2. ***Have detailed comments in your `.S` stating why exactly you did
+     what you did with page numbers.***  This is not optional.
 
-  2. Have detailed comments in your `.S` stating why exactly you did
-     what you did with page numbers.     
+  3. Checkoff should be 5-8 people at once where anyone can answer
+     questions: "why did you do this".
 
 Extensions:
   - There are *tons* of extensions at the bottom.
