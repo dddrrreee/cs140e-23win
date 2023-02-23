@@ -35,25 +35,31 @@ MK_FN(get_cache_type)
     asm_todo("implement this")
     bx lr
 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ part 1:  write to the domain register.
+@    easy sequencing rule: look at 2.7.6
+@
+@ depending on your code, you might name this
+@ something else (or inline into the c code):
+@  void domain_access_ctrl_set(uint32_t dom_reg);
+MK_FN(cp15_domain_ctrl_wr)
+    asm_todo("implement this thursday")
+    bx lr
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ part 2: 
 @ void mmu_reset(void)
+@   - called on boot-up.
 @   - clear the dcache, icache, tlbs: make sure you obey 
 @     any rules from B2
 MK_FN(mmu_reset)
     asm_todo("implement this thursday")
     bx lr
 
-@ void cp15_domain_ctrl_wr(uint32_t dom_reg);
-@    easy rule: look at 2.7.6
-MK_FN(cp15_domain_ctrl_wr)
-    asm_todo("implement this thursday")
-    bx lr
 
-@ void cp15_set_procid_ttbr0(uint32_t proc_and_asid, fld_t *pt);
-@     sequence from b2-25 + rules from 3-129
-MK_FN(cp15_set_procid_ttbr0)
-    asm_todo("implement this thursday")
-    bx lr
 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ part 3
 @ void mmu_disable_set_asm(cp15_ctrl_reg1_t c);
 @
 @ given the control register value <c>, write it 
@@ -87,6 +93,21 @@ MK_FN(mmu_enable_set_asm)
     asm_todo("implement this thursday")
     bx lr
 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ part 4
+@
+@ void cp15_set_procid_ttbr0(uint32_t proc_and_asid, fld_t *pt);
+@     sequence from b2-25 + rules from 3-129
+@
+@ this is the fanciest one.
+MK_FN(cp15_set_procid_ttbr0)
+    asm_todo("implement this thursday")
+    bx lr
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ you need this for pinned-vm.c
+@
 @ this just turns the MMU on for the first time.
 @ r0 = asid
 @ r1 = pointer to empty page table
@@ -94,7 +115,7 @@ MK_FN(mmu_enable_set_asm)
 @ is a combination/simplification of mmu_init() and 
 @ mmu_enable_set_asm().
 @
-@ also could just call them from C code! :)
+@ also could just call the above from C code! :)
 MK_FN(mmu_on_first_time)
     asm_todo("implement this for pinned vm")
     bx lr
