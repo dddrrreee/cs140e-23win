@@ -1,5 +1,9 @@
----------------------------------------------------------------------------
-rules:
+### Summarized rules for armv6 / arm1176 
+
+Notes for cs140e.  May not be correct.  If you find a bug please
+let us know!
+
+General rules / strategy:
   - everything mapped to same location in global memory
   - no interrupts, no exceptions.
   - no branches (btb flush defeated), no loads (in general).
@@ -29,7 +33,6 @@ tlb maintenance:
   - TLB operations do not go backwards: previous instructions safe.
     
 pte mods and tlb walk hardware (b2-23):
-
   - "clean pte from cache; DSB" to make visible to hw.  
   - "clean pte from cache; DSB; PF" to make visible to hw if PT walk caused
       by instruction fetch.  
@@ -44,10 +47,12 @@ bt (2.7.5):
       - write new mapping to PTE [modify?]
       - changing TTBR0, TTBR1, TTBCR
       - changing context id (asid+pid)
-  - all of these need to end with a PF so the following instructions get the update.
+  - all of these need to end with a PF so the following instructions
+    get the update.
   - do not *seem* to need a DSB: (1) 2.7.5 rule doesn't say; (2)
-      comments in code don't say.  (counter: first bullet in 2.7.2
-      mentions for branch operations)
+      comments in code don't say; (3) first bullet in 2.7.2 does
+      talk about branch operations, but the point about DSB only 
+      discusses cache ops, not branc)
 
 cp14/cp15:
   - "cp14/cp14;PF" required so instructions after use any changes. (2.7.6)
@@ -73,7 +78,12 @@ context id (3.2.47)
 
 
 ------------------------------------------------------------------
- self-modifying code [if not self-modify, can eliminate stuff]
+### Self-modifying code  (B2-22)
+
+Note: if not self-modify (where code already has run and now
+we change its bits) can eliminate stuff.
+
+Code: 
 
         1: STR rx  ; instruction location
         2: clean data cache by MVA ; instruction location
@@ -109,7 +119,9 @@ notes:
     won't apply.  i think can do, but its weird --- don't do b/c you can,
     do what is definitely ok.
 ------------------------------------------------------------------
-they give:
+#### ASID / PT change (B2-25)
+
+Code:
 
         1. Change ASID to 0
         2. PrefetchFlush
@@ -118,12 +130,16 @@ they give:
         5. Change asid to new value.
         6. anything else ???
 
-issue:
+Issue:
  - cannot atomically switch atomic and PT.
  - will run with the wrong page table <---> wrong asid.
+
+Strategy:
  - map in the same location.
  - no branches, no loads [other than instruction load]
+ - burn asid 0 for the window where things are incoherent.
 
+Notes:
  - 1: before this at step 0 *must have* a DSB. 3-129 
  - 2: changing to asid 0 is a hack so that cache pollution doesn't matter.
  - 3: PF needed b/c 3-129
@@ -136,7 +152,9 @@ issue:
          and prefetchflush so the example seems wrong (or at least
          incomplete)
 -----------------------------------------------------------------
-Code (b2-23):
+#### PTE modification (b2-23)
+
+Code:
 
         1: STR rx ; pte
         2: clean line ; pte
@@ -146,14 +164,11 @@ Code (b2-23):
         6: DSB; to ensure (4) completes
         7: prefetchflush
 
-
  - 1;2 --- ordered b/c the MVA [cite]  cache ops cannot affect previous
         loads or stores.   so don't need a DSB/DMB.
-
  - 3: after (2) need a DSB so to ensure completion before invalidating
       the TLB (4) since we don't have guarantees that TLB and cache ops
       are sequential.
-
  - 4: invalidate tlb [since it might have wrong mapping]
  - 4;5: hmmm.  i don't think 4 and 5 are ordered b/c BTB and TLB 
       not ordered and TLB not completed (bc no DSB)
@@ -161,13 +176,9 @@ Code (b2-23):
       works b/c no branches, and code isn't effected by PTE mapping and
       the entry won't be reloaded [no exceptions/interrupts]  and we
       *will* have DSB later.
-
  - why 5?  (2.7.5) says we need to do this after modifying PTE.
-
  - 6: we need the DSB to make sure (4) is done.  If not, (4) might
      not complete and the prefetch flush doesn't help.
-
  - 7: PF needed after BTB flush.
-    
  - i *think* can flip 4 and 5 and also 5 and 6.
 
