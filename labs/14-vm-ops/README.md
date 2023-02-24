@@ -4,11 +4,13 @@
   <img src="images/class-bug.png" width="450" />
 </p>
 
-```{figure} images/part2-domain.png
-:name: label
 
-B4-32: Bits to set in Domain
-```
+<p align="center">
+<figure>
+  <img src="images/class-bug.png" width="450" />
+  <figcaption> B4-32: Bits to set in Domain.</figcaption>
+</figure>
+</p>
 
 Make sure you've read, re-read, re-re-read:
 
