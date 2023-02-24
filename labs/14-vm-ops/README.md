@@ -4,6 +4,11 @@
   <img src="images/class-bug.png" width="450" />
 </p>
 
+<figure>
+  <img src="images/part2-domain.png"/>
+  <figcaption> B4-32: Bits to set in Domain </figcaption>
+</figure>
+
 Make sure you've read, re-read, re-re-read:
 
   - B2, especially B2-18 --- B-25.
@@ -224,6 +229,7 @@ Useful intuition:
 <table><tr><td>
   <img src="images/part2-domain.png"/>
 </td></tr></table>
+
 ----------------------------------------------------------------------
 
 Useful pages:
