@@ -4,7 +4,28 @@
   <img src="images/class-bug.png" width="450" />
 </p>
 
+Last lab we did the page table, the main noun of the VM universe.  This
+lab we do the main gerunds needed to hook it up to the hardware: 
+   - setting up domains.
+   - setting up the page table register and ASID.
+   - turning on the MMU.
+   - making sure the state is coherent.  
 
+You'll write assembly helper routines implement these (put them in
+`13-vm-page-table/code/your-mmu-asm.S`) and then at the end remove our
+`staff-mmu-asm.o` from the makefiles in labs 12 and 13.  Mechanically,
+you will go through, one-at-a-time and replace every function prefixed
+with `staff_` to be your own code.  The code is setup so that you can
+knock these off one at a time, making sure that things work after each
+modification.
+
+At that point all the code for two different ways to do VM will be yours.
+They aren't fancy, but they are complete.  From these working examples
+you should be able to make a much fancier system if you are inclined
+or (my favorite) a much faster one.  In addition, these are the most
+complex features of the ARM.  They are generally the most complex on any
+architecture.  Now that you understand them (roughly): there is nothing
+harder.  You have the ability to drop in anywhere and figure things out.
 
 Make sure you've read, re-read, re-re-read:
 
@@ -18,29 +39,6 @@ Make sure you've read, re-read, re-re-read:
     it's a bit simpler.
   - The BTB/BTAC is described in 5-1 --- 5-6 of the arm1176 pdf.
 
-Last lab we did the page table, the main noun of the VM universe.  This
-lab we do the main gerunds needed to hook it up to the hardware: 
-   - setting up domains.
-   - setting up the page table register and ASID.
-   - turning on the MMU.
-   - making sure the state is coherent.  
-
-You'll write assembly helper routines implement these (put them
-in `13-vm-page-table/code/your-mmu-asm.s`) and then at the end remove our
-`staff-mmu-asm.o` from the `Makefile`.  Mechanically, you will go through,
-one-at-a-time and replace every function prefixed with `staff_` to be
-your own code.  The code is setup so that you can knock these off one
-at a time, making sure that things work after each modification.
-
-At the end, you can replace all our code (the `staff-mmu-asm.o`
-in the previous 12 and 13 labs).  At that point all the code for two
-different ways to do VM will be yours.  They aren't fancy, but they are
-complete.  From these working examples you should be able to make a much
-fancier system if you are inclined or (my favorite) a much faster one.
-In addition, these are the most complex topics in the ARM.  They are
-generally the most complex on any architecture.  Now that you understand
-them (roughly): there is nothing harder.  You have the ability to drop
-in anywhere and figure things out.
 
 If you look in `mmu.h` you'll see the five routines you have to 
 implement, which will be in `mmu-asm.S`:
@@ -50,9 +48,6 @@ implement, which will be in `mmu-asm.S`:
     void mmu_disable_set_asm(cp15_ctrl_reg1_t c);
     void mmu_enable_set_asm(cp15_ctrl_reg1_t c);
     void cp15_set_procid_ttbr0(uint32_t proc_and_asid, fld_t *pt);
-
-You'll use the B2 chapter to figure these out as well as 3-129 for
-additional ASID rules.  Their callers are all in `mmu.c`.
 
   - `armv6-coprocessor-asm.h` --- many useful assembly 
     instructions and page numbers.
@@ -82,14 +77,6 @@ is worse than nothing in our context.  Better to have never written the
 VM code since then you know it doesn't work.
 
 <img src="images/bugs-glowing.png" align="right" width="400px"/>
-
-VM bugs will trash random application memory or code, causing non-sensical
-loads, stores, PC jumps, or instruction execution in application code that
-was not doing anything obviously VM relevant.  (The application might not
-even have used `malloc` or any pointers at all, but simply had its code
-corrupted by a stale VM cache.)  Whoever wrote the code will never find
-the error. It won't even occur to them that it's a bug in the VM code. The
-only thing we can do is make sure we have no errors.  Very non-Stanford.
 
 So, the way we handle this is how you generally handle things that are
 (1) very difficult to reason about and (2) very difficult to test:
@@ -125,7 +112,7 @@ You will:
      what you did with page numbers.***  This is not optional.
 
   3. Check-off should be 5-8 people at once where anyone can answer
-     questions: "why did you do this".
+     questions: "why did you do this?"
 
 Extensions:
   - There are *tons* of extensions at the bottom.
@@ -194,8 +181,6 @@ ARMv6 manual (`docs/armv6.b2-memory.annot.pdf`).  Useful pages:
 ----------------------------------------------------------------------
 ## Part 1: `domain_access_ctrl_set()` 
 
-
-
 Most of you already have this, but in case not:
   - Implement `domain_access_ctrl_set()` 
   - Make sure you obey any requirements for coherence stated in Chapter B2,
@@ -210,20 +195,11 @@ Compiling:
     that gives an example.
   - It's possible because of naming you'll get a duplicate warning
     about this one routine.  You can either change the name, or 
-    make it into a weak symbol.
+    make it into a weak symbol.  For example:
 
-Useful pages:
-  - B4-10: what the bit values mean for the `domain` field.
-  - B4-15: how addresses are translated and checked for faults.
-  - B4-27: the location / size of the `domain` field in the segment 
-    page table entry.
-  - B4-42: setting the domain register.
-
-Useful intuition:
-  - When you flush the `BTB`, you need to do a `PrefetchFlush` to wait for
-    it to complete (B2.7.5, p B2-24).
-
-----------------------------------------------------------------------
+        int __attribute__((weak)) domain_access_ctrl_set(uint32_t d) {
+            ...
+        }
 
 Useful pages:
   - B4-10: what the bit values mean for the `domain` field.
@@ -245,7 +221,6 @@ Useful intuition:
   <figcaption><strong>B4-32: Bits to set in Domain.</strong></figcaption>
 </figure>
 </p>
-
 
 ----------------------------------------------------------------------
 ##### B6-21: Flush prefetch buffer and tricks.
@@ -273,6 +248,8 @@ You need to:
     cache).  Do *not* clean the data cache since it will potentially 
     write garbage back to memory)
   - Make sure you put in any B2 ordering operations.
+  - As mentioned above: `armv6-coprocessor-asm.h` has many 
+    useful assembly instructions and page numbers.
   - Replace the calls in both labs and make sure your tests still pass.
 
 ----------------------------------------------------------------------
@@ -296,7 +273,6 @@ are correct.
   * Note that the flush instruction cache operation has bugs in 
     some ARM v6 chips, so we provided the recommended sequences (taken
     from Linux).
-
 ----------------------------------------------------------------------
 ##### 6-9: Protocol for turning on MMU.
 
