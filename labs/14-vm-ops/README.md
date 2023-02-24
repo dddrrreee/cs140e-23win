@@ -4,8 +4,6 @@
   <img src="images/class-bug.png" width="450" />
 </p>
 
-
-
 Make sure you've read, re-read, re-re-read:
 
   - B2, especially B2-18 --- B-25.
@@ -59,7 +57,7 @@ additional ASID rules.  Their callers are all in `mmu.c`.
 
 #### Workflow
 
-<img src="images/cats-inspecting.png" align="center" width="450px"/>
+<img src="images/cats-inspecting.png" align="right" width="450px"/>
 
 The lab approach today is different from the others.  Today you must
 have a group of 5-8 people that you have discussed and agreed on the
@@ -137,7 +135,7 @@ Extensions:
 ------------------------------------------------------------------------
 #### Flushing stale state.
 
-<img src="images/swirling-code.png" align="center" width="450px"/>
+<img src="images/swirling-code.png" align="right" width="450px"/>
 
 The trickiest part of this lab is not figuring out the instructions 
 to change the state we need, but is making sure you do --- exactly ---
