@@ -11,13 +11,11 @@ rules:
     seek and destroy all caches.
   - the modifications *do not effect* the code that does the modifications.
 
-  2.7.2
-  cache maintenance:
+2.7.2 cache maintenance:
   - "dcache; DSB" needed otherwise cache operations not nec complete
       DSB = completed + visible.
   - "icache; DSB; PF" needed for code. DSB = completed, PF=visible.
       (top of B2-22)
-
   - cache operations do not go backwards: previous instructions safe.
   - cache / branch operations occur in order w.r.t. each other.
   - cache and branch done before PTE mod will complete before it.
