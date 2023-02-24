@@ -194,21 +194,6 @@ ARMv6 manual (`docs/armv6.b2-memory.annot.pdf`).  Useful pages:
 ----------------------------------------------------------------------
 ## Part 1: `domain_access_ctrl_set()` 
 
-<figure>
-  <img
-  src="images/part2-domain.png"
-  width="600"
-  alt="The beautiful MDN logo.">
-  <figcaption><strong>        B4-32: Bits to set in Domain.</strong></figcaption>
-</figure>
-
-
-<p align="right">
-<figure>
-  <img src="images/part2-domain.png" width="600" />
-  <figcaption><strong>B4-32: Bits to set in Domain.</strong></figcaption>
-</figure>
-</p>
 
 
 Most of you already have this, but in case not:
@@ -253,22 +238,27 @@ Useful intuition:
 
 ----------------------------------------------------------------------
 ##### B4-32: Bits to set in Domain
-<table><tr><td>
-  <img src="images/part2-domain.png"/>
-</td></tr></table>
+
+<p align="right">
+<figure>
+  <img src="images/part2-domain.png" width="600" />
+  <figcaption><strong>B4-32: Bits to set in Domain.</strong></figcaption>
+</figure>
+</p>
+
 
 ----------------------------------------------------------------------
 ##### B6-21: Flush prefetch buffer and tricks.
 
 <table><tr><td>
-  <img src="images/part3-flushprefetch.png"/>
+  <img src="images/part3-flushprefetch.png" width="600" />
 </td></tr></table>
 
 ----------------------------------------------------------------------
 ##### B6-22: DSB, DMB instruction
 
 <table><tr><td>
-  <img src="images/part3-dsb-dmb.png"/>
+  <img src="images/part3-dsb-dmb.png" width=500/>
 </td></tr></table>
 
 ----------------------------------------------------------------------
@@ -311,21 +301,21 @@ are correct.
 ##### 6-9: Protocol for turning on MMU.
 
 <table><tr><td>
-  <img src="images/part2-enable-mmu.png"/>
+  <img src="images/part2-enable-mmu.png" width=500/>
 </td></tr></table>
 
 ----------------------------------------------------------------------
 ##### B4-39 and B4-40: Bits to set to turn on MMU
 
 <table><tr><td>
-  <img src="images/part2-control-reg1.png"/>
+  <img src="images/part2-control-reg1.png" width=500/>
 </td></tr></table>
 
 ----------------------------------------------------------------------
 ##### B6-21: Various invalidation instructions
 
 <table><tr><td>
-  <img src="images/part2-inv-tlb.png"/>
+  <img src="images/part2-inv-tlb.png" width=500/>
 </td></tr></table>
 
 ----------------------------------------------------------------------
@@ -365,35 +355,35 @@ Where and what:
 ##### B4-41: Setting page table pointer.
 
 <table><tr><td>
-  <img src="images/part2-control-reg2-ttbr0.png"/>
+  <img src="images/part2-control-reg2-ttbr0.png" width=500/>
 </td></tr></table>
 
 ----------------------------------------------------------------------
 ##### B2-25: Sync ASID
 
 <table><tr><td>
-  <img src="images/part3-sync-asid.png"/>
+  <img src="images/part3-sync-asid.png" width=500/>
 </td></tr></table>
 
 ----------------------------------------------------------------------
 ##### B2-22: When do you need to flush 
 
 <table><tr><td>
-  <img src="images/part3-tlb-maintenance.png"/>
+  <img src="images/part3-tlb-maintenance.png" width=500/>
 </td></tr></table>
 
 ----------------------------------------------------------------------
 ##### B2-23: How to invalidate after a PTE change
 
 <table><tr><td>
-  <img src="images/part3-invalidate-pte.png"/>
+  <img src="images/part3-invalidate-pte.png" width=500/>
 </td></tr></table>
 
 ----------------------------------------------------------------------
 ##### B2-24: When to flush BTB
 
 <table><tr><td>
-  <img src="images/part3-flush-btb.png"/>
+  <img src="images/part3-flush-btb.png" width=500/>
 </td></tr></table>
 
 ----------------------------------------------------------------------
