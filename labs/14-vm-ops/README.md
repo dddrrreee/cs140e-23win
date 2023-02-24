@@ -194,6 +194,15 @@ ARMv6 manual (`docs/armv6.b2-memory.annot.pdf`).  Useful pages:
 ----------------------------------------------------------------------
 ## Part 1: `domain_access_ctrl_set()` 
 
+<figure>
+  <img
+  src="images/part2-domain.png"
+  width="600"
+  alt="The beautiful MDN logo.">
+  <figcaption><strong>B4-32: Bits to set in Domain.</strong></figcaption>
+</figure>
+
+
 <p align="right">
 <figure>
   <img src="images/part2-domain.png" width="600" />
