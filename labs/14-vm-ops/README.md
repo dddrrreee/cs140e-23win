@@ -1,5 +1,11 @@
 ## Hooking translation up to hardware
 
+<p align="center">
+  <img src="images/class-bug.png" width="450" />
+</p>
+
+
+
 Make sure you've read, re-read, re-re-read:
 
   - B2, especially B2-18 --- B-25.
@@ -41,9 +47,9 @@ implement, which will be in `mmu-asm.S`:
 
     void cp15_domain_ctrl_wr(uint32_t dom_reg);
     void mmu_reset(void);
-    void cp15_set_procid_ttbr0(uint32_t proc_and_asid, fld_t *pt);
     void mmu_disable_set_asm(cp15_ctrl_reg1_t c);
     void mmu_enable_set_asm(cp15_ctrl_reg1_t c);
+    void cp15_set_procid_ttbr0(uint32_t proc_and_asid, fld_t *pt);
 
 You'll use the B2 chapter to figure these out as well as 3-129 for
 additional ASID rules.  Their callers are all in `mmu.c`.
@@ -52,6 +58,11 @@ additional ASID rules.  Their callers are all in `mmu.c`.
     instructions and page numbers.
 
 #### Workflow
+
+<p align="center">
+  <img src="images/cat-inspecting.png" width="450" />
+</p>
+
 
 The lab approach today is different from the others.  Today you must
 have a group of 5-8 people that you have discussed and agreed on the
@@ -69,11 +80,15 @@ won't be able to figure out what is going on.
 
 The Stanford algorithm you learn in most classes is: write a bunch of
 code quickly, try a bunch of things until it passes a test case (if you
-have one) and then move on.  (Yeah, I know.) This is worse than nothing
-in our context.  Better to have never written the VM code: VM bugs will
-trash random application memory or code, causing non-sensical loads,
-stores, PC jumps, or instruction execution in application code that was
-not doing anything obviously VM relevant.  (The application might not
+have one) and then move on.  (Yeah, I know: Pot. Kettle. Black.) This
+is worse than nothing in our context.  Better to have never written the
+VM code since then you know it doesn't work.
+
+<img src="images/bugs-glowing.png" align="right" width="300px"/>
+
+VM bugs will trash random application memory or code, causing non-sensical
+loads, stores, PC jumps, or instruction execution in application code that
+was not doing anything obviously VM relevant.  (The application might not
 even have used `malloc` or any pointers at all, but simply had its code
 corrupted by a stale VM cache.)  Whoever wrote the code will never find
 the error. It won't even occur to them that it's a bug in the VM code. The
@@ -85,10 +100,10 @@ careful discussion with peers and lots of specific comments giving the
 basis and logical argument for why you are doing what you are doing.
 Without this informal "proof" someone will have a hard time figuring
 out if you know what you are doing and if the code does what it purports
-to do.  This kind of careful, manual reasoining is the state of the art
+to do.  This kind of careful, manual reasoning is the state of the art
 --- there is no silver bullet.  You just have to work closely with your
 peers, arguing and double-checking each other's reasoning and having a
-citeable sentence for why you did (or did not do) something and in the
+cite-able sentence for why you did (or did not do) something and in the
 order you chose.
 
 This class generally has no real code style requirements.  However,
@@ -99,20 +114,20 @@ page numbers).
 
 #### Check-off
 
-You're going to write a tiny amount of code (< 10 lines for each part),
+You're going to write a tiny amount of code (< 20 lines for each part),
 but it has to be the right code.  
 
 You will:
 
   1. Replace all of our code from labs 12 and 13 lab and show that
-     the previous tests run.  (Note: our "tests" are incredibly 
-     weak so this isn't a high bar; apologies.  Next tuesday
-     will have a more ruthless approach)
+     the previous tests run.  (Note: our "tests" are incredibly weak so
+     this isn't a high bar; apologies.  Next Tuesday will have a more
+     ruthless approach)
 
   2. ***Have detailed comments in your `.S` stating why exactly you did
      what you did with page numbers.***  This is not optional.
 
-  3. Checkoff should be 5-8 people at once where anyone can answer
+  3. Check-off should be 5-8 people at once where anyone can answer
      questions: "why did you do this".
 
 Extensions:
@@ -124,6 +139,10 @@ Extensions:
 
 ------------------------------------------------------------------------
 #### Flushing stale state.
+
+<p align="center">
+  <img src="images/swirling-code.png" width="450" />
+</p>
 
 The trickiest part of this lab is not figuring out the instructions 
 to change the state we need, but is making sure you do --- exactly ---
@@ -178,92 +197,52 @@ ARMv6 manual (`docs/armv6.b2-memory.annot.pdf`).  Useful pages:
   - B2-24: must flush after a CP15.
 
 ----------------------------------------------------------------------
-## Part 1: setting up domains.
+## Part 1: `domain_access_ctrl_set()` 
 
-Deliverables:
-  1. You should replace `staff_domain_access_ctrl_set` with yours.
-     Make sure you obey any requirements for coherence stated in Chapter B2,
-     specifically B2-24.  Make sure the code still works!
+Most of you already have this, but in case not:
+  - Implement `domain_access_ctrl_set()` 
+  - Make sure you obey any requirements for coherence stated in Chapter B2,
+    specifically B2-24 (2.7.6).  Make sure the code still works!
+  - Change `staff_domain_access_ctrl_set` to call it.
 
-  2. Copy `2-test-no-access-write.c` to a new test case
-     `3-test-no-access-write.c` and
-     change it so that the code does not crash when it (1) executes a
-     location we do not allow execution of, (2) writes to a location
-     that has writes disabled.
+Compiling:
+  - You'll have to modify your `13-vm-page-table/code/Makefile` so that
+    it starts compiling your assembly.  (`COMMON_SRC += your-vm-asm.S`).
+  - You'll have to modify your `12-pinned-vm/code/Makefile` to
+    start using your assembly as well.  There is now a `Makefile.lab14`
+    that gives an example.
+  - It's possible because of naming you'll get a duplicate warning
+    about this one routine.  You can either change the name, or 
+    make it into a weak symbol.
 
 Useful pages:
   - B4-10: what the bit values mean for the `domain` field.
   - B4-15: how addresses are translated and checked for faults.
   - B4-27: the location / size of the `domain` field in the segment 
-  page table entry.
+    page table entry.
   - B4-42: setting the domain register.
 
 Useful intuition:
   - When you flush the `BTB`, you need to do a `PrefetchFlush` to wait for
     it to complete (B2.7.5, p B2-24).
 
-#### Some intuition and background on domains.
+----------------------------------------------------------------------
+##### B4-32: Bits to set in Domain
+<table><tr><td>
+  <img src="images/part2-domain.png"/>
+</td></tr></table>
+----------------------------------------------------------------------
 
-ARM has an interesting take on protection.  Like most modern architectures
-it allows you to mark pages as invalid, read-only, read-write, executable.
-However, it gives you a way to quickly disable these restrictions in a
-fine-grained way through the use of domains.
+Useful pages:
+  - B4-10: what the bit values mean for the `domain` field.
+  - B4-15: how addresses are translated and checked for faults.
+  - B4-27: the location / size of the `domain` field in the segment 
+    page table entry.
+  - B4-42: setting the domain register.
 
-Mechanically it works as follows.
-  - each page-table entry (PTE) has a 4-bit field stating which single 
-  domain (out of 16 possible) the entry belongs to.
-
-  - the system control register (CP15) has a 32-bit domain register (`c3`,
-  page B4-42) that contains 2-bits for each of the 16 domains stating
-  what mode each the domain is in.  
-    - no-access (`0b00`): no load or store can be done to any virtual
-    address belonging to the domain;
-
-  - a "client" (`0b01`): all accesses must be consistent with the
-    permissions in their associated PTE;
-
-  - a "manager" (`0b11`): no permission checks are done, can read or
-    write any virtual address in the PTE region.
-
-  - B4-15: On each memory reference, the hardware looks up the page
-    table entry (in reality: the cached TLB entry) for the virtual address,
-    gets the domain number, looks up the 2-bit state of the domain in the
-    domain register checks if it is allowed.
-
-As a result, you can quickly do a combination of both removing all access
-to a set of regions, and granting all access to others by simply writing
-a 32-bit value to a single coprocessor register.
-
-To see how these pieces play together, consider an example where code
-with more privileges (e.g., the OS) wants to run code that has less
-privileges using the same address translations (e.g., a device driver
-it doesn't trust).
-   - The OS assigns the device driver a unique domain id (e.g., `2`).
-   - The OS tags all PTE entries the driver is allowed to touch with `2`
-   in the `domain` field.
-   - When the OS is running it sets all domains to manager (`0b11`) mode
-   so that it can read and write all memory.
-   - When the OS wants to call the device driver, it switches the state of
-   domain `2` to be a client (`0b01`) and all other domains as no-access
-   (`0b00`).
-
-Result:
-  1. When the driver code runs, it cannot corrupt any other kernel memory.
-  2. Switching domains is fast compared to switching page tables (the
-  typical approach).  
-  3. As a nice bonus: All the addresses are the same in both pieces of
-  code, which makes many things easier.
-
-In terms of our data structures: 
-  - Assume we gave the driver access to the single virtual segment range
-  `[0x100000, 0x20000)`, which is segment 1 (`0x100000 >> 20 = 1`).
-  
-  - We would set the `domain` field for the associated page table entry 
-  containing the first level descriptor to `2`: i.e., `pt[1].domain = 2`.
-
-  - Before starting the device driver we would write `0b01 << 2` into
-  register 3 of CP15.   I.e., domain 2 is in client mode, all other
-  domains (`0, 1, 3..15`) are in no-access mode.
+Useful intuition:
+  - When you flush the `BTB`, you need to do a `PrefetchFlush` to wait for
+    it to complete (B2.7.5, p B2-24).
 
 ----------------------------------------------------------------------
 ##### B4-32: Bits to set in Domain
@@ -287,12 +266,78 @@ In terms of our data structures:
 
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
-## Part 2: Implement `cp15_set_procid_ttbr0`
+## Part 2: Implement `mmu_reset`
+
+This routine gets called after booting up to set all caches to a clean
+state by invalidating them.  The MMU is off and should remain off.
+
+You need to:
+  - Invalidate all caches (ITLB, DTLB, data cache, instruction
+    cache).  Do *not* clean the data cache since it will potentially 
+    write garbage back to memory)
+  - Make sure you put in any B2 ordering operations.
+  - Replace the calls in both labs and make sure your tests still pass.
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+## Part 3: implement `mmu_enable_set_asm` and `mmu_disable_set_asm`
+
+Now you can write the code to turn the MMU on/off:
+  - `mmu_enable_set_asm`  (called by `mmu_enable` in `mmu.c`).
+  - `mmu_disable_set_asm` (called by `mmu_disable` in `mmu.c`).
+
+The high-level sequence is given on page 6-9 of the `arm1176.pdf` document
+(screen shot below).  You will also have to flush:
+   - all caches (D/I cache, the I/D TLBs)
+   - PrefetchBuffer.
+   - BTB
+   - and wait for everything correctly.
+
+We provided macros for most of these; but you should check that they
+are correct.
+
+  * Note that the flush instruction cache operation has bugs in 
+    some ARM v6 chips, so we provided the recommended sequences (taken
+    from Linux).
+
+----------------------------------------------------------------------
+##### 6-9: Protocol for turning on MMU.
+
+<table><tr><td>
+  <img src="images/part2-enable-mmu.png"/>
+</td></tr></table>
+
+----------------------------------------------------------------------
+##### B4-39 and B4-40: Bits to set to turn on MMU
+
+<table><tr><td>
+  <img src="images/part2-control-reg1.png"/>
+</td></tr></table>
+
+----------------------------------------------------------------------
+##### B6-21: Various invalidation instructions
+
+<table><tr><td>
+  <img src="images/part2-inv-tlb.png"/>
+</td></tr></table>
+
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+## Part 4: Implement `cp15_set_procid_ttbr0`
+
+<p align="center">
+  <img src="images/robots-inspecting.png" width="450" />
+</p>
+
+This is the hardest routine.  Make sure each step makes sense to your
+partners and there is an explicit reason you're doing it.
+
 
 Deliverable:
    - Set the page table pointer and address space identifier by replacing
     `staff_set_procid_ttbr0` with yours.  Make sure you can switch between
     multiple address spaces.
+
 
 Where and what:
 
@@ -346,53 +391,14 @@ Where and what:
 
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
-## Part 3: implement `mmu_enable_set_asm` and `mmu_disable_set_asm`
-
-Now you can write the code to turn the MMU on/off:
-  - `mmu_enable_set_asm`
-  - `mmu_disable_set_asm`
-
-The high-level sequence is given on page 6-9 of the `arm1176.pdf` document
-(screen shot below).  You will also have to flush:
-   - all caches (D/I cache, the I/D TLBs)
-   - PrefetchBuffer.
-   - BTB
-   - and wait for everything correctly.
-
-We provided macros for most of these; but you should check that they
-are correct.
-
-   * Note that the flush instruction cache operation has bugs in 
-     some ARM v6 chips, so we provided the recommended sequences (taken
-     from Linux).
-
-----------------------------------------------------------------------
-##### 6-9: Protocol for turning on MMU.
-
-<table><tr><td>
-  <img src="images/part2-enable-mmu.png"/>
-</td></tr></table>
-
-----------------------------------------------------------------------
-##### B4-39 and B4-40: Bits to set to turn on MMU
-
-<table><tr><td>
-  <img src="images/part2-control-reg1.png"/>
-</td></tr></table>
-
-----------------------------------------------------------------------
-##### B6-21: Various invalidation instructions
-
-<table><tr><td>
-  <img src="images/part2-inv-tlb.png"/>
-</td></tr></table>
-
-----------------------------------------------------------------------
-----------------------------------------------------------------------
 ## Part 4: Get rid of our code.
 
-You should go through and delete all of our files, changing the `Makefile`
-to remove references to them.  At this point, all code is written by you!
+You should go through and delete all uses of our code in the lab 12 and
+lab 13 makefiles.  At this point, all code is written by you!
+
+<p align="center">
+  <img src="images/done-robot.png" width="450" />
+</p>
 
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
