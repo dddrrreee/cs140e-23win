@@ -194,6 +194,14 @@ ARMv6 manual (`docs/armv6.b2-memory.annot.pdf`).  Useful pages:
 ----------------------------------------------------------------------
 ## Part 1: `domain_access_ctrl_set()` 
 
+<p align="right">
+<figure>
+  <img src="images/part2-domain.png" width="600" />
+  <figcaption> <strong>B4-32: Bits to set in Domain.</strong></figcaption>
+</figure>
+</p>
+
+
 Most of you already have this, but in case not:
   - Implement `domain_access_ctrl_set()` 
   - Make sure you obey any requirements for coherence stated in Chapter B2,
@@ -220,17 +228,6 @@ Useful pages:
 Useful intuition:
   - When you flush the `BTB`, you need to do a `PrefetchFlush` to wait for
     it to complete (B2.7.5, p B2-24).
-
-----------------------------------------------------------------------
-##### B4-32: Bits to set in Domain
-<table><tr><td>
-  <img src="images/part2-domain.png"/>
-</td></tr></table>
-
-<figure>
-  <img src="images/part2-domain.png" width="600" />
-  <figcaption> <strong>B4-32: Bits to set in Domain.</strong></figcaption>
-</figure>
 
 ----------------------------------------------------------------------
 
