@@ -59,8 +59,7 @@ additional ASID rules.  Their callers are all in `mmu.c`.
 
 #### Workflow
 
-<img src="images/cats-inspecting.png" align="center" width="400px"/>
-
+<img src="images/cats-inspecting.png" align="left" width="450px"/>
 
 The lab approach today is different from the others.  Today you must
 have a group of 5-8 people that you have discussed and agreed on the
