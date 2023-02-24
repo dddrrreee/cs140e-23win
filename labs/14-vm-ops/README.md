@@ -11,6 +11,9 @@ lab we do the main gerunds needed to hook it up to the hardware:
    - turning on the MMU.
    - making sure the state is coherent.  
 
+Today we'll write the hardest code of the quarter, but also do so in 
+a way where you are surprised if it is broken.
+
 You'll write assembly helper routines implement these (put them in
 `13-vm-page-table/code/your-mmu-asm.S`) and then at the end remove our
 `staff-mmu-asm.o` from the makefiles in labs 12 and 13.  Mechanically,
