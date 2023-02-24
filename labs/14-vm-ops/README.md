@@ -229,8 +229,8 @@ Useful intuition:
 
 <p align="center">
 <figure>
-  <img src="images/part2-domain.png" width="300" />
-  <figcaption> *B4-32: Bits to set in Domain*.</figcaption>
+  <img src="images/part2-domain.png" width="600" />
+  <figcaption> <strong>B4-32: Bits to set in Domain.</strong></figcaption>
 </figure>
 </p>
 
