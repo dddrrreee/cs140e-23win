@@ -59,9 +59,7 @@ additional ASID rules.  Their callers are all in `mmu.c`.
 
 #### Workflow
 
-<p align="center">
-  <img src="images/cat-inspecting.png" width="450" />
-</p>
+<img src="images/cats-inspecting.png" align="center" width="400px"/>
 
 
 The lab approach today is different from the others.  Today you must
@@ -84,7 +82,7 @@ have one) and then move on.  (Yeah, I know: Pot. Kettle. Black.) This
 is worse than nothing in our context.  Better to have never written the
 VM code since then you know it doesn't work.
 
-<img src="images/bugs-glowing.png" align="right" width="300px"/>
+<img src="images/bugs-glowing.png" align="right" width="400px"/>
 
 VM bugs will trash random application memory or code, causing non-sensical
 loads, stores, PC jumps, or instruction execution in application code that
