@@ -51,6 +51,9 @@ implement, which will be in `mmu-asm.S`:
     void mmu_disable_set_asm(cp15_ctrl_reg1_t c);
     void mmu_enable_set_asm(cp15_ctrl_reg1_t c);
     void cp15_set_procid_ttbr0(uint32_t proc_and_asid, fld_t *pt);
+    // note: see the errata for this --- we didn't put this in
+    // a part below.
+    void mmu_sync_pte_mods(void);
 
   - `armv6-coprocessor-asm.h` --- many useful assembly 
     instructions and page numbers.
