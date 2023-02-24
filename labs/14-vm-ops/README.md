@@ -5,12 +5,6 @@
 </p>
 
 
-<p align="center">
-<figure>
-  <img src="images/class-bug.png" width="450" />
-  <figcaption> B4-32: Bits to set in Domain.</figcaption>
-</figure>
-</p>
 
 Make sure you've read, re-read, re-re-read:
 
@@ -232,6 +226,13 @@ Useful intuition:
 <table><tr><td>
   <img src="images/part2-domain.png"/>
 </td></tr></table>
+
+<p align="center">
+<figure>
+  <img src="images/part2-domain.png" width="300" />
+  <figcaption> *B4-32: Bits to set in Domain*.</figcaption>
+</figure>
+</p>
 
 ----------------------------------------------------------------------
 
