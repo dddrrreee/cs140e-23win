@@ -36,7 +36,6 @@ pte mods and tlb walk hardware (b2-23):
   - "clean pte from cache; DSB; PF" to make visible to hw if PT walk caused
       by instruction fetch.  
   - these modifications don't go backwards
-
   - "PTE; DSB; PF" safest.  always need DSB [good check]
 
 bt (2.7.5): 
@@ -48,7 +47,6 @@ bt (2.7.5):
       - changing TTBR0, TTBR1, TTBCR
       - changing context id (asid+pid)
   - all of these need to end with a PF so the following instructions get the update.
-
   - do not *seem* to need a DSB: (1) 2.7.5 rule doesn't say; (2)
       comments in code don't say.  (counter: first bullet in 2.7.2
       mentions for branch operations)
@@ -56,7 +54,6 @@ bt (2.7.5):
 cp14/cp15:
   - "cp14/cp14;PF" required so instructions after use any changes. (2.7.6)
   - occur in order if same register
-
   - "might require other operations" --- have to look at manual.  tricky!
       it's not a huge red flag that "if you don't look can break everything"
       [next]
