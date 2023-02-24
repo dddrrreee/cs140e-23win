@@ -227,12 +227,10 @@ Useful intuition:
   <img src="images/part2-domain.png"/>
 </td></tr></table>
 
-<p align="center">
 <figure>
   <img src="images/part2-domain.png" width="600" />
   <figcaption> <strong>B4-32: Bits to set in Domain.</strong></figcaption>
 </figure>
-</p>
 
 ----------------------------------------------------------------------
 
