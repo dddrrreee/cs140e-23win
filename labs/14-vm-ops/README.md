@@ -197,7 +197,7 @@ ARMv6 manual (`docs/armv6.b2-memory.annot.pdf`).  Useful pages:
 <p align="right">
 <figure>
   <img src="images/part2-domain.png" width="600" />
-  <figcaption> <strong>B4-32: Bits to set in Domain.</strong></figcaption>
+  <figcaption> B4-32: Bits to set in Domain.</figcaption>
 </figure>
 </p>
 
