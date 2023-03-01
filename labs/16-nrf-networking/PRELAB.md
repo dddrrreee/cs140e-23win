@@ -4,6 +4,23 @@ Make sure you start on the datasheet early and make sure your hardware device
 runs before lab!
 
 ---------------------------------------------------------------------
+#### Quick check.
+
+
+<p align="center">
+  <img src="images/nrf-top.png" width="400" />
+</p>
+<p align="center">
+  <img src="images/nrf-side.png" width="400" />
+</p>
+
+
+Today:
+  - plug in your two NRF devices.
+  - do `make` in the `staff-binaries` directory: a bunch of stuff should run,
+    and you should see sendig and receivig messages.
+
+---------------------------------------------------------------------
 ### Readings
 
 The NRF datasheet:
