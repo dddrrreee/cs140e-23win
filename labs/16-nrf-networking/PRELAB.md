@@ -8,10 +8,10 @@ runs before lab!
 
 
 <p align="center">
-  <img src="images/nrf-top.png" width="400" />
+  <img src="images/nrf-top.jpg" width="400" />
 </p>
 <p align="center">
-  <img src="images/nrf-side.png" width="400" />
+  <img src="images/nrf-side.jpg" width="400" />
 </p>
 
 
