@@ -239,16 +239,34 @@ Second most common bug: in `nrf_init` hardcoding variables as constants.
 ### Part 2: Implement `nrf-driver.c:nrf_tx_send_noack`.
 
 You'll implement sending without acknowledgements.
-   1. Set the device to TX mode.
-   2. Set the TX address.
-   3. Use `nrf_putn` and `NRF_W_TX_PAYLOAD` to write the message to the device
-   4. Pulse the `CE` pin.
-   5. Wait until the TX fifo is empty.
-   6. Clear the TX interrupt.
-   7. When you are done, don't forget to set the device back in RX mode.
 
-Transmitting payload pulse times etc can be seen in Appendix A (page 75):
-"Enhanced ShockBurst transmitting payload".
+To start the process:
+  1. Set the TX address:
+
+            nrf_set_addr(n, NRF_TX_ADDR, txaddr, addr_nbytes);
+
+  2. Use `nrf_putn` and `NRF_W_TX_PAYLOAD` to write the message to the device
+
+            nrf_putn(n, NRF_W_TX_PAYLOAD, msg, nbytes);
+
+     At this point "the TX fifo is not empty" as per the state machine.
+
+  3. We should be in RX mode.  So first go to Standby-I by setting
+     CE=0(see state machine).  Then, start the transmit by (1) setting
+     `NRF_CONFIG=tx_config` and then (2) `CE=1.  This will take us to
+     TX mode.
+
+  4. Detect when the transmission is complete by either (1) waiting
+     until the TX fifo is empty or (2) for the TX interrupt to be
+     triggered.  I *believe* the methods are equivalent.  The latter
+     (interrupts) is similar to sending with acks so probably makes
+     more sense.
+
+  5. Clear the TX interrupt.
+  6. Transition back to RX mode.
+
+For reference, look at Appendix A (page 75): "Enhanced ShockBurst
+transmitting payload".
 
 When you get rid of the call to our `staff_nrf_tx_send_noack` the
 tests should work.
