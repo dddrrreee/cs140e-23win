@@ -84,6 +84,7 @@ structure:
         nrf_stat_start(n);
         n->spi = pin_init(c.ce_pin, c.spi_chip);
         n->rxaddr = rxaddr;
+        cq_init(&n->recvq, 1);
 
 
 Cheat code:
@@ -95,7 +96,7 @@ Cheat code:
 
 Key things:
   1. You need to setup GPIO and SPI first or nothing will work (see the
-     code above).
+     code above: `pin_init`).
   2. You must put the chip in "power down" mode before you change
      the configure.
   3. If in not-ack mode,  just enable pipe 1.
@@ -103,8 +104,8 @@ Key things:
      Pipe 0 is needed to receive acks.  
 
   5. You should flush the RX (`nrf_rx_flush()`) and TX fifos
-     (`nrf_tx_flush()`).  For today they should also be empty.
-     After:
+     (`nrf_tx_flush()`) before putting the chip in "power up" mode.
+     For today they should also be empty:
 
             assert(!nrf_tx_fifo_full(n));
             assert(nrf_tx_fifo_empty(n));
@@ -124,19 +125,71 @@ Key things:
         // reg 0x1d: feature register.  we don't use it yet.
         nrf_put8_chk(n, NRF_FEATURE, 0);
 
-  7. You should power up and also (as is common) wait "long enough"
-     for the device to set itself up.  In this case, delay 2 milliseconds.
+  7. After write 1 to the "power up" bit in `NRF_CONFIG`, you should
+     (as is common for complex devices) wait "long enough" for the
+     device to set itself up.  In this case, delay 2 milliseconds
+     (`delay_ms(2)`).
 
-  8. Finally: put the device in RX mode and return.  The enum `rx_config`
-     has the bits set the way we need them.
+  8. Finally, put the NRF in "RX mode".  The enum `rx_config` has the
+     bits set the way we need them.  Note: don't ignore the CE pin!
 
   9. In general add tons of asserts to verify that things are in the
      state you expect.
 
 When you swap in your `nrf_init`, all the tests should still pass.
 
-Common mistakes:
-  - Not correctly handling the CE pin when setting up RX.
+##### Two common bugs
+
+The most common bug from class: Not correctly putting the NRF into 
+RX mode:
+
+  - The result: the NRF values in the 0 tests would match, but 
+    the NRF would not receive messages in the later tests.
+
+  - This issue extended later to messing up the general
+    transition between RX mode and TX mode.
+
+  - If you look at the state machine on page 20, you can see that we
+    can move between RX mode and TX mode in the same way: (1) write
+    CE=0, (2) set `NRF_CONFIG` to either `rx_config` or `tx_config`
+    as appropriate, and finally (3) set CE=1.
+
+    Thus, RX mode: `CE=1` and `NRF_CONFIG=rx_config`.
+    TX mode: `CE=1` and `NRF_CONFIG=tx_config`.
+
+
+  - Your code will go back and forth between RX mode and TX modes
+    in multiple places. After all the debugging in the lab, I strongly
+    suggest you write two routines (e.g., `nrf_tx_mode` and `nrf_rx_mode`)
+    so you can write this code once, get it right, and then forget
+    about it.
+
+  - Recall from the cheatsheet: when the NRF is not in RX mode it will
+    blithely ignore all packets sent to it.  Thus, we are always in RX
+    mode other than a brief flip to TX to send a packet.  
+
+  - In summary from above: at the end of `nrf_init`, we should be
+    in RX mode and thus from these previous values: with `CE=1` and
+    `NRF_CONFIG=rx_config`.)
+
+Second most common bug: in `nrf_init` hardcoding variables as constants.
+
+  - This is partly on me: a nasty bug people hit was caused by
+    hard-coding NRF initialization values rather than setting 
+    them based on input.  
+
+    Common result: the `0` test and 4-byte tests passed, but then their
+    code would break on the 32-byte messages (since the NRF was hard-coded
+    for 4-bytes).  Similarly, hard-coding the NRF receive address which
+    meant it wouldn't receive anything if the address changed.
+
+  - Most values in the NRF should be set based on either 
+
+  - You should be setting the NRF's receive address using `rxaddr` and
+    its message message size using the `nbytes` in the `config` structure.
+
+    In general, all the values in the `nrf-default-values.h` should be 
+    used during setup.  Don't hard-code.
 
 --------------------------------------------------------------------------------
 #### Part 2: Implement `nrf-driver.c:nrf_tx_send_noack`.
