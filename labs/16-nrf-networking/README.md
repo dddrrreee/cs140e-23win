@@ -10,6 +10,9 @@ the routines to (1) initialize, (2) receive, (3) send non-acked packets,
 (4) send acked packets.  This gives you a simple starting point for
 networking.  
 
+  - Make sure you go through the [CHEATSHEET](./CHEATSHEET-nrf24l01p.md).
+    A bunch of facts you need are there, so it's a good cheatcode.
+
 The code is currently setup so that all the tests *should* pass if you
 just run `make check`.
    - ***NOTE: with 50+ people in one room we will have signficant
@@ -73,7 +76,6 @@ acknwledgements (`ack_p=0`) but not both.
 You'll want to make sure that the output after running each test program
 matches up.
 
-
 Before you start reading and writing the NRF you need to setup the 
 structure:
 
@@ -133,6 +135,9 @@ Key things:
 
 When you swap in your `nrf_init`, all the tests should still pass.
 
+Common mistakes:
+  - Not correctly handling the CE pin when setting up RX.
+
 --------------------------------------------------------------------------------
 #### Part 2: Implement `nrf-driver.c:nrf_tx_send_noack`.
 
@@ -165,6 +170,15 @@ When the RX fifo is empty, return the byte count.
 When you remove the call to our `staff_nrf_get_pkts` the 
 tests should still work.
 
+Roughly:
+  0. While the RX fifo is not empty, spin a loop pulling packets.
+  1. You can get the pipeid for the packet using the 
+      status field (page 59).  Today, it should always be fore
+      pipe 1.  You should panic if not.
+  2. Read in the packet using `nrf_getn(n, NRF_R_RX_PAYLOAD, ...)`
+     and push it onto the `recvq`.   
+  3. Clear the RX interrupt.
+
 You can see receive steps on Page 76, Appendix A, "Enhanced ShockBurst
 receive payload".
 
@@ -178,22 +192,19 @@ the no-ack version, except:
    3. You need to check for failure using the max retransmission interrupt (and clear it).
    4. When you are done, don't forget to set the device back in RX mode.
 
-
-
 When you get rid of the call to our `staff_nrf_tx_send_ack` the
 tests should work.
+
+--------------------------------------------------------------------------------
+#### Part 5: write a test to send to your partner.
+
+Rewrite the ping-pong test so you can send and receive to your partner.
 
 Congratulations!  You now have a very useful networking system.
 
 <p align="center">
   <img src="images/robots-done.png" width="450" />
 </p>
-
-
---------------------------------------------------------------------------------
-#### Part 5: write a test to send to your partner.
-
-This should be a single change where you modify a one-way send.
 
 --------------------------------------------------------------------------------
 #### Extensions
@@ -205,6 +216,9 @@ Mainline extensions:
   4. Do exponential backoff to handle the case where two nodes blast
      each other .
   5. Do a tiny little distributed system!
+  6. Replace our SPI with a bit-banged version (this is about 15 lines,
+     you can take right from the wiki-page for SPI).
+  7.  Use more pipes.
 
 ##### Use interrupts
 
@@ -230,11 +244,3 @@ Do a remote put32/get32:
   2. This lets remote pi's control it.
   3. Should be pretty easy to make a small shim library that can run your old programs
      remotely.
-
-##### Other stuff
-  
-Many many extensions:
-  0. Do a network bootloader.
-  1. Use more pipes.
-  2. See how fast you can go
-  3. Change the interface to make it easy to change the different messages sizes.
