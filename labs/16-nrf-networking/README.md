@@ -1,5 +1,9 @@
 ## Get two nrf24l01p RF tranceivers to talk to each other.
 
+<p align="center">
+  <img src="images/rpi-cables.png" width="450" />
+</p>
+
 Today you'll build some code to make the NRF chips we have talk to
 each other.   The lab is organized as a fetch-quest where you'll build
 the routines to (1) initialize, (2) receive, (3) send non-acked packets,
@@ -180,6 +184,11 @@ When you get rid of the call to our `staff_nrf_tx_send_ack` the
 tests should work.
 
 Congratulations!  You now have a very useful networking system.
+
+<p align="center">
+  <img src="images/robots-done.png" width="450" />
+</p>
+
 
 --------------------------------------------------------------------------------
 #### Part 5: write a test to send to your partner.
