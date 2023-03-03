@@ -141,6 +141,9 @@ You'll implement sending without acknowledgements.
    6. Clear the TX interrupt.
    7. When you are done, don't forget to set the device back in RX mode.
 
+Transmitting payload pulse times etc can be seen in Appendix A (page 75):
+"Enhanced ShockBurst transmitting payload".
+
 When you get rid of the call to our `staff_nrf_tx_send_noack` the
 tests should work.
 
@@ -158,6 +161,9 @@ When the RX fifo is empty, return the byte count.
 When you remove the call to our `staff_nrf_get_pkts` the 
 tests should still work.
 
+You can see receive steps on Page 76, Appendix A, "Enhanced ShockBurst
+receive payload".
+
 --------------------------------------------------------------------------------
 #### Part 4: Implement `nrf-driver.c:nrf_tx_send_ack`.
 
@@ -167,6 +173,8 @@ the no-ack version, except:
    2. You need to check success using the TX interrupt (and clear it).
    3. You need to check for failure using the max retransmission interrupt (and clear it).
    4. When you are done, don't forget to set the device back in RX mode.
+
+
 
 When you get rid of the call to our `staff_nrf_tx_send_ack` the
 tests should work.
