@@ -197,8 +197,8 @@ RX mode:
 
   - If you look at the state machine on page 20, you can see that we
     can move between RX mode and TX mode in the same way: (1) write
-    CE=0, (2) set `NRF_CONFIG` to either `rx_config` or `tx_config`
-    as appropriate, and finally (3) set CE=1.
+    CE=0 (to get to `Standby-I` state) (2) set `NRF_CONFIG` to either
+    `rx_config` or `tx_config` as appropriate, and finally (3) set CE=1.
 
     Thus, RX mode: `CE=1` and `NRF_CONFIG=rx_config`.
     TX mode: `CE=1` and `NRF_CONFIG=tx_config`.
@@ -224,12 +224,10 @@ Second most common bug: in `nrf_init` hardcoding variables as constants.
     hard-coding NRF initialization values rather than setting 
     them based on input.  
 
-    Common result: the `0` test and 4-byte tests passed, but then their
-    code would break on the 32-byte messages (since the NRF was hard-coded
+    Common result: the `0` tests and 4-byte message tests passed, but
+    the 32-byte message tests would fail (since the NRF was hard-coded
     for 4-bytes).  Similarly, hard-coding the NRF receive address which
     meant it wouldn't receive anything if the address changed.
-
-  - Most values in the NRF should be set based on either 
 
   - You should be setting the NRF's receive address using `rxaddr` and
     its message message size using the `nbytes` in the `config` structure.
