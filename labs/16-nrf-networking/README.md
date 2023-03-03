@@ -24,9 +24,9 @@ just run `make check`.
      to see if reduces issues.  You can also use a different channel.
 
 
-<p float="left">
-  <img src="images/nrf-closeup.jpg" width="350" />
-  <img src="images/nrf-side.jpg" width="350" />
+<p float="center">
+  <img src="images/nrf-closeup.jpg" width="250" />
+  <img src="images/nrf-side.jpg" width="250" />
 </p>
 
 Parthiv's board makes this much easier than in the past.  On the other
