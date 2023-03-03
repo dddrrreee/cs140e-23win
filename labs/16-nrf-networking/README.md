@@ -23,9 +23,16 @@ just run `make check`.
      you can try (you can use others too).  Worth plugging them in 
      to see if reduces issues.  You can also use a different channel.
 
+
+<p float="left">
+  <img src="images/nrf-closeup.jpg" width="350" />
+  <img src="images/nrf-side.jpg" width="350" />
+</p>
+
 Parthiv's board makes this much easier than in the past.  On the other
 hand the size of the datasheet makes it not that easy.  As a result,
 we have way more starter code than usual.
+
 
 What you will change:
   - `nrf-driver.c`: all the code you write will be in here.
