@@ -69,6 +69,17 @@ acknwledgements (`ack_p=0`) but not both.
 You'll want to make sure that the output after running each test program
 matches up.
 
+
+Before you start reading and writing the NRF you need to setup the 
+structure:
+
+        nrf_t *n = kmalloc(sizeof *n);
+        n->config = c;
+        nrf_stat_start(n);
+        n->spi = pin_init(c.ce_pin, c.spi_chip);
+        n->rxaddr = rxaddr;
+
+
 Cheat code:
    - If you get stuck you can use `nrf_dump` to print the values we set
      the device too and make sure you set them to the same thing.
