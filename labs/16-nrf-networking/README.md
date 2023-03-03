@@ -96,7 +96,9 @@ Cheat code:
      still agree!
 
 
-Key helpers:
+#### Key helpers: use these.
+
+Two useful helpers:
 
   1. In general, when implementing device code for an unknown
      device: if you write a value to a register that you believe
@@ -124,7 +126,10 @@ Key helpers:
 
      You should use it.
 
-Key points:
+#### Key points: read this before coding.
+
+Some advice:
+
   0. Before you start reading and writing the NRF you need to setup the 
      structure:
 
