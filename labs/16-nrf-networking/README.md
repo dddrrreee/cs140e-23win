@@ -86,6 +86,45 @@ Cheat code:
      It should be the case that if you change default values that both
      still agree!
 
+
+Key things:
+  1. You need to setup GPIO and SPI first or nothing will work.
+  2. You must put the chip in "power down" mode before you change
+     the configure.
+  3. If in not-ack mode,  just enable pipe 1.
+  4. If in ack mode,  you have to enable both pipe 0 and pipe 1.
+     Pipe 0 is needed to receive acks.  
+
+  5. You should flush the RX (`nrf_rx_flush()`) and TX fifos
+     (`nrf_tx_flush()`).  For today they should also be empty.
+     After:
+
+            assert(!nrf_tx_fifo_full(n));
+            assert(nrf_tx_fifo_empty(n));
+            assert(!nrf_rx_fifo_full(n));
+            assert(nrf_rx_fifo_empty(n));
+        
+            assert(!nrf_has_rx_intr(n));
+            assert(!nrf_has_tx_intr(n));
+            assert(pipeid_empty(nrf_rx_get_pipeid(n)));
+            assert(!nrf_rx_has_packet(n));
+
+  6.  We don't use dynamic payload or feature stuff today:
+
+        // reg=0x1c dynamic payload (next register --- don't set the others!)
+        assert(nrf_get8(n, NRF_DYNPD) == 0);
+
+        // reg 0x1d: feature register.  we don't use it yet.
+        nrf_put8_chk(n, NRF_FEATURE, 0);
+
+  7. You should power up and also (as is common) wait "long enough"
+     for the device to set itself up.  In this case, delay 2 milliseconds.
+
+  8. Finally: put the device in RX mode and return.
+
+  9. In general add tons of asserts to verify that things are in the
+     state you expect.
+
 When you swap in your `nrf_init`, all the tests should still pass.
 
 --------------------------------------------------------------------------------
