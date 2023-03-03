@@ -96,35 +96,37 @@ Cheat code:
      still agree!
 
 
-#### Key helpers: use these.
+#### Two key helpers: use these.
 
-Two useful helpers:
+When setting up values, use the following two routines
+(provided in `nrf-hw-support.c`):
 
-  1. In general, when implementing device code for an unknown
-     device: if you write a value to a register that you believe
-     should not change, read the value back and check it.  This will
-     detect several errors,  First, if the register discards values in
-     ways you didn't expect.  Two, it is smaller than expected or you
-     misunderstood the helper routines (this happened when people set
-     the multi-byte address using `put8` routines which just write a
-     single byte).  Or, finally, if one of your NRF devices is dead
-     (or the SPI is misconfigured).
-
-     We give you a routine:
+  1. When setting values, almost always use the following routine:
 
             nrf_put8_chk(n, NRF_RX_PW_P1, c.nbytes);
 
-     That will automatically read back the value after writing it
-     and `panic` if it differs.  You should use it for all standard
+     That will automatically read back the value after writing it and
+     `panic` if it differs.  You should use it for almost all standard
      registers (note the `NRF_STATUS` will act differently: why?)
+
+     In general, when implementing device code for an unknown device: if
+     you write a value to a register that you believe should not change,
+     read the value back and check it.  This will detect several errors,
+     First, if the register discards values in ways you didn't expect.
+     Two, it is smaller than expected or you misunderstood the helper
+     routines (this happened when people set the multi-byte address using
+     `put8` routines which just write a single byte).  Or, finally,
+     if one of your NRF devices is dead (or the SPI is misconfigured).
 
   2. The receive and transmit addresses are multi-byte.  They can't
      be written with a simple `nrf_put8` (which just writes 1 byte).
-     You can use `nrf-hw-support.c:nrf_set_addr` to do this:
+     You can use `nrf_set_addr` to set the address:
 
             nrf_set_addr(n, NRF_RX_ADDR_P1, rxaddr, addr_nbytes);
 
-     You should use it.
+     You should use it and look at its implementation to see
+     how it works.  (For any new SPI device you'd likely have to 
+     figure out something similar!)
 
 #### Key points: read this before coding.
 
