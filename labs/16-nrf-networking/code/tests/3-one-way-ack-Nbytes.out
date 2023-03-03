@@ -1,0 +1,11 @@
+TRACE:notmain:send total=1000, 32-byte messages from server=
+TRACE:one_way_ack:sent 100 ack'd packets
+TRACE:one_way_ack:sent 200 ack'd packets
+TRACE:one_way_ack:sent 300 ack'd packets
+TRACE:one_way_ack:sent 400 ack'd packets
+TRACE:one_way_ack:sent 500 ack'd packets
+TRACE:one_way_ack:sent 600 ack'd packets
+TRACE:one_way_ack:sent 700 ack'd packets
+TRACE:one_way_ack:sent 800 ack'd packets
+TRACE:one_way_ack:sent 900 ack'd packets
+TRACE:one_way_ack:trial: total successfully sent 1000 ack'd packets lost 

@@ -1,0 +1,12 @@
+TRACE:notmain:configuring no-ack server= with 4 nbyte msgs
+TRACE:notmain:configuring no-ack client= with 4 nbyte msg
+TRACE:one_way_noack:sent 100 no-ack'd packets
+TRACE:one_way_noack:sent 200 no-ack'd packets
+TRACE:one_way_noack:sent 300 no-ack'd packets
+TRACE:one_way_noack:sent 400 no-ack'd packets
+TRACE:one_way_noack:sent 500 no-ack'd packets
+TRACE:one_way_noack:sent 600 no-ack'd packets
+TRACE:one_way_noack:sent 700 no-ack'd packets
+TRACE:one_way_noack:sent 800 no-ack'd packets
+TRACE:one_way_noack:sent 900 no-ack'd packets
+TRACE:one_way_noack:trial: successfully sent 1000 no-ack'd pkts, 
