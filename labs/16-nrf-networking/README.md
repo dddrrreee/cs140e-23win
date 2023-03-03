@@ -32,6 +32,9 @@ just run `make check`.
 Parthiv's board makes this much easier than in the past.  On the other
 hand the size of the datasheet makes it not that easy.  As a result,
 we have way more starter code than usual.
+If you are doing this *without* Parthiv's board and need to wire things
+up with jumpers, the 2022 NRF lab has some discussion 
+on [how to do this](https://github.com/dddrrreee/cs140e-22win/tree/main/labs/17-nrf24l01p).
 
 
 What you will change:
@@ -51,7 +54,7 @@ What you should not have to change:
   - `tests/*.c`: tests.  Useful to look at to see how
     to use the NRF interfaces.
 
-### Checkoff
+#### Checkoff
 
 Pretty simple:
   1.  You should have implemented your own copies of the `staff_` routines
@@ -70,8 +73,9 @@ but it's also probably the most superficial, in that you can just
 use `nrf_dump` to get our hardware configuration and then walk down,
 replicating it.
 
-It can get setup either for acknowledgements (`ack_p=1`) or no
-acknwledgements (`ack_p=0`) but not both.
+As mentioned above, for simplicity, you'll only configure the NRF to use
+a single pipe.  This pipe can either be initialized for acknowledgements
+(`ack_p=1`) and or no acknwledgements (`ack_p=0`) but not both.
 
    -  `ack_p=0`: for this you only have to enable pipe 1.
       No other pipe should be enabled.  
@@ -93,12 +97,40 @@ structure:
         n->rxaddr = rxaddr;
         cq_init(&n->recvq, 1);
 
-
 Cheat code:
    - If you get stuck you can use `nrf_dump` to print the values we set
      the device too and make sure you set them to the same thing.
      It should be the case that if you change default values that both
      still agree!
+
+
+Key helpers:
+
+  1. In general, when implementing device code for an unknown
+     device: if you write a value to a register that you believe
+     should not change, read the value back and check it.  This will
+     detect several errors,  First, if the register discards values in
+     ways you didn't expect.  Two, it is smaller than expected or you
+     misunderstood the helper routines (this happened when people set
+     the multi-byte address using `put8` routines which just write a
+     single byte).  Or, finally, if one of your NRF devices is dead
+     (or the SPI is misconfigured).
+
+     We give you a routine:
+
+            nrf_put8_chk(n, NRF_RX_PW_P1, c.nbytes);
+
+     That will automatically read back the value after writing it
+     and `panic` if it differs.  You should use it for all standard
+     registers (note the `NRF_STATUS` will act differently: why?)
+
+  2. The receive and transmit addresses are multi-byte.  They can't
+     be written with a simple `nrf_put8` (which just writes 1 byte).
+     You can use `nrf-hw-support.c:nrf_set_addr` to do this:
+
+            nrf_set_addr(n, NRF_RX_ADDR_P1, rxaddr, addr_nbytes);
+
+     You should use it.
 
 
 Key things:
@@ -126,11 +158,10 @@ Key things:
 
   6.  We don't use dynamic payload or feature stuff today:
 
-        // reg=0x1c dynamic payload (next register --- don't set the others!)
-        assert(nrf_get8(n, NRF_DYNPD) == 0);
-
-        // reg 0x1d: feature register.  we don't use it yet.
-        nrf_put8_chk(n, NRF_FEATURE, 0);
+            // dynamic payload
+            nrf_put8_chk(n, NRF_DYNPD, 0);
+            // feature register.
+            nrf_put8_chk(n, NRF_FEATURE, 0);
 
   7. After write 1 to the "power up" bit in `NRF_CONFIG`, you should
      (as is common for complex devices) wait "long enough" for the
