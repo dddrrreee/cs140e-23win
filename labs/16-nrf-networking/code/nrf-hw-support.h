@@ -190,7 +190,7 @@ static inline int nrf_ce_val(nrf_t *nic) {
 
 // p 22: CE=0 and PWRUP=1
 static inline int nrf_is_standbyI(nrf_t *nic) {
-    return nrf_is_pwrup(nic) && nrf_ce_val(nic) == 1;
+    return nrf_is_pwrup(nic) && nrf_ce_val(nic) == 0;
 }
 
 static int nrf_rx_has_packet(nrf_t *nic) {
