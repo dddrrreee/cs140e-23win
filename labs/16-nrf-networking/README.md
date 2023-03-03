@@ -66,7 +66,7 @@ Extension:
      you'll learn alot.  The tests give reasonable iterfaces.
 
 --------------------------------------------------------------------------------
-#### Part 1: Implement `nrf-driver.c:nrf_init`.
+### Part 1: Implement `nrf-driver.c:nrf_init`.
 
 This is the longest part, since you need to set all the regsiters,
 but it's also probably the most superficial, in that you can just
@@ -84,18 +84,10 @@ a single pipe.  This pipe can either be initialized for acknowledgements
       This is used by a test `1-one-way-ack.c` which sends a 4 byte
       value back and forth between the client and the server.
 
-You'll want to make sure that the output after running each test program
-matches up.
+   - After you implement these and swap in your `nrf_init`, all the
+     tests should still pass.  (We discuss common bugs and what they
+     look like at the end of Part 1.)
 
-Before you start reading and writing the NRF you need to setup the 
-structure:
-
-        nrf_t *n = kmalloc(sizeof *n);
-        n->config = c;
-        nrf_stat_start(n);
-        n->spi = pin_init(c.ce_pin, c.spi_chip);
-        n->rxaddr = rxaddr;
-        cq_init(&n->recvq, 1);
 
 Cheat code:
    - If you get stuck you can use `nrf_dump` to print the values we set
@@ -132,8 +124,18 @@ Key helpers:
 
      You should use it.
 
+Key points:
+  0. Before you start reading and writing the NRF you need to setup the 
+     structure:
 
-Key things:
+            nrf_t *nrf_init(...) {
+                nrf_t *n = kmalloc(sizeof *n);
+                n->config = c;
+                nrf_stat_start(n);
+                n->spi = pin_init(c.ce_pin, c.spi_chip);
+                n->rxaddr = rxaddr;
+                cq_init(&n->recvq, 1);
+
   1. You need to setup GPIO and SPI first or nothing will work (see the
      code above: `pin_init`).
   2. You must put the chip in "power down" mode before you change
@@ -174,9 +176,8 @@ Key things:
   9. In general add tons of asserts to verify that things are in the
      state you expect.
 
-When you swap in your `nrf_init`, all the tests should still pass.
 
-##### Two common bugs
+#### Two common bugs
 
 The most common bug from class: Not correctly putting the NRF into 
 RX mode:
@@ -230,7 +231,7 @@ Second most common bug: in `nrf_init` hardcoding variables as constants.
     used during setup.  Don't hard-code.
 
 --------------------------------------------------------------------------------
-#### Part 2: Implement `nrf-driver.c:nrf_tx_send_noack`.
+### Part 2: Implement `nrf-driver.c:nrf_tx_send_noack`.
 
 You'll implement sending without acknowledgements.
    1. Set the device to TX mode.
@@ -248,7 +249,7 @@ When you get rid of the call to our `staff_nrf_tx_send_noack` the
 tests should work.
 
 --------------------------------------------------------------------------------
-#### Part 3: Implement `nrf-driver.c:nrf_get_pkts`.
+### Part 3: Implement `nrf-driver.c:nrf_get_pkts`.
 
 For this part, you'll just spin until the RX fifo is empty, pulling
 packets off the RX fifo and pushing them onto their associated pipe.
@@ -274,7 +275,7 @@ You can see receive steps on Page 76, Appendix A, "Enhanced ShockBurst
 receive payload".
 
 --------------------------------------------------------------------------------
-#### Part 4: Implement `nrf-driver.c:nrf_tx_send_ack`.
+### Part 4: Implement `nrf-driver.c:nrf_tx_send_ack`.
 
 You'll implement sending with acknowledgements.  It will look similar to 
 the no-ack version, except:
@@ -287,7 +288,7 @@ When you get rid of the call to our `staff_nrf_tx_send_ack` the
 tests should work.
 
 --------------------------------------------------------------------------------
-#### Part 5: write a test to send to your partner.
+### Part 5: write a test to send to your partner.
 
 Rewrite the ping-pong test so you can send and receive to your partner.
 
@@ -298,7 +299,7 @@ Congratulations!  You now have a very useful networking system.
 </p>
 
 --------------------------------------------------------------------------------
-#### Extensions
+### Extensions
 
 Mainline extensions:
   1. Speed!  The code is slow.  You should be able to tune it.
@@ -311,7 +312,7 @@ Mainline extensions:
      you can take right from the wiki-page for SPI).
   7.  Use more pipes.
 
-##### Use interrupts
+#### Use interrupts
 
 The main one I'd suggest:  change it to use interrupts!  This should
 not take that long.
@@ -321,13 +322,13 @@ not take that long.
      interrupt handler code.
   3. Should hopefully just take 20 minutes or so.
  
-##### Implement your own software SPI
+#### Implement your own software SPI
 
 I just used the SPI code in the wikipedia page; worked first try.
 Make sure you set the pins to input or output.   Also, make sure you
 are setting the chip select pin high and low as needed.
 
-##### Remote put32/get32
+#### Remote put32/get32
 
 Do a remote put32/get32:
   1. You can write a small piece of code that waits for PUT32 and GET32 messages and
