@@ -252,8 +252,8 @@ To start the process:
      At this point "the TX fifo is not empty" as per the state machine.
 
   3. We should be in RX mode.  So first go to Standby-I by setting
-     CE=0(see state machine).  Then, start the transmit by (1) setting
-     `NRF_CONFIG=tx_config` and then (2) `CE=1.  This will take us to
+     `CE=0` (see state machine).  Then, start the transmit by (1) setting
+     `NRF_CONFIG=tx_config` and then (2) `CE=1`.  This will take us to
      TX mode.
 
   4. Detect when the transmission is complete by either (1) waiting
@@ -274,28 +274,43 @@ tests should work.
 --------------------------------------------------------------------------------
 ### Part 3: Implement `nrf-driver.c:nrf_get_pkts`.
 
-For this part, you'll just spin until the RX fifo is empty, pulling
-packets off the RX fifo and pushing them onto their associated pipe.
-For today, we're only using a single pipe (pipe 1) so you should assert
-all packets are for it (you can use `nrf_rx_get_pipeid` for this).  For
-each packet you get, the code will push it onto the pipe's circular queue
-(just as we did in previous labs).  You should clear the RX interrupt.
-When the RX fifo is empty, return the byte count.
+The basic idea: pull packets off the RX fifo until there are none,
+and push the data into single NRF receive queue `recvq`,
+and return the count.  
 
-When you remove the call to our `staff_nrf_get_pkts` the 
-tests should still work.
+For a reference, see the receive steps on Page 76, Appendix A, "Enhanced
+ShockBurst receive payload".
 
 Roughly:
-  0. While the RX fifo is not empty, spin a loop pulling packets.
-  1. You can get the pipeid for the packet using the 
-      status field (page 59).  Today, it should always be fore
-      pipe 1.  You should panic if not.
-  2. Read in the packet using `nrf_getn(n, NRF_R_RX_PAYLOAD, ...)`
-     and push it onto the `recvq`.   
-  3. Clear the RX interrupt.
+  1. While the RX fifo is not empty (`!nrf_rx_fifo_empty(n)`)
+     loop pulling packets.
 
-You can see receive steps on Page 76, Appendix A, "Enhanced ShockBurst
-receive payload".
+  2. Get the pipeid for the incoming packet using the 
+     status field (page 59) or the helper `nrf_rx_get_pipeid(n)`.
+     Today, it should always be for
+     pipe 1.  You should panic if not.
+
+  3. Read in the packet using `nrf_getn`:
+
+        nrf_getn(n, NRF_R_RX_PAYLOAD, buf, n->config.nbytes);
+
+     and push it onto the `recvq`:   
+
+        if(!cq_push_n(&n->recvq, msg, nbytes))
+            panic("not enough space in receive queue\n");
+
+  4. Clear the RX interrupt.
+  5. Return the count of packets read.
+  6. When you remove the call to our `staff_nrf_get_pkts` the 
+     tests should still work.
+
+Most common mistake I saw: not reading te message data into a large
+enough buffer.  Packets can be up-to 32 bytes, so the temporary
+buffer you read packets into should be this large.  Multiple
+people read the packets into a `uint32_t` temporary, which would
+work great for 4-byte packets (same size) but corrupt the stack
+in weird ways if larger.  If you have weird corruption issues, it is
+probably from this mistake.
 
 --------------------------------------------------------------------------------
 ### Part 4: Implement `nrf-driver.c:nrf_tx_send_ack`.
