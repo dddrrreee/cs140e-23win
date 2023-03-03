@@ -29,6 +29,9 @@ OPT_LEVEL ?= -Og
 # various warnings.  any warning = error, so you must fix it.
 CFLAGS += $(OPT_LEVEL) -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=arm1176jzf-s -mtune=arm1176jzf-s  -std=gnu99 $(INC) -ggdb -Wno-pointer-sign  $(CFLAGS_EXTRA) -Werror  -Wno-unused-function -Wno-unused-variable
 
+# workaround for gcc struct assignment bug 
+CFLAGS += -mno-unaligned-access
+
 # disable the thread-local pointer coprocessor register (for Thumb support)
 CFLAGS += -mtp=soft
 

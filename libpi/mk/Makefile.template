@@ -106,7 +106,7 @@ print:
 libs:: FORCE
 ifneq ($(LIB),libpi.a)
 ifneq ($(LIB),libpi-fp.a)
-	@make -s -C $(LPP)
+	make -s -C $(LPP)
 endif
 endif
 
@@ -115,7 +115,7 @@ FORCE:
 ifneq ($(LIB),libpi.a)
 ifneq ($(LIB),libpi-fp.a)
 $(LPI):
-	@make -s -C $(LPP)
+	make -s -C $(LPP)
 endif
 endif
 

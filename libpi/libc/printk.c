@@ -33,6 +33,7 @@ static void emit_val(unsigned base, uint32_t u) {
 }
 
 // a really simple printk. 
+// need to do <sprintk>
 int vprintk(const char *fmt, va_list ap) {
     for(; *fmt; fmt++) {
         if(*fmt != '%')
@@ -48,6 +49,28 @@ int vprintk(const char *fmt, va_list ap) {
             case 'b': emit_val(2, va_arg(ap, uint32_t)); break;
             case 'u': emit_val(10, va_arg(ap, uint32_t)); break;
             case 'c': putchar(va_arg(ap, int)); break;
+
+            // we only handle %llx.   
+            case 'l':  
+                fmt++;
+                if(*fmt != 'l')
+                    panic("only handling llx format, have: <%s>\n", fmt);
+                fmt++;
+                if(*fmt != 'x')
+                    panic("only handling llx format, have: <%s>\n", fmt);
+                putchar('0');
+                putchar('x');
+                // have to get as a 64 vs two 32's b/c of arg passing.
+                uint64_t x = va_arg(ap, uint64_t);
+                // we break it up otherwise gcc will emit a divide
+                // since it doesn't seem to strength reduce uint64_t
+                // on a 32-bit machine.
+                uint32_t hi = x>>32;
+                uint32_t lo = x;
+                if(hi)
+                    emit_val(16, hi);
+                emit_val(16, lo);
+                break;
 
             // leading 0x
             case 'x':  

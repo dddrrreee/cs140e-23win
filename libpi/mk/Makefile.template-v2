@@ -85,7 +85,7 @@ endif
 # wait: you need src too?
 dep := $(patsubst %.c, %.d, $(PROGS)) 
 dep := $(dep) $(LIB_OBJS:.o=.d) $(START:.o=.d) $(COMMON_OBJS:.o=.d) 
-VPATH := ./ $(sort $(dir $(dep)))
+VPATH := $(sort $(dir $(dep)))
 
 .SUFFIXES: .run
 
@@ -93,6 +93,7 @@ VPATH := ./ $(sort $(dir $(dep)))
 include $(CS140E_2023_PATH)/libpi/defs.mk
 # CFLAGS += -Wno-unused-function -Wno-unused-variable  $(EXTRA_CFLAGS)
 CFLAGS += $(EXTRA_CFLAGS)
+CFLAGS += -MMD
 
 ifndef MK_CHK
     MK_CHK := $(LPP)/mk/Makefile.check-v2
@@ -170,10 +171,10 @@ endif
 	$(CC) $(CPP_ASFLAGS) -c $< -o $@
 
 
-./%.d: %.c $(DEPS)
-	$(CC) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
-./%.d: %.S $(DEPS)
-	$(CC) $(CPP_ASFLAGS) -c $< -MM -MT $(@:.d=.o) >$@
+#./%.d: %.c $(DEPS)
+#	$(CC) $(CFLAGS) $< -MMD $(@:.d=.o) >$@
+#./%.d: %.S $(DEPS)
+#	$(CC) $(CPP_ASFLAGS) -c $< -MMD $(@:.d=.o) >$@
 
 %.list: %.elf
 	$(OD) -d   $*.elf > $*.list
@@ -200,7 +201,8 @@ tags:
 
 # note: double :: is so user can add transparently
 clean::
-	rm -rf $(NAME) *~ tags $(COMMON_OBJS) *.bin *.elf *.list *.img Makefile.bak  *.d  $(TEST_OBJS) *.raw *.test $(TEST_ASM_OBJS) $(LIB_OBJS) $(LIB)
+	rm -f $(NAME) *~ tags $(COMMON_OBJS) Makefile.bak *.d $(TEST_OBJS) *.raw *.test $(TEST_ASM_OBJS) $(LIB_OBJS) $(LIB) 
+	rm -f $(TEST_LIST) $(TEST_ELF) $(TEST_DEP) $(TEST_TMP) $(TEST_PROGS)
 
 #@rm -f $(TEST_TMP)
 

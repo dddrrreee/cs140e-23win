@@ -109,7 +109,7 @@ $(LPI):
 libs::
 ifneq ($(LIB),libpi.a)
 ifneq ($(LIB),libpi-fp.a)
-	@make -C $(LPP)
+	make -C $(LPP)
 endif
 endif
 
@@ -137,7 +137,7 @@ $(LIB): $(ALL_OBJS) $(DEPS) $(LINK_DEPS)
 	$(OD) -D $@ > $@.list
 
 %.elf: %.o $(LIBS) $(DEPS) $(START)  $(LINK_DEPS)
-	$(LD) $(START)  $< -T $(MEMMAP) -o $@  $(LIBS)
+	$(LD) $(START)  $< -T $(MEMMAP) -o $@  $(LIBS) $(LIB_POST)
 
 
 %.d: %.c $(DEPS) $(BUILD_DIR)
