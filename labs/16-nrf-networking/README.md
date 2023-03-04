@@ -267,7 +267,9 @@ Roughly:
 
   5. Clear the TX interrupt.
   6. Transition back to RX mode.
-  7. When you get rid of the call to our `staff_nrf_tx_send_noack` the
+  7. Return the numbe of bytes sent (just `nbytes` that the routine
+     was called with).
+  8. When you get rid of the call to our `staff_nrf_tx_send_noack` the
      tests should work.
 
 --------------------------------------------------------------------------------
@@ -335,6 +337,8 @@ the no-ack version, except:
     then do a randomized exponential backoff and retry.
 
  4. When you are done, don't forget to set the device back in RX mode.
+ 5. Return the numbe of bytes sent (just `nbytes` that the routine
+    was called with).
 
 When you get rid of the call to our `staff_nrf_tx_send_ack` the tests
 should work.  If the ack-tests break, make sure you've enabled pipe 0
