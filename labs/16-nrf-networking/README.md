@@ -238,9 +238,11 @@ Second most common bug: in `nrf_init` hardcoding variables as constants.
 --------------------------------------------------------------------------------
 ### Part 2: Implement `nrf-driver.c:nrf_tx_send_noack`.
 
-You'll implement sending without acknowledgements.
+You'll implement sending without acknowledgements.  For a rough reference
+(for ack'd packets), look at Appendix A (page 75): "Enhanced ShockBurst
+transmitting payload".
 
-To start the process:
+Roughly:
   1. Set the TX address:
 
             nrf_set_addr(n, NRF_TX_ADDR, txaddr, addr_nbytes);
@@ -251,7 +253,8 @@ To start the process:
 
      At this point "the TX fifo is not empty" as per the state machine.
 
-  3. We should be in RX mode.  So first go to Standby-I by setting
+  3. We should be in RX mode.  So to TX the packet, first go to Standby-I
+     by setting
      `CE=0` (see state machine).  Then, start the transmit by (1) setting
      `NRF_CONFIG=tx_config` and then (2) `CE=1`.  This will take us to
      TX mode.
@@ -264,12 +267,8 @@ To start the process:
 
   5. Clear the TX interrupt.
   6. Transition back to RX mode.
-
-For reference, look at Appendix A (page 75): "Enhanced ShockBurst
-transmitting payload".
-
-When you get rid of the call to our `staff_nrf_tx_send_noack` the
-tests should work.
+  7. When you get rid of the call to our `staff_nrf_tx_send_noack` the
+     tests should work.
 
 --------------------------------------------------------------------------------
 ### Part 3: Implement `nrf-driver.c:nrf_get_pkts`.
@@ -304,31 +303,50 @@ Roughly:
   6. When you remove the call to our `staff_nrf_get_pkts` the 
      tests should still work.
 
-Most common mistake I saw: not reading te message data into a large
-enough buffer.  Packets can be up-to 32 bytes, so the temporary
-buffer you read packets into should be this large.  Multiple
-people read the packets into a `uint32_t` temporary, which would
-work great for 4-byte packets (same size) but corrupt the stack
-in weird ways if larger.  If you have weird corruption issues, it is
-probably from this mistake.
+#### Most common bug
+
+The most common mistake I saw was reading incoming messages (step 3)
+into a too-small temporary buffer message.  Packets can be up-to 32
+bytes, so the size of the temporary buffer you read packets into (`buf`)
+should be 32-bytes.  Multiple people read the packets into a `uint32_t`
+temporary, which would work great for 4-byte packets (same size) but
+corrupt the stack in weird ways if larger.  If you have weird corruption
+issues, it is probably from this mistake.
 
 --------------------------------------------------------------------------------
 ### Part 4: Implement `nrf-driver.c:nrf_tx_send_ack`.
 
 You'll implement sending with acknowledgements.  It will look similar to 
 the no-ack version, except:
-   1. You need to set the P0 pipe to the same address you are sending to (for acks).
-   2. You need to check success using the TX interrupt (and clear it).
-   3. You need to check for failure using the max retransmission interrupt (and clear it).
-   4. When you are done, don't forget to set the device back in RX mode.
 
-When you get rid of the call to our `staff_nrf_tx_send_ack` the
-tests should work.
+ 1. You need to set the P0 pipe to the same address you are sending 
+    to (for acks).
+
+        nrf_set_addr(n, NRF_RX_ADDR_P0, txaddr, addr_nbytes);
+
+ 2. You need to check success using the TX interrupt (and clear it).
+
+ 3. You need to check for the max retransmission interrupt
+    (there is a helper `nrf_has_max_rt_intr(n)`),
+    which the hardware sets when it has not received an ACK 
+    after re-sendig the packet the maximum number of times configured
+    by `nrf_init`.
+
+    For today, just panic if this occurs (it should not except in the
+    case of extreme interference).  For an extension below, you could
+    then do a randomized exponential backoff and retry.
+
+ 4. When you are done, don't forget to set the device back in RX mode.
+
+When you get rid of the call to our `staff_nrf_tx_send_ack` the tests
+should work.  If the ack-tests break, make sure you've enabled pipe 0
+since the hardware uses that to receive acknowledgements.
 
 --------------------------------------------------------------------------------
 ### Part 5: write a test to send to your partner.
 
 Rewrite the ping-pong test so you can send and receive to your partner.
+Their RX address should be the TX address you send to and vice-versa.
 
 Congratulations!  You now have a very useful networking system.
 
@@ -339,8 +357,11 @@ Congratulations!  You now have a very useful networking system.
 --------------------------------------------------------------------------------
 ### Extensions
 
-Mainline extensions:
+There's a ton of extensions.  Building out most of these would 
+be a great, useful final project:
   1. Speed!  The code is slow.  You should be able to tune it.
+     One easy change is to change it so it can send multiple
+     packets at a time.
   2. Make a reliable FIFO.
   3. Do a network bootloader.
   4. Do exponential backoff to handle the case where two nodes blast
@@ -349,11 +370,13 @@ Mainline extensions:
   6. Replace our SPI with a bit-banged version (this is about 15 lines,
      you can take right from the wiki-page for SPI).
   7.  Use more pipes.
+  8. Send and receive using both NRFs to double the effective bandwidth.
+     A great final project is seeing how many NRFs you can drive at once.
 
 #### Use interrupts
 
-The main one I'd suggest:  change it to use interrupts!  This should
-not take that long.
+A very illuminating modification is to change the code to 
+use interrupts!  This will allow you to make it much faster.
 
   1. Connect the NRF interrupt pin to a free GPIO pin.
   2. Grab the code from the GPIO interrupt lab.  and steal the initialization and 
@@ -363,8 +386,12 @@ not take that long.
 #### Implement your own software SPI
 
 I just used the SPI code in the wikipedia page; worked first try.
-Make sure you set the pins to input or output.   Also, make sure you
-are setting the chip select pin high and low as needed.
+If you do this make sure:
+  - You set the SPI pins to input or output correctly.
+  - Use the same pins that hardware SPI will use. 
+  - That you are setting the chip select pin high and low as needed.
+  - That you aren't sending data too quickly (the NRF's are actually
+    pretty slow).  I would start slow and speed up until it breaks.
 
 #### Remote put32/get32
 
