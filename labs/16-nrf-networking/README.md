@@ -247,8 +247,8 @@ Roughly:
 
             nrf_set_addr(n, NRF_TX_ADDR, txaddr, addr_nbytes);
 
-  2. Write the message to the device using `nrf_putn` and
-     `NRF_W_TX_PAYLOAD`:
+  2. Write the message to the device using `nrf_putn` with the NRF
+     command `NRF_W_TX_PAYLOAD`:
 
             nrf_putn(n, NRF_W_TX_PAYLOAD, msg, nbytes);
 
@@ -273,10 +273,8 @@ Roughly:
 --------------------------------------------------------------------------------
 ### Part 3: Implement `nrf-driver.c:nrf_get_pkts`.
 
-The basic idea: pull packets off the RX fifo until there are none,
-and push the data into single NRF receive queue `recvq`,
-and return the count.  
-
+The basic idea: pull packets off the RX fifo until there are none, and
+push the data into single NRF receive queue `recvq`, and return the count.
 For a reference, see the receive steps on Page 76, Appendix A, "Enhanced
 ShockBurst receive payload".
 
@@ -291,12 +289,12 @@ Roughly:
 
   3. Read in the packet using `nrf_getn`:
 
-        nrf_getn(n, NRF_R_RX_PAYLOAD, buf, n->config.nbytes);
+            nrf_getn(n, NRF_R_RX_PAYLOAD, buf, n->config.nbytes);
 
      and push it onto the `recvq`:   
 
-        if(!cq_push_n(&n->recvq, msg, nbytes))
-            panic("not enough space in receive queue\n");
+            if(!cq_push_n(&n->recvq, msg, nbytes))
+                panic("not enough space in receive queue\n");
 
   4. Clear the RX interrupt.
   5. Return the count of packets read.
