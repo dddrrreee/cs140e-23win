@@ -247,17 +247,17 @@ Roughly:
 
             nrf_set_addr(n, NRF_TX_ADDR, txaddr, addr_nbytes);
 
-  2. Use `nrf_putn` and `NRF_W_TX_PAYLOAD` to write the message to the device
+  2. Write the message to the device using `nrf_putn` and
+     `NRF_W_TX_PAYLOAD`:
 
             nrf_putn(n, NRF_W_TX_PAYLOAD, msg, nbytes);
 
      At this point "the TX fifo is not empty" as per the state machine.
 
-  3. We should be in RX mode.  So to TX the packet, first go to Standby-I
-     by setting
-     `CE=0` (see state machine).  Then, start the transmit by (1) setting
-     `NRF_CONFIG=tx_config` and then (2) `CE=1`.  This will take us to
-     TX mode.
+  3. We should be in RX mode.  So to transmit the packet, first go
+     to Standby-I by setting `CE=0` (see state machine).  Then, start
+     the transmit by (1) setting `NRF_CONFIG=tx_config` and then (2)
+     `CE=1`.  This will take us to TX mode.
 
   4. Detect when the transmission is complete by either (1) waiting
      until the TX fifo is empty or (2) for the TX interrupt to be
