@@ -201,7 +201,7 @@ tags:
 
 # note: double :: is so user can add transparently
 clean::
-	rm -f $(NAME) *~ tags $(COMMON_OBJS) Makefile.bak *.d $(TEST_OBJS) *.raw *.test $(TEST_ASM_OBJS) $(LIB_OBJS) $(LIB) 
+	rm -f $(NAME) *~ tags $(COMMON_OBJS) Makefile.bak *.d $(TEST_OBJS) *.raw *.test $(TEST_ASM_OBJS) $(LIB_OBJS) # $(LIB) 
 	rm -f $(TEST_LIST) $(TEST_ELF) $(TEST_DEP) $(TEST_TMP) $(TEST_PROGS)
 
 #@rm -f $(TEST_TMP)
