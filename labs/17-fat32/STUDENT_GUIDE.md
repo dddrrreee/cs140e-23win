@@ -17,6 +17,32 @@ laid out on the disk:
   <img src="images/fat32-overview-diagram.png" width="600"/>
 </td></tr></table>
 
+#### Structure
+
+One helpful note to better understand the FAT32 file system is to consider
+its structure. The FAT32 system consists of 3 separate regions. 
+
+##### Reserved Sectors
+The first region is called the "Reserved Sectors" region. In our diagram 
+above, this region refers to the blue sectors as well as the grey area
+labeled "Reserved Area". The first reserved sector (logical sector 0) is 
+the Boot Sector. It includes basic file system information and usually 
+contains the operating system's boot loader code.
+
+##### FAT Region
+The second region is called the FAT Region. This region is where the File
+Allocation Table is stored. In our diagram, this region is labelled with the
+section "FAT" and starts with the FAT Begin Logical Block Address (LBA) and 
+ends with with the Cluster Begin Logical Block Address (LBA).
+
+##### Data Region
+The last region is the Data Region. This is where the actual file and directory 
+data is stored. This region takes up most of the partition. The size of files 
+and subdirectories can be increased arbitrarily (as long as there are free clusters) 
+by simply adding more links to the file's chain in the FAT. Files are allocated 
+in units of clusters, so if a 1 KB file resides in a 32 KB cluster, 31 KB are wasted.
+
+
 
 
 
