@@ -1,4 +1,4 @@
-## Interrupts.
+## FAT 32.
 
 #### Introduction
 In this lab, you implement a FAT32 file system. FAT32, which stands for File 
