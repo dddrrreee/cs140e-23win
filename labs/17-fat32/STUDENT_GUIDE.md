@@ -14,7 +14,7 @@ Below is a digaram of what the FAT-32 file system might look like when its
 laid out on the disk: 
 
 <table><tr><td>
-  <img src="images/fat32-overview-diagram.png" width="600"/>
+  <img src="images/fat32-overview-diagram.png" width="1000"/>
 </td></tr></table>
 
 #### Structure
