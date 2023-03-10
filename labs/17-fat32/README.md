@@ -195,9 +195,9 @@ This should be fast:
 ### Part 3: read in and setup the FAT (20 minutes)
 
 Here you will use the boot record to setup the `fat32_fs_t` structure,
-including the actual FAT table.    Use the volume ID and the partition
-to implement the rest of the `fat32_mk` routine, which will define the 
-important pieces for your FAT32 FS.
+including the actual FAT table.  Use the volume ID and the partition to
+implement the rest of the `fat32_mk` routine, which will define the important
+pieces for your FAT32 FS.
 
 A reasonable description of the information you need is
 [here](https://www.pjrc.com/tech/8051/ide/fat32.html)
@@ -215,6 +215,9 @@ You'll get the root directory, read it in, and print it.
    3. Read it in (implement `fat32_readdir`).
    4. You should pass `tests/2-fat32-ls.c`, and the output should show you a 
       list of all the files in the root directory.
+
+You can find the end of the root directory by looking for a "end of directory"
+marker (a filename starting with a 0x00 byte).
 
 Note that the root directory may be more than one sector long--you'll have to 
 iterate through the FAT to find all the relevant sectors!  You'll probably want 
