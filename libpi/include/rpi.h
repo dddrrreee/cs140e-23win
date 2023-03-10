@@ -35,7 +35,8 @@ typedef int (*rpi_putchar_t)(int chr);
 extern rpi_putchar_t rpi_putchar;
 
 // override the routine.
-void rpi_putchar_set(rpi_putchar_t putc);
+rpi_putchar_t rpi_putchar_set(rpi_putchar_t putc);
+#define rpi_set_putc rpi_putchar_set
 
 
 // emit a single string.
@@ -61,6 +62,8 @@ int uart_get8(void);
 // put one byte on the uart:
 // returns < 0 on error.
 int uart_put8(uint8_t c);
+
+int uart_hex(unsigned h);
 
 // returns -1 if no byte, the value otherwise.
 int uart_get8_async(void);
@@ -130,6 +133,10 @@ void *kmalloc_aligned(unsigned nbytes, unsigned alignment);
 // initialize and set where the heap starts and give a maximum
 // size in bytes
 void kmalloc_init_set_start(void *addr, unsigned max_nbytes);
+static inline void kmalloc_init(void) {
+    unsigned MB = 1024*1024;
+    kmalloc_init_set_start((void*)MB, 64*MB);
+}
 
 // return pointer to the first free byte.  used for
 // bounds checking.
@@ -199,6 +206,9 @@ void caches_enable(void);
 // disable branch and icache
 void caches_disable(void);
 int caches_is_enabled(void);
+
+
+int memiszero(const void *_p, unsigned n);
 
 
 /*********************************************************

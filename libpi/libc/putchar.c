@@ -15,6 +15,8 @@ static int default_putchar(int c) {
 
 rpi_putchar_t rpi_putchar = default_putchar;
 
-void rpi_putchar_set(rpi_putchar_t putc) {
+rpi_putchar_t rpi_putchar_set(rpi_putchar_t putc) {
+    rpi_putchar_t old  = rpi_putchar;
     rpi_putchar = putc;
+    return old;
 }

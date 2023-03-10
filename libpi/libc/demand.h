@@ -21,12 +21,14 @@
 } while(0)
 
 // if assertion failed, die and reboot.
+#ifndef assert
 #define assert(bool) do {                                   \
     if((bool) == 0) {                                       \
         debug("ERROR: Assertion `%s` failed.\n", #bool);      \
 	    clean_reboot();							            \
     }                                                       \
 } while(0)
+#endif
 
 // stringify argument
 #define _XSTRING(x) #x
@@ -49,8 +51,8 @@
 //      if <_msg> contains a ',' you'll have to put it in quotes.
 #define demand(_expr, _msg, args...) do {                           \
     if(!(_expr)) {                                                  \
-        debug("ERROR: Demand `%s` failed: %s\n",                  \
-                   _XSTRING(_expr), _XSTRING(_msg), ##args);        \
+        debug("ERROR: Demand `%s` failed:" _XSTRING(_msg) "\n",     \
+                   _XSTRING(_expr), ##args);        \
         clean_reboot();                                             \
     }                                                               \
 } while(0)
@@ -69,8 +71,8 @@
  * tracing macros used for testing.
  */
 
-#define exit_success(args...)  \
-    do { printk("SUCCESS:"); output(args); clean_reboot(); } while(0)
+#define test_passed(args...)  \
+    do { printk(__FILE__ "PASS:"); output(args); clean_reboot(); } while(0)
 
 // used for tracing: just emit a TRACE: prefix so can grep
 #define trace(args...) \
