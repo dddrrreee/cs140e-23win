@@ -131,7 +131,7 @@ static pi_dirent_t dirent_convert(fat32_dirent_t *d) {
   // can compare this name
   memcpy(e.raw_name, d->filename, sizeof d->filename);
   // for printing.
-  fat32_dirent_name(d,e.name,sizeof e.name);
+  fat32_dirent_name(d,e.name);
   return e;
 }
 

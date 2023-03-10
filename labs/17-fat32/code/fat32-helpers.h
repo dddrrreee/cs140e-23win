@@ -225,7 +225,7 @@ static inline int fat32_is_dir(fat32_dirent_t *d) {
 }
 
 // convert name from 8.3
-void fat32_dirent_name(fat32_dirent_t *d, char *name, unsigned n);
+void fat32_dirent_name(fat32_dirent_t *d, char *name);
 
 // check if possible to convert to 8.3
 int fat32_is_valid_name(char *name);

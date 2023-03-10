@@ -183,8 +183,7 @@ static const char *to_8dot3(const char p[11]) {
 }
 
 
-// UGH. fix all this conversion stuff: gross!!
-void fat32_dirent_name(fat32_dirent_t *d, char *name, unsigned n) {
+void fat32_dirent_name(fat32_dirent_t *d, char *name) {
   strcpy(name, to_8dot3(d->filename));
 }
 
