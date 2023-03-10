@@ -18,13 +18,13 @@ static bool wait_reg_mask(reg32 *reg, u32 mask, bool set, u32 timeout) {
 }
 
 static u32 get_clock_divider(u32 base_clock) {
-  u32 target_rate = SD_CLOCK_HIGH;
+#define TARGET_RATE SD_CLOCK_HIGH
   u32 target_div = 1;
 
-  if (target_rate <= base_clock) {
-    target_div = base_clock / target_rate;
+  if (TARGET_RATE <= base_clock) {
+    target_div = base_clock / TARGET_RATE;
 
-    if (base_clock % target_rate) {
+    if (base_clock % TARGET_RATE) {
       target_div = 0;
     }
   }
