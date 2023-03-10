@@ -8,8 +8,8 @@ STAFF_OBJS +=  staff-fat32.o
 
 # the tests in decreasing order of difficulty.
 PROGS := $(wildcard ./tests/[2]-*.c)
-PROGS += $(wildcard ./tests/[1]-*.c)
-PROGS += $(wildcard ./tests/[0]-*.c)
+PROGS := $(wildcard ./tests/[1]-*.c)
+PROGS := $(wildcard ./tests/[0]-*.c)
 
 CFLAGS_EXTRA  = -Iexternal-code
 

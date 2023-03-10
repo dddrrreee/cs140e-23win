@@ -10,9 +10,13 @@ guide](https://www.pjrc.com/tech/8051/ide/fat32.html), although it's a bit
 ambiguous/hard to understand in certain places.
 
 ***The first thing you do***:
-  - Run `my-install staff-binary/1-mbr.bin` --- it looks like the driver we have
-    doesnt' work with some of the SD cards we gave out.  (It works with the cheap
-    slow ones, but not the faster SanDisks.)
+- Run `make`.  Everything should compile (using a `staff-mbr.o` and
+  `staff.fat32.o`), and it should automatically run a test of the MBR.  Let us
+  know immediately if this doesn't work---some SD cards don't work with the SD
+  driver we use.
+    - Tests 0 and 1 should work.  Tests 2 will partially work, but some of them
+      require you to copy files to the SD card first (described later in the README).
+- Once the test works, change the Makefile to not use the staff object files.
 
 We will do a fancy hello world: 
   1. Write a simple read-only file system that can read from your SD card.
