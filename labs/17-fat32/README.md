@@ -62,7 +62,7 @@ You should:
      similar) output.
   4. Be able to load/execute a "hello world" binary off the SD card.
 
-Extensions:
+Major Extensions:
   1. Be able to edit files on the SD card (e.g. pass the `3-` tests).
   2. Add (correct) caching to improve performance (using your `pread` from the prelab)
   3. Build a simple shell which lets you run `ls`, `cat`, etc. by typing in 
@@ -275,7 +275,7 @@ should be:
 
 -------------------------------------------------------------------------
 
-### Part 7: Writing
+### Part 7: Writing (Extension)
 
 We've provided a template for turning your read-only driver into a read-write 
 driver (this is what the `tests/3-` tests are for.  This is an extension for 
