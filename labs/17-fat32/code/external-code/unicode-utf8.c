@@ -11,7 +11,7 @@
 #   define printf printk
 #endif
 
-#include <inttypes.h>
+/* #include <inttypes.h> */
 #include "unicode-utf8.h"
 
 typedef struct {
