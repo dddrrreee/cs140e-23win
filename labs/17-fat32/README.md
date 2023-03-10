@@ -56,18 +56,15 @@ The tl;dr strategy:
 #### Checkoff
 
 You should:
-  1. A working sdcard driver that you steal from somewhere else and adapt.
-     (This is in the prelab).  Also, make sure you pass the `kmalloc` tests
-     in the `PRELAB`.
-  2. Read and echo the contents of `config.txt` on your SD card.
-  3. List all the files on your SD card.
-  4. You should be able to swap SD cards with your partner and get the same (or
+  1. Read and echo the contents of `config.txt` on your SD card.
+  2. List all the files on your SD card.
+  3. You should be able to swap SD cards with your partner and get the same (or
      similar) output.
-  5. Be able to load/execute a "hello world" binary off the SD card.
+  4. Be able to load/execute a "hello world" binary off the SD card.
 
-Extensions:
+Major Extensions:
   1. Be able to edit files on the SD card (e.g. pass the `3-` tests).
-  2. Add (correct) caching to improve performance.
+  2. Add (correct) caching to improve performance (using your `pread` from the prelab)
   3. Build a simple shell which lets you run `ls`, `cat`, etc. by typing in 
      commands.
   4. Add a second ram-based filesystem for temporary files (like /tmp).
@@ -182,9 +179,10 @@ Read the MBR:
 
 This should be fast:
   0. Implement the first parts of `fat32_mk` in `fat32.c`
-  1. Use the MBR to read the partition-specific boot sector (the volume id) off 
-     the SD card.  It's the first sector in the partition; there's a struct 
-     definition for it in `fat32_boot_sec_t`.
+  1. Use the partition entry (which the tests read from the MBR) to read the
+     partition-specific boot sector (the volume id) off the SD card.  It's the
+     first sector in the partition; there's a struct definition for it in
+     `fat32_boot_sec_t`.
   2. Verify the boot sector with `fat32_volume_id_check`.
   3. Read in the `fsinfo` structure (which is usually right after the boot 
      sector, but you should confirm this is true on your SD card).
@@ -198,9 +196,9 @@ This should be fast:
 ### Part 3: read in and setup the FAT (20 minutes)
 
 Here you will use the boot record to setup the `fat32_fs_t` structure,
-including the actual FAT table.    Use the volume ID and the partition
-to implement the rest of the `fat32_mk` routine, which will define the 
-important pieces for your FAT32 FS.
+including the actual FAT table.  Use the volume ID and the partition to
+implement the rest of the `fat32_mk` routine, which will define the important
+pieces for your FAT32 FS.
 
 A reasonable description of the information you need is
 [here](https://www.pjrc.com/tech/8051/ide/fat32.html)
@@ -218,6 +216,9 @@ You'll get the root directory, read it in, and print it.
    3. Read it in (implement `fat32_readdir`).
    4. You should pass `tests/2-fat32-ls.c`, and the output should show you a 
       list of all the files in the root directory.
+
+You can find the end of the root directory by looking for a "end of directory"
+marker (a filename starting with a 0x00 byte).
 
 Note that the root directory may be more than one sector long--you'll have to 
 iterate through the FAT to find all the relevant sectors!  You'll probably want 
@@ -278,7 +279,7 @@ should be:
 
 -------------------------------------------------------------------------
 
-### Part 7: Writing
+### Part 7: Writing (Extension)
 
 We've provided a template for turning your read-only driver into a read-write 
 driver (this is what the `tests/3-` tests are for.  This is an extension for 
