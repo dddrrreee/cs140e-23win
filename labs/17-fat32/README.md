@@ -3,6 +3,12 @@
 ***NOTE: Make sure you start with the [PRELAB](PRELAB.md)!***
 ***NOTE: There is also a [FAT32 cheatsheet](./fat32-cheat-sheet.md)!***
 
+Ayelet wrote up a useful guide to FAT32: [STUDENT_GUIDE.md](STUDENT_GUIDE.md)
+
+I'd also recommend looking at the [pjrc
+guide](https://www.pjrc.com/tech/8051/ide/fat32.html), although it's a bit
+ambiguous/hard to understand in certain places.
+
 ***The first thing you do***:
   - Run `my-install staff-binary/1-mbr.bin` --- it looks like the driver we have
     doesnt' work with some of the SD cards we gave out.  (It works with the cheap
@@ -10,7 +16,7 @@
 
 We will do a fancy hello world: 
   1. Write a simple read-only file system that can read from your SD card.
-  2. Use it to read in a `hello-fixed.bin` from last lab.
+  2. Use it to read in a `hello-f.bin` from the disk.
   3. Jump to it and run this program.
 
 It's kind of cool that we can write a read-only FS for (arguably) the most
@@ -51,9 +57,8 @@ You should:
      in the `PRELAB`.
   2. Read and echo the contents of `config.txt` on your SD card.
   3. List all the files on your SD card.
-  4. ~~You should be able to swap SD cards with your partner and get the same
-     output.  (If you add print statements, make sure you have a way to `grep` 
-     them out!).~~
+  4. You should be able to swap SD cards with your partner and get the same (or
+     similar) output.
   5. Be able to load/execute a "hello world" binary off the SD card.
 
 Extensions:
@@ -64,6 +69,16 @@ Extensions:
   4. Add a second ram-based filesystem for temporary files (like /tmp).
   5. Add long file name support (we mostly just ignore them, but modern OSes 
      process them correctly).
+
+#### Debugging Tips
+
+* Be very careful about sectors vs. clusters vs. bytes vs. blocks vs. directory
+  entries.  When doing math, always do dimensional analysis to make sure the
+  units work out.
+* You can ignore LFNs until everything else works (or completely).  LFNs are a
+  backwards-compatible hack, so it's technically allowed for a FAT32
+  implementation to only ever handle short file names.  If you see a long file
+  name entry, just skip it.
 
 -------------------------------------------------------------------------
 ### Background: File systems over-simplified.

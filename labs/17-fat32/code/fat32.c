@@ -347,7 +347,7 @@ int fat32_delete(fat32_fs_t *fs, pi_dirent_t *directory, char *filename) {
   if (trace_p) trace("deleting %s\n", filename);
   if (!fat32_is_valid_name(filename)) return 0;
   // TODO: look for a matching directory entry, and set the first byte of the
-  // name to 0 to mark it as free
+  // name to 0xE5 to mark it as free
   unimplemented();
 
   // TODO: free the clusters referenced by this dirent
