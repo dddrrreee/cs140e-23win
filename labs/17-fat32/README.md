@@ -179,9 +179,10 @@ Read the MBR:
 
 This should be fast:
   0. Implement the first parts of `fat32_mk` in `fat32.c`
-  1. Use the MBR to read the partition-specific boot sector (the volume id) off 
-     the SD card.  It's the first sector in the partition; there's a struct 
-     definition for it in `fat32_boot_sec_t`.
+  1. Use the partition entry (which the tests read from the MBR) to read the
+     partition-specific boot sector (the volume id) off the SD card.  It's the
+     first sector in the partition; there's a struct definition for it in
+     `fat32_boot_sec_t`.
   2. Verify the boot sector with `fat32_volume_id_check`.
   3. Read in the `fsinfo` structure (which is usually right after the boot 
      sector, but you should confirm this is true on your SD card).
