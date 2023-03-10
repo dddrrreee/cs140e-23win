@@ -56,18 +56,15 @@ The tl;dr strategy:
 #### Checkoff
 
 You should:
-  1. A working sdcard driver that you steal from somewhere else and adapt.
-     (This is in the prelab).  Also, make sure you pass the `kmalloc` tests
-     in the `PRELAB`.
-  2. Read and echo the contents of `config.txt` on your SD card.
-  3. List all the files on your SD card.
-  4. You should be able to swap SD cards with your partner and get the same (or
+  1. Read and echo the contents of `config.txt` on your SD card.
+  2. List all the files on your SD card.
+  3. You should be able to swap SD cards with your partner and get the same (or
      similar) output.
-  5. Be able to load/execute a "hello world" binary off the SD card.
+  4. Be able to load/execute a "hello world" binary off the SD card.
 
 Extensions:
   1. Be able to edit files on the SD card (e.g. pass the `3-` tests).
-  2. Add (correct) caching to improve performance.
+  2. Add (correct) caching to improve performance (using your `pread` from the prelab)
   3. Build a simple shell which lets you run `ls`, `cat`, etc. by typing in 
      commands.
   4. Add a second ram-based filesystem for temporary files (like /tmp).
