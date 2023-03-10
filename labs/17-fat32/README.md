@@ -151,25 +151,10 @@ Further reading --- the first three are good summaries, the latter have more det
   for all the weird flags that can pop up.
   5. [linux source](https://elixir.bootlin.com/linux/latest/source/fs/fat/dir.c).
 
-
--------------------------------------------------------------------------
-### Part 0: An SD card driver.
-
-You should have done this in the PRELAB:
-
-  1. Make sure your SD card reader is working.
-  2. It should pass our sanity check in `tests/0-sd.c`
-  3. ~~Make sure when you run with `trace_p = 1` that your checksum is the same 
-     as your partner's when you swap SD cards.~~
-  4. Run `make` and make sure the `tests/0-` tests work.
-
-**Note: you need to copy these files into `code/external-code` for the 
-remaining parts to compile.**
-
 -------------------------------------------------------------------------
 ### Part 1: Read the MBR. (10 minutes)
 
-You should have done this in the PRELAB:
+Read the MBR:
   1. `tests/1-mbr.c` should be able to read in the master boot record.  It should pass
      our sanity check `mbr_check`.
 
