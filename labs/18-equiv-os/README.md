@@ -8,10 +8,13 @@ in the code that you can to replace ours from old labs and see that
 the tests pass.  As is: `make` in `code` should complete without
 panics.
 
-The bad news: the reason its short is that the code is not clean and simple.
-It needs another day of hacking.   So, all you have to do today is try
-to drop in a few of your old implementations and replace mine.  none
-of the hashes should change.
+The bad news: the reason its short is that the code is ugly and overly
+complex.  It needs another day of hacking to make it about half the
+size.  So, all you have to do today is try to drop in a few of your old
+implementations and replace mine.  none of the hashes should change.
+You can treat the code as a big test case; or you can go into it and
+add things.  The absolutely fantastic thing is that equivalance checking
+will find your mistakes aggressively (it did mine!).
 
 The big picture:
   - This is a heavily modified version of lab 11 (the equivalance) process
