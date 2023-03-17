@@ -15,6 +15,8 @@ COMMON_SRC += equiv-os.c
 COMMON_SRC += sec-alloc.c
 COMMON_SRC += support-code.c
 
+# CFLAGS = -I.
+
 
 ########################################################################
 # Part 0 [you might want to do this later]
@@ -72,8 +74,8 @@ include $(CS140E_2023_PATH)/libpi/mk/Makefile.template-v2
 
 all:: # prog-gen
 
-libs::
-	make -C user-progs
+#libs::
+#	make -C user-progs
 
 #user-progs/byte-array-prog-vec.h:
 #	make -C user-progs
