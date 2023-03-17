@@ -5,7 +5,8 @@
 #define aligned8(ptr)  aligned(ptr,8)
 
 void *memset(void *dst, int c, size_t n) {
-    assert(n);
+    if(!n)
+        return dst;
 
     if(!c) {
         if(aligned8(dst) && aligned8(n)) {
