@@ -162,7 +162,9 @@ int syscall_full(uint32_t regs[17]) {
     not_reached();
 }
 
+#if 0
 #include "armv6-debug-impl.h"
+#endif
 // b4-20
 enum {
     SECTION_XLATE_FAULT = 0b00101,
@@ -170,6 +172,8 @@ enum {
 };
 
 void data_abort_full(uint32_t regs[17]) {
+    todo("you have to implement\n");
+#if 0
     // b4-43
     unsigned dfsr = cp15_dfsr_get();
     unsigned reason = ( (dfsr >> 4) & (1<<4)) |  (dfsr & 0b1111);
@@ -199,10 +203,13 @@ void data_abort_full(uint32_t regs[17]) {
     default:
         panic("unknown reason %b\n", reason);
     }
+#endif
     not_reached();
 }
 
 static void prefetch_fault(uint32_t regs[17]) {
+    todo("you have to implement\n");
+#if 0
     unsigned ifsr = cp15_ifsr_get();
     unsigned reason = bits_get(ifsr, 0, 3) | bit_get(ifsr, 10) << 10;
     uint32_t ifar = cp15_ifar_get();
@@ -216,16 +223,20 @@ static void prefetch_fault(uint32_t regs[17]) {
     default:
         panic("unexpected reason %b\n", reason);
     }
+#endif
     not_reached();
 }
 
 void prefetch_abort_full(uint32_t regs[17]) {
     uint32_t pc = regs[15];
 
+#if 0
+    you should implement this.
     if(!brkpt_fault_p()) {
         prefetch_fault(regs);
         panic("pc=%x: is not a breakpoint fault??\n", pc);
     }
+#endif
     pctx_t *ctx = ctx_get();
     proc_t *p = cur_proc_get(ctx);
     pstats_inst_inc(&ctx->stats, p);
