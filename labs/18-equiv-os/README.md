@@ -3,7 +3,10 @@
 Today we'll have a very small, OS that does equivalance checking.
 It provides `fork`, `waitpid`, `exit` and `sbrk`.
 
-The good news:  lab today is capped at 2.5 hours.  You 
+The good news:  lab today is capped at 2.5 hours.  You should drop
+in the code that you can to replace ours from old labs and see that
+the tests pass.  As is: `make` in `code` should complete without
+panics.
 
 The bad news: the reason its short is that the code is not clean and simple.
 It needs another day of hacking.   So, all you have to do today is try
@@ -48,6 +51,8 @@ Any of the following:
 
   - start going through the `Makefile` and drop in your code for the
     different pieces and make sure that the tests still pass.
+
+Alternatives, or extensions:
  - Alternative: drop in page tables.
  - Alternative: add more interesting equiv hacks.  E.g., enable the 
    icache.  Or, more tricky, add caching. 
