@@ -93,6 +93,26 @@ int vprintk(const char *fmt, va_list ap) {
                 for(s = va_arg(ap, char *); *s; s++) 
                     putchar(*s);
                 break;
+            case '0':
+              switch (*++fmt) {
+                case '2':
+                  assert(*++fmt == 'X');
+                  break;
+                case '8':
+                  assert(*++fmt == 'l');
+                  assert(*++fmt == 'X');
+                  break;
+                default:
+                  panic("bogus X id: <%c>\n", *fmt);
+              }
+              putchar('x');
+              emit_val(16, va_arg(ap, uint32_t));
+              break;
+            case '2':
+                assert(*++fmt == 'u');
+                emit_val(10, va_arg(ap, uint32_t));
+                break;
+
             default: panic("bogus identifier: <%c>\n", *fmt);
             }
         }
