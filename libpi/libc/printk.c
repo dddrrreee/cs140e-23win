@@ -32,6 +32,15 @@ static void emit_val(unsigned base, uint32_t u) {
     }
 }
 
+static void emit_hex(uint32_t u, unsigned count) {
+  char num[8], *p = num;
+  assert(count <= 8);
+  for (; count--; u /= 16)
+    *p++ = "0123456789abcdef"[u % 16];
+  while (p > &num[0])  // emit backwards
+    putchar(*--p);
+}
+
 // a really simple printk. 
 // need to do <sprintk>
 int vprintk(const char *fmt, va_list ap) {
@@ -96,17 +105,18 @@ int vprintk(const char *fmt, va_list ap) {
             case '0':
               switch (*++fmt) {
                 case '2':
-                  assert(*++fmt == 'X');
+                  ++fmt;
+                  assert(*fmt == 'X' || *fmt == 'x');
+                  emit_hex(va_arg(ap, uint32_t), 2);
                   break;
                 case '8':
                   assert(*++fmt == 'l');
                   assert(*++fmt == 'X');
+                  emit_hex(va_arg(ap, uint32_t), 8);
                   break;
                 default:
                   panic("bogus X id: <%c>\n", *fmt);
               }
-              putchar('x');
-              emit_val(16, va_arg(ap, uint32_t));
               break;
             case '2':
                 assert(*++fmt == 'u');
