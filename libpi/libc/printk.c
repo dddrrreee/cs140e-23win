@@ -41,6 +41,15 @@ static void emit_hex(uint32_t u, unsigned count) {
     putchar(*--p);
 }
 
+static void emit_dec(uint32_t u, unsigned count) {
+  char num[10], *p = num;
+  assert(count <= 10);
+  for (; count--; u /= 10)
+    *p++ = '0' + (u % 10);
+  while (p > &num[0])  // emit backwards
+    putchar(*--p);
+}
+
 // a really simple printk. 
 // need to do <sprintk>
 int vprintk(const char *fmt, va_list ap) {
@@ -110,6 +119,11 @@ int vprintk(const char *fmt, va_list ap) {
                 ++fmt;
               assert(*fmt == 'X' || *fmt == 'x');
               emit_hex(va_arg(ap, uint32_t), count);
+              break;
+            case '1':
+              assert(*++fmt == '0');
+              assert(*++fmt == 'd');
+              emit_dec(va_arg(ap, uint32_t), 10);
               break;
             case '2':
                 assert(*++fmt == 'u');
