@@ -44,6 +44,7 @@ static void emit_hex(uint32_t u, unsigned count) {
 // a really simple printk. 
 // need to do <sprintk>
 int vprintk(const char *fmt, va_list ap) {
+    unsigned count;
     for(; *fmt; fmt++) {
         if(*fmt != '%')
             putchar(*fmt);
@@ -103,20 +104,12 @@ int vprintk(const char *fmt, va_list ap) {
                     putchar(*s);
                 break;
             case '0':
-              switch (*++fmt) {
-                case '2':
-                  ++fmt;
-                  assert(*fmt == 'X' || *fmt == 'x');
-                  emit_hex(va_arg(ap, uint32_t), 2);
-                  break;
-                case '8':
-                  assert(*++fmt == 'l');
-                  assert(*++fmt == 'X');
-                  emit_hex(va_arg(ap, uint32_t), 8);
-                  break;
-                default:
-                  panic("bogus X id: <%c>\n", *fmt);
-              }
+              count = (unsigned) (*++fmt - '0');
+              assert(count < 10);
+              if (*++fmt == 'l')
+                ++fmt;
+              assert(*fmt == 'X' || *fmt == 'x');
+              emit_hex(va_arg(ap, uint32_t), count);
               break;
             case '2':
                 assert(*++fmt == 'u');
