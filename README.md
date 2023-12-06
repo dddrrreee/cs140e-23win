@@ -1,16 +1,16 @@
 ## CS140E: embedded operating systems (Engler, Winter, 2023)
 
-***NOTE: the 2023 application is at the following link***:
+***NOTE: the 2024 application is at the following link***:
 
-***NOTE: the 2023 application is at the following link***:
+***NOTE: the 2024 application is at the following link***:
 
-***NOTE: the 2023 application is at the following link***:
+***NOTE: the 2024 application is at the following link***:
 
-***NOTE: the 2023 application is at the following link***:
+***NOTE: the 2024 application is at the following link***:
 
-***NOTE: the 2023 application is at the following link***:
+***NOTE: the 2024 application is at the following link***:
 
-***NOTE: the 2023 application is at the following link***:
+***NOTE: the 2024 application is at the following link***:
   - https://forms.gle/q1X7STikN57JS2128
 
 
