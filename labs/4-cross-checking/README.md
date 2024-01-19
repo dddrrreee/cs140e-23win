@@ -415,10 +415,11 @@ Checkoff:
    2. Rewrite your `gpio_set_input` and `gpio_set_output` to call 
       `gpio_set_function` and then verify you get the same checksums.
       (See a pattern?)
-   3. Checking that `printk` now works for real;
-      copy your `gpio.c` into `2-cross-check/code-hello` and type `make`
-      it should produce a `hello.bin` that you can send to your pi (using
-      `pi-install`) and have it print and reboot.
+
+   3. Checking that `printk` now works for real; if you go into 
+      `4-cross-check/check-hello` and type `make` it produce a `hello.bin`
+      that it can run successfully.
+      If so, congratulations!  It is using your `gpio.c`
 
 ----------------------------------------------------------------------
 #### 3. Do similar tracing on the pi (`2-trace`)
@@ -451,6 +452,12 @@ and then drop in your gpio and make sure you get the same answer.
       source code in the upcoming labs).
    4. Change `libpi/Makefile` to use your `gpio.c` instead of ours by changing
       `SRC = src/gpio.c` and removing the `staff-objs/gpio.o` from `STAFF_OBJS`
+
+      To make debugging easy: before doing anything else, check that
+      running `make` in `4-cross-check/check-libpi` doesn't break: for
+      `hello-bin.bin` should print "hello" and `act-blink.bin` should
+      blink the small green led on the pi itself.
+
    5. Now verify tracing gives the same values: `make check`: you should get the same results.
 
 ----------------------------------------------------------------------
