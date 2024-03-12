@@ -1,13 +1,16 @@
 ## Build a simple FAT32 read-only file system.
 
-***NOTE: Make sure you start with the [PRELAB](PRELAB.md)!***
-***NOTE: There is also a [FAT32 cheatsheet](./fat32-cheat-sheet.md)!***
+***NOTE***:
+  - In a poetic irony, my laptop died last night and the m.2 ssd wouldn't
+    boot a new spare laptop.  So the code in this lab is identical to 
+    last year, based on a lab reworking by Akshay.   
+  - Make sure you start with the [PRELAB](PRELAB.md)!
+  - There is also a [FAT32 cheatsheet](./fat32-cheat-sheet.md).  You
+    really want to read and use this.
 
-Ayelet wrote up a useful guide to FAT32: [STUDENT_GUIDE.md](STUDENT_GUIDE.md)
-
-I'd also recommend looking at the [pjrc
-guide](https://www.pjrc.com/tech/8051/ide/fat32.html), although it's a bit
-ambiguous/hard to understand in certain places.
+  - I'd also recommend looking at the 
+    [pjrc guide](https://www.pjrc.com/tech/8051/ide/fat32.html), although 
+    it's a bit ambiguous/hard to understand in certain places.
 
 ***The first thing you do***:
 - Run `make`.  Everything should compile (using a `staff-mbr.o` and
@@ -62,7 +65,13 @@ You should:
      similar) output.
   4. Be able to load/execute a "hello world" binary off the SD card.
 
-Major Extensions:
+#### Major extensions
+
+There's easily a semester's worth of extensions.
+
+  0. Rewrite the code (and interfaces!) to not allocate / leak so 
+     much memory.  Also use arena allocation so when you unmount
+     the file system everything gets freed.
   1. Be able to edit files on the SD card (e.g. pass the `3-` tests).
   2. Add (correct) caching to improve performance (using your `pread` from the prelab)
   3. Build a simple shell which lets you run `ls`, `cat`, etc. by typing in 
@@ -70,12 +79,16 @@ Major Extensions:
   4. Add a second ram-based filesystem for temporary files (like /tmp).
   5. Add long file name support (we mostly just ignore them, but modern OSes 
      process them correctly).
+  6. Rework the SD driver code so that it uses interrupts rather than
+     being synchronous.  Similarly, add an asynchronous file system
+     interface.
 
 #### Debugging Tips
 
 * Be very careful about sectors vs. clusters vs. bytes vs. blocks vs. directory
   entries.  When doing math, always do dimensional analysis to make sure the
-  units work out.
+  units work out.  Mixing up sectors and clusters was by far the single
+  most common error.
 * You can ignore LFNs until everything else works (or completely).  LFNs are a
   backwards-compatible hack, so it's technically allowed for a FAT32
   implementation to only ever handle short file names.  If you see a long file
