@@ -7,3 +7,7 @@
 staff-*.txt
 staff-*.c
 .gdb_history
+*.d
+*.o
+*.a
+*.a.list

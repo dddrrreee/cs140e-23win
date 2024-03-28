@@ -32,9 +32,28 @@ static void emit_val(unsigned base, uint32_t u) {
     }
 }
 
+static void emit_hex(uint32_t u, unsigned count) {
+  char num[8], *p = num;
+  assert(count <= 8);
+  for (; count--; u /= 16)
+    *p++ = "0123456789abcdef"[u % 16];
+  while (p > &num[0])  // emit backwards
+    putchar(*--p);
+}
+
+static void emit_dec(uint32_t u, unsigned count) {
+  char num[10], *p = num;
+  assert(count <= 10);
+  for (; count--; u /= 10)
+    *p++ = '0' + (u % 10);
+  while (p > &num[0])  // emit backwards
+    putchar(*--p);
+}
+
 // a really simple printk. 
 // need to do <sprintk>
 int vprintk(const char *fmt, va_list ap) {
+    unsigned count;
     for(; *fmt; fmt++) {
         if(*fmt != '%')
             putchar(*fmt);
@@ -93,6 +112,24 @@ int vprintk(const char *fmt, va_list ap) {
                 for(s = va_arg(ap, char *); *s; s++) 
                     putchar(*s);
                 break;
+            case '0':
+              count = (unsigned) (*++fmt - '0');
+              assert(count < 10);
+              if (*++fmt == 'l')
+                ++fmt;
+              assert(*fmt == 'X' || *fmt == 'x');
+              emit_hex(va_arg(ap, uint32_t), count);
+              break;
+            case '1':
+              assert(*++fmt == '0');
+              assert(*++fmt == 'd');
+              emit_dec(va_arg(ap, uint32_t), 10);
+              break;
+            case '2':
+                assert(*++fmt == 'u');
+                emit_val(10, va_arg(ap, uint32_t));
+                break;
+
             default: panic("bogus identifier: <%c>\n", *fmt);
             }
         }
